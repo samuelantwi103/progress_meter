@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521844857787",
+    "project_id": "son-progress-meter",
+    "storage_bucket": "son-progress-meter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521844857787:android:b36081ba47c1b61d9ec29e",
+        "android_client_info": {
+          "package_name": "com.son.progress_meter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvxkkiuxFguTAqlBrj6UX5ME9bUOMSj4Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
