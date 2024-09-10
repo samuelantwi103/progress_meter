@@ -1,5 +1,8 @@
 // pages/dashboard.dart
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
+import 'package:progress_meter/components/card.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -11,9 +14,84 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
+    String currentDate =
+        "September 12, 2024";
+    final List<Map<String, String>> dummyData = [
+      {
+        "title": "Complete App UI",
+        "description":
+            "Increase the font size of app content and include theme change feature. Change theme colors to blue.",
+        "dateAssigned": "12/12/2024",
+        "dateDue": "24/12/2024"
+      },
+      {
+        "title": "Implement Firebase Auth",
+        "description":
+            "Integrate Firebase for user authentication and sign-in.",
+        "dateAssigned": "10/12/2024",
+        "dateDue": "18/12/2024"
+      }
+    ];
+
     return Scaffold(
-      body: Center(
-        child: Text("Home"),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    currentDate,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              const Text(
+                "Welcome Samuel,",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+
+              // Task Assigned Section Title
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: const Text(
+                    "Tasks Assigned",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: dummyData.length,
+                itemBuilder: (context, index) {
+                  final data = dummyData[index];
+                 return Column(
+                    children: [
+                      CardHome(
+                        title: data["title"]!,
+                        description:
+                            data["description"]!,
+                        dateAssigned: data["dateAssigned"]!,
+                        dateDue: data["dateDue"]!,
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

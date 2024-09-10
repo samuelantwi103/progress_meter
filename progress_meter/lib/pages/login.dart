@@ -28,7 +28,7 @@ class LoginPageState extends State<LoginPage> {
                     hintText: "Enter your code",
                     filled: true,
                     
-                    fillColor: Theme.of(context).colorScheme.primaryContainer,
+                    // fillColor: Theme.of(context).colorScheme.primaryContainer,
                     prefixIcon: Icon(Icons.numbers),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
@@ -43,7 +43,7 @@ class LoginPageState extends State<LoginPage> {
                     labelText: "PIN",
                     hintText: "Enter your PIN",
                     filled: true,
-                    fillColor: Theme.of(context).colorScheme.primaryContainer,
+                    // fillColor: Theme.of(context).colorScheme.primaryContainer,
                     prefixIcon: Icon(Icons.fiber_pin_outlined),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),

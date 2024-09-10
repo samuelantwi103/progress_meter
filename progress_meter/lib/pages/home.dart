@@ -35,20 +35,23 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: NavigationBar(
         destinations: [
           NavigationDestination(
-            icon: Icon(Icons.home_outlined),
+            icon: Badge(
+              child: Icon(Icons.home_outlined),
+            ),
             label: "Home",
             selectedIcon: Icon(Icons.home),
           ),
           NavigationDestination(
-            icon: Icon(Icons.task_outlined),
+            icon: Badge(
+              label: Text("!"),
+              child: Icon(Icons.task_outlined),
+            ),
             selectedIcon: Icon(Icons.task_rounded),
-
             label: "Standups",
           ),
           NavigationDestination(
             icon: Icon(Icons.person_outlined),
             selectedIcon: Icon(Icons.person),
-
             label: "Profile",
           ),
           NavigationDestination(
@@ -67,4 +70,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
