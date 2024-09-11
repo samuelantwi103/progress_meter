@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:progress_meter/components/card.dart';
+import 'package:progress_meter/pages/login.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -30,10 +31,22 @@ class _ProfilePageState extends State<ProfilePage> {
         slivers: [
           // App Bar
           SliverAppBar.medium(
-            title: Center(
-              child: Text("Profile"),
-            ),
-            centerTitle: true,
+            title: Text("Profile"),
+
+            // centerTitle: true,
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.light_mode),
+              ),
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+                },
+                icon: Icon(Icons.logout_outlined),
+                label: Text("Logout"),
+              ),
+            ],
           ),
 
           // Body
@@ -49,7 +62,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 40,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -127,30 +140,29 @@ class _ProfilePageState extends State<ProfilePage> {
                     Center(
                       child: Wrap(
                         alignment: WrapAlignment.spaceAround,
-                        
                         children: [
                           // Row(
-                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            // children: [
-                              taskStatusCard(
-                                context: context,
-                                title: "Completed",
-                                count: completedTasks,
-                                color: Colors.green,
-                              ),
-                              taskStatusCard(
-                                context: context,
-                                title: "In Progress",
-                                count: inProgressTasks,
-                                color: Colors.orange,
-                              ),
-                              taskStatusCard(
-                                context: context,
-                                title: "Pending",
-                                count: pendingTasks,
-                                color: Colors.red,
-                              ),
-                            // ],
+                          // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          // children: [
+                          taskStatusCard(
+                            context: context,
+                            title: "Completed",
+                            count: completedTasks,
+                            color: Colors.green,
+                          ),
+                          taskStatusCard(
+                            context: context,
+                            title: "In Progress",
+                            count: inProgressTasks,
+                            color: Colors.orange,
+                          ),
+                          taskStatusCard(
+                            context: context,
+                            title: "Pending",
+                            count: pendingTasks,
+                            color: Colors.red,
+                          ),
+                          // ],
                           // ),
                         ],
                       ),

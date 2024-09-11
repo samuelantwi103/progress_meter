@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_meter/components/loading.dart';
+import 'package:progress_meter/pages/admin_home.dart';
 import 'package:progress_meter/pages/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
 
@@ -149,12 +150,20 @@ class LoginPageState extends State<LoginPage> {
                         if (_formKey.currentState!.validate()) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Logging in...")));
-                        // LoginLoading(context);
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ));
+                          // LoginLoading(context);
+                          if (_codeController.text == "AAA-AAAAA") {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => AdminHomePage(),
+                                ));
+                          } else {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => HomePage(),
+                                ));
+                          }
                         }
                       },
                       child: Text("Login"),
