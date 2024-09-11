@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/services/callback.dart';
 
+
 // Standup Form UI
 class StandupForm extends StatefulWidget {
   const StandupForm({super.key});
@@ -55,7 +56,7 @@ class _StandupFormState extends State<StandupForm> {
                   border: OutlineInputBorder(),
                   filled: true,
                   alignLabelWithHint: true),
-              maxLines: 3,
+              maxLines: 2,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a task description';
@@ -97,15 +98,15 @@ class _StandupFormState extends State<StandupForm> {
             TextFormField(
               controller: _standupController,
               decoration: InputDecoration(
-                labelText: 'Comments',
+                labelText: 'Comments or Challenges',
                 border: OutlineInputBorder(),
                 filled: true,
                 alignLabelWithHint: true,
               ),
-              maxLines: 5,
+              maxLines: 4,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Any comments?';
+                  return 'Any comments or challenges?';
                 }
                 return null;
               },

@@ -30,7 +30,20 @@ class _StandupsPageState extends State<StandupsPage> {
                   "Daily Standup Report",
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
-                SizedBox(height: 20),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "September 12, 2024",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    SizedBox(width: 10),
+                  ],
+                ),
+                SizedBox(height: 10),
                 ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 500, minWidth: 300),
                   child: StandupForm(),

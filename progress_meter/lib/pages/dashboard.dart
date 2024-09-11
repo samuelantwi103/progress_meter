@@ -30,6 +30,13 @@ class _DashboardPageState extends State<DashboardPage> {
             "Integrate Firebase for user authentication and sign-in.",
         "dateAssigned": "10/12/2024",
         "dateDue": "18/12/2024"
+      },
+      {
+        "title": "Implement Firebase Auth",
+        "description":
+            "Integrate Firebase for user authentication and sign-in.",
+        "dateAssigned": "10/12/2024",
+        "dateDue": "18/12/2024"
       }
     ];
 

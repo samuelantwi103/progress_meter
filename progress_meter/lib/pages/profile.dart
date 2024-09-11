@@ -1,5 +1,7 @@
 // pages/profile.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:progress_meter/components/card.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -10,70 +12,193 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   // Dummy user data
-  final String userName = "Samuel Johnson";
-  final String userEmail = "samuel.johnson@example.com";
-  final int totalTasks = 10;
-  final int completedTasks = 6;
-  final int inProgressTasks = 3;
-  final int pendingTasks = 1;
-  final int completedStandUps = 15;
 
   @override
   Widget build(BuildContext context) {
+    String userName = "Samuel Johnson";
+    String userEmail = "SON-WX125";
+    int totalTasks = 10;
+    int completedTasks = 6;
+    int inProgressTasks = 3;
+    int pendingTasks = 1;
+    int completedStandUps = 15;
+
     final double progressPercentage = completedTasks / totalTasks;
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
+          // App Bar
           SliverAppBar.medium(
             title: Center(
               child: Text("Profile"),
             ),
             centerTitle: true,
           ),
-          SliverFillRemaining(
-            child: Padding(padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+          // Body
+          SliverToBoxAdapter(
+            child: Center(
+              child: Container(
+                constraints: BoxConstraints(
+                  minWidth: 300,
+                  maxWidth: 400,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
+                    SizedBox(
+                      height: 40,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          userName,
-                          style: Theme.of(context).textTheme.headlineMedium,
+                        CircleAvatar(
+                          radius: 40,
+                          child: Icon(
+                            Icons.person,
+                            size: 50,
+                          ),
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primaryContainer,
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          userEmail,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: Colors.grey,
-                                  ),
+                        Expanded(
+                          child: Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  userName,
+                                  style:
+                                      Theme.of(context).textTheme.headlineSmall,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  userEmail,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        color: Colors.grey,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
+                    const SizedBox(height: 40),
+
+                    // Task progress bar
+                    Text(
+                      "Overall Task Progress",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LinearProgressIndicator(
+                            value: progressPercentage,
+                            minHeight: 15,
+                            // backgroundColor: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                            "${(100 * progressPercentage).toStringAsFixed(0)}%",
+                            style: Theme.of(context).textTheme.titleMedium),
+                      ],
+                    ),
+
+                    SizedBox(height: 40),
+
+                    // Task breakdown section
+                    Text(
+                      "Task Breakdown",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+
+                    const SizedBox(height: 8),
+                    Center(
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceAround,
+                        
+                        children: [
+                          // Row(
+                            // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            // children: [
+                              taskStatusCard(
+                                context: context,
+                                title: "Completed",
+                                count: completedTasks,
+                                color: Colors.green,
+                              ),
+                              taskStatusCard(
+                                context: context,
+                                title: "In Progress",
+                                count: inProgressTasks,
+                                color: Colors.orange,
+                              ),
+                              taskStatusCard(
+                                context: context,
+                                title: "Pending",
+                                count: pendingTasks,
+                                color: Colors.red,
+                              ),
+                            // ],
+                          // ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Stand-up summary
+                    Text(
+                      "Stand-Ups Completed",
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: completedStandUps.toStringAsFixed(0),
+                                style: Theme.of(context).textTheme.displaySmall,
+                              ),
+                              TextSpan(
+                                text: " out of ",
+                              ),
+                              TextSpan(
+                                text: '30',
+                                style: Theme.of(context).textTheme.displaySmall,
+                              ),
+                            ],
+                          ),
+                          // style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            "stand-ups completed for this month 🥳",
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
                   ],
                 ),
-                const SizedBox(height: 24),
-
-                // Task progress bar
-                Text(
-                  "Overall Task Progress",
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-              ],
+              ),
             ),
-          )
-            )
+          ),
         ],
       ),
     );

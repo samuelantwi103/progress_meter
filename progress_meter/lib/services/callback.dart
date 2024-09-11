@@ -29,3 +29,46 @@ void submitStandupForm(
     });
   }
 }
+
+// Login Text Formatter
+void formatLoginCode(TextEditingController controller) {
+  String currentText = controller.text;
+
+ currentText = currentText.replaceAll('-', '');
+
+  if (currentText.length > 3) {
+    currentText = currentText.substring(0, 3) + '-' + currentText.substring(3);
+  }
+
+  controller.value = controller.value.copyWith(
+      text: currentText.toUpperCase(),
+      selection: TextSelection.collapsed(offset: currentText.length));
+}
+
+// Get Color based on status
+Color getStatusColor(String status) {
+  switch (status) {
+    case "Completed":
+      return Colors.green;
+    case "In Progress":
+      return Colors.orange;
+    case "Pending":
+      return Colors.red;      
+    default:
+    return Colors.grey;
+  }
+}
+
+// Get icon based on status
+IconData getStatusIcon(String status) {
+  switch (status) {
+    case "Completed":
+        return Icons.check_circle_outline;
+      case "In Progress":
+        return Icons.hourglass_bottom;
+      case "Pending":
+        return Icons.pending;
+      default:
+        return Icons.help_outline;
+  }
+}
