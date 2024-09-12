@@ -22,21 +22,24 @@ class _DashboardPageState extends State<DashboardPage> {
         "description":
             "Increase the font size of app content and include theme change feature. Change theme colors to blue.",
         "dateAssigned": "12/12/2024",
-        "dateDue": "24/12/2024"
+        "dateDue": "24/12/2024",
+        "status": "In Progress"
       },
       {
         "title": "Implement Firebase Auth",
         "description":
             "Integrate Firebase for user authentication and sign-in.",
         "dateAssigned": "10/12/2024",
-        "dateDue": "18/12/2024"
+        "dateDue": "18/12/2024",
+        "status": "Pending"
       },
       {
         "title": "Implement Firebase Auth",
         "description":
             "Integrate Firebase for user authentication and sign-in.",
         "dateAssigned": "10/12/2024",
-        "dateDue": "18/12/2024"
+        "dateDue": "18/12/2024",
+        "status":"Completed"
       }
     ];
 
@@ -90,6 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             data["description"]!,
                         dateAssigned: data["dateAssigned"]!,
                         dateDue: data["dateDue"]!,
+                        status: data["status"]!,
                       ),
                       const SizedBox(height: 10),
                     ],

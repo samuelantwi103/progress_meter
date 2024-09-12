@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_meter/components/loading.dart';
-import 'package:progress_meter/pages/admin_home.dart';
-import 'package:progress_meter/pages/user_home.dart';
+import 'package:progress_meter/pages/admin/admin_home.dart';
+import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
 
 class LoginPage extends StatefulWidget {
@@ -77,17 +77,20 @@ class LoginPageState extends State<LoginPage> {
                       maxLength: 9,
                       textCapitalization: TextCapitalization.characters,
                       decoration: InputDecoration(
-                          labelText: "Code",
-                          hintText: "Enter your code",
-                          prefixIcon: const Icon(Icons.vpn_key_outlined),
-                          filled: true,
+                        labelText: "Code",
+                        hintText: "Enter your code",
+                        prefixIcon: const Icon(Icons.vpn_key_outlined),
+                        filled: true,
 
-                          // fillColor: Theme.of(context).colorScheme.primaryContainer,
-                          // prefixIcon: Icon(Icons.numbers),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          counter: Text("")),
+                        // fillColor: Theme.of(context).colorScheme.primaryContainer,
+                        // prefixIcon: Icon(Icons.numbers),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        counter: const SizedBox(
+                          height: 0,
+                        ),
+                      ),
                       keyboardType: TextInputType.text,
                       onChanged: (value) => formatLoginCode(_codeController),
                       validator: (value) {
@@ -114,12 +117,16 @@ class LoginPageState extends State<LoginPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       controller: _pinController,
                       keyboardType: TextInputType.number,
+                      maxLength: 4,
                       obscureText: !_isPinVisible,
                       obscuringCharacter: "*",
                       decoration: InputDecoration(
                           labelText: "PIN",
                           hintText: "Enter your PIN",
                           filled: true,
+                          counter: const SizedBox(
+                            height: 0,
+                          ),
 
                           // fillColor: Theme.of(context).colorScheme.primaryContainer,
                           prefixIcon: Icon(Icons.lock_outline),

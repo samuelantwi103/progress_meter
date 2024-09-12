@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:progress_meter/pages/admin.dart';
-import 'package:progress_meter/pages/dashboard.dart';
-import 'package:progress_meter/pages/history.dart';
-import 'package:progress_meter/pages/profile.dart';
-import 'package:progress_meter/pages/standup.dart';
+import 'package:progress_meter/pages/admin/dashboard.dart';
+import 'package:progress_meter/pages/admin/employee.dart';
+import 'package:progress_meter/pages/admin/task.dart';
+
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -15,13 +14,11 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   int selectIndex = 0;
   List<Widget> page = [
-    DashboardPage(),
-    StandupsPage(),
-    ProfilePage(),
-    HistoryPage(),
-    AdminPage(),
+    AdminDashboardPage(),
+    TaskPage(),
+    EmployeePage(),
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +29,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             icon: Badge(
               child: Icon(Icons.home_outlined),
             ),
-            label: "Home",
+            label: "Dashboard",
             selectedIcon: Icon(Icons.home),
           ),
           NavigationDestination(
@@ -41,21 +38,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
               child: Icon(Icons.task_outlined),
             ),
             selectedIcon: Icon(Icons.task_rounded),
-            label: "Standups",
+            label: "Tasks",
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outlined),
-            selectedIcon: Icon(Icons.person),
-            label: "Profile",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.history),
-            label: "History",
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.admin_panel_settings_outlined),
-            selectedIcon: Icon(Icons.admin_panel_settings_rounded),
-            label: "Admin",
+            icon: Badge(
+              // label: Text("!"),
+              isLabelVisible: false,
+              child: Icon(Icons.groups),
+            ),
+            selectedIcon: Icon(Icons.groups_outlined),
+            label: "Employees",
           ),
         ],
         elevation: 10,
@@ -66,7 +58,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
           });
         },
       ),
-    
     );
   }
 }

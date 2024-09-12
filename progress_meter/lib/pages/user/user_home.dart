@@ -2,10 +2,10 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:progress_meter/pages/dashboard.dart';
-import 'package:progress_meter/pages/history.dart';
-import 'package:progress_meter/pages/profile.dart';
-import 'package:progress_meter/pages/standup.dart';
+import 'package:progress_meter/pages/user/dashboard.dart';
+import 'package:progress_meter/pages/user/history.dart';
+import 'package:progress_meter/pages/user/profile.dart';
+import 'package:progress_meter/pages/user/standup.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
