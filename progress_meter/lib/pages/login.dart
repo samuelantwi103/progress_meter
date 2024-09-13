@@ -75,8 +75,8 @@ class LoginPageState extends State<LoginPage> {
                       // inputFormatters: [
                       //   FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]$'))
                       // ],
-                      maxLength: 9,
-                      textCapitalization: TextCapitalization.characters,
+                      maxLength: 8,
+                      // textCapitalization: TextCapitalization.characters,
                       decoration: InputDecoration(
                         labelText: "Code",
                         hintText: "Enter your code",
@@ -100,12 +100,12 @@ class LoginPageState extends State<LoginPage> {
                           return "Enter your code";
                         }
 
-                        if (!RegExp(r'[A-Z]{3}-[A-Z0-9]{5}$').hasMatch(value)) {
-                          return 'Please enter a valid code: eg.SON-WX123';
+                        if (!RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$').hasMatch(value)) {
+                          return 'Please enter a valid code: eg.sonss001';
                         }
                         if (value != null &&
                             value.isNotEmpty &&
-                            !RegExp(r'[A-Z]{3}-[A-Z0-9]{5}$').hasMatch(value)) {
+                            !RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$').hasMatch(value)) {
                           setState(() {
                             _isCodeValid = false;
                           });
@@ -120,6 +120,9 @@ class LoginPageState extends State<LoginPage> {
                       keyboardType: TextInputType.number,
                       maxLength: 4,
                       obscureText: !_isPinVisible,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       obscuringCharacter: "*",
                       decoration: InputDecoration(
                           labelText: "PIN",

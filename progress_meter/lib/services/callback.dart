@@ -36,12 +36,12 @@ void formatLoginCode(TextEditingController controller) {
 
  currentText = currentText.replaceAll('-', '');
 
-  if (currentText.length > 3) {
-    currentText = currentText.substring(0, 3) + '-' + currentText.substring(3);
-  }
+  // if (currentText.length > 3) {
+  //   currentText = currentText.substring(0, 3) + '-' + currentText.substring(3);
+  // }
 
   controller.value = controller.value.copyWith(
-      text: currentText.toUpperCase(),
+      text: currentText,
       selection: TextSelection.collapsed(offset: currentText.length));
 }
 
