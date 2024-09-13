@@ -3,6 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -14,6 +16,8 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
+
+    Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
     String currentDate =
         "September 12, 2024";
     final List<Map<String, String>> dummyData = [
@@ -43,6 +47,7 @@ class _DashboardPageState extends State<DashboardPage> {
       }
     ];
 
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -59,8 +64,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ),
-              const Text(
-                "Welcome Samuel,",
+              Text(
+                "Welcome ${member.memberInfo!['firstname']},",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(

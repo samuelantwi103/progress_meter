@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/pages/login.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -16,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
     String userName = "Samuel Johnson";
     String userEmail = "SON-WX125";
     int totalTasks = 10;
@@ -82,13 +85,13 @@ class _ProfilePageState extends State<ProfilePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  userName,
+                                  '${member.memberInfo!['firstname']} ${member.memberInfo!['middlename']} ${member.memberInfo!['lastname']}',
                                   style:
                                       Theme.of(context).textTheme.headlineSmall,
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  userEmail,
+                                  member.memberInfo!['uniquecode'],
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyMedium
