@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class EmployeePage extends StatefulWidget {
   const EmployeePage({super.key});
@@ -12,7 +13,7 @@ class _EmployeePageState extends State<EmployeePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text("Employees"),
+        child: LottieBuilder.asset("assets/login_loading_anim.json"),
       ),
     );
   }

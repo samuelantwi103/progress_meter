@@ -27,10 +27,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
         destinations: [
           NavigationDestination(
             icon: Badge(
-              child: Icon(Icons.home_outlined),
+              child: Icon(Icons.dashboard_outlined),
             ),
             label: "Dashboard",
-            selectedIcon: Icon(Icons.home),
+            selectedIcon: Icon(Icons.dashboard_rounded),
           ),
           NavigationDestination(
             icon: Badge(
@@ -44,9 +44,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
             icon: Badge(
               // label: Text("!"),
               isLabelVisible: false,
-              child: Icon(Icons.groups),
+              child: Icon(Icons.groups_outlined),
             ),
-            selectedIcon: Icon(Icons.groups_outlined),
+            selectedIcon: Icon(Icons.groups),
             label: "Employees",
           ),
         ],

@@ -239,3 +239,146 @@ Widget historyCard({
         ),
       ));
 }
+
+// Helper method to create overview cards
+Widget overviewCard(String title, String value, Color color, BuildContext context) {
+  return Container(
+    width: 180,
+    margin: const EdgeInsets.all(8.0),
+    decoration: BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.2),
+          spreadRadius: 2,
+          blurRadius: 4,
+          offset: Offset(0, 2), // changes position of shadow
+        ),
+      ],
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+              color: Theme.of(context).colorScheme.surface,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Spacer(),
+          Text(
+            value,
+            style: TextStyle(
+                color: Colors.white, fontSize: 28, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+// Helper method to create a Task Card
+Widget adminDashTask(Map<String, dynamic> task, BuildContext context) {
+  return Badge(
+    label: Padding(
+      padding: EdgeInsets.all(1),
+      child: Icon(
+        getStatusIcon(task["status"]),
+        color: getStatusColor(task["status"]),
+      ),
+    ),
+    alignment: Alignment(0.8, -0.6),
+    backgroundColor: Colors.transparent,
+    child: Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      margin: EdgeInsets.symmetric(vertical: 10),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Task title
+            Text(
+              task["title"]!,
+              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+            SizedBox(height: 8),
+
+            // Task status
+            // Text(
+            //   "Status: ${task["status"]}",
+            //   style: Theme.of(context).textTheme.bodySmall,
+            // ),
+            // SizedBox(height: 4),
+
+            // Assigned Employee
+            Text(
+              "Assigned to: ${task["employee"]}",
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            SizedBox(height: 4),
+
+            // Assigned and Due Dates
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Assigned: ${task["assignedDate"]}",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+                Text(
+                  "Due: ${task["dueDate"]}",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+// Helper method to create Employee Productivity Ranking Card with LinearProgressIndicator
+Widget adminTaskIndicator(Map<String, dynamic> employee, BuildContext context) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // Employee name
+      Text(
+        employee["name"],
+        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      // SizedBox(height: 10),
+      Row(
+        children: [
+          Expanded(
+            child: LinearProgressIndicator(
+              value: employee["performance"],
+              minHeight: 15,
+              // backgroundColor: Colors.grey[300],
+              borderRadius: BorderRadius.circular(25),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Text("${(100 * employee["performance"]).toStringAsFixed(0)}%",
+              style: Theme.of(context).textTheme.titleMedium),
+        ],
+      ),
+      Divider(
+
+      )
+    ],
+  );
+}
