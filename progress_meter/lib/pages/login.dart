@@ -5,6 +5,7 @@ import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/pages/admin/admin_home.dart';
 import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
+import 'package:progress_meter/services/myclasses.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -153,24 +154,30 @@ class LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: 32),
                     FilledButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        
+
                         if (_formKey.currentState!.validate()) {
+
+                          final code = _codeController.text.trim();
+                          final pin = _pinController.text.trim();
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Logging in...")));
                           // LoginLoading(context);
-                          if (_codeController.text == "AAA-AAAAA") {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AdminHomePage(),
-                                ));
-                          } else {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HomePage(),
-                                ));
-                          }
+                          await fetchdata(context,code,pin);
+                          // if (_codeController.text == "AAA-AAAAA") {
+                          //   Navigator.pushReplacement(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => AdminHomePage(),
+                          //       ));
+                          // } else {
+                          //   Navigator.pushReplacement(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //         builder: (context) => HomePage(),
+                          //       ));
+                          // }
                         }
                       },
                       child: Text("Login"),
