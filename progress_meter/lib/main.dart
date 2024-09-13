@@ -2,8 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/pages/login.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  )
+  runApp(MultiProvider(
+    providers:[
+      ChangeNotifierProvider(create(_)=> MemberProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
