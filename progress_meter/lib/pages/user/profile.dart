@@ -19,8 +19,6 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    String userName = "Samuel Johnson";
-    String userEmail = "SON-WX125";
     int totalTasks = 10;
     int completedTasks = 6;
     int inProgressTasks = 3;

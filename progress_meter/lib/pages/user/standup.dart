@@ -2,6 +2,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/form.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 
 class StandupsPage extends StatefulWidget {
   const StandupsPage({super.key});
@@ -11,8 +12,11 @@ class StandupsPage extends StatefulWidget {
 }
 
 class _StandupsPageState extends State<StandupsPage> {
+ 
   @override
   Widget build(BuildContext context) {
+    DateTime currentDate = DateTime.now();
+    String formattedDate = convertDateTimeToString(currentDate);
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -37,7 +41,7 @@ class _StandupsPageState extends State<StandupsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "September 12, 2024",
+                      formattedDate,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     SizedBox(width: 10),

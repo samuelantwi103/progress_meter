@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -18,8 +19,8 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
 
     Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    String currentDate =
-        "September 12, 2024";
+    DateTime currentDate = DateTime.now();
+    String formattedDate = convertDateTimeToString(currentDate);
     final List<Map<String, String>> dummyData = [
       {
         "title": "Complete App UI",
@@ -59,7 +60,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
-                    currentDate,
+                    formattedDate,
                     style: const TextStyle(fontSize: 16),
                   ),
                 ),

@@ -24,6 +24,48 @@ class MemberProvider extends ChangeNotifier{
   }
 }
 
+//===============================================================
+
+class AssignedTasks {
+  List<Map<String,dynamic>>? memberAssignedtasks;
+
+  AssignedTasks();
+
+}
+
+class AssignedProvider extends ChangeNotifier{
+  AssignedTasks? _currentTasks;
+
+  AssignedTasks? get currenMember => _currentTasks;
+
+  void setCurrentAssignedTasks(AssignedTasks tasks){
+    _currentTasks = tasks;
+    notifyListeners();
+  }
+
+}
+
+//=============================================================
+
+class SelfTasks {
+  List<Map<String,dynamic>>? memberSelftasks;
+
+  SelfTasks();
+
+}
+
+class SelfTasksProvider extends ChangeNotifier{
+  SelfTasks? _currentTasks;
+
+  SelfTasks? get currenMember => _currentTasks;
+
+  void setCurrentSelfTaks(SelfTasks tasks){
+    _currentTasks = tasks;
+    notifyListeners();
+  }
+
+}
+
 Future<void> fetchdata(BuildContext context,String uid,String pin)async{
 
   DocumentSnapshot usersnap = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(uid).get();

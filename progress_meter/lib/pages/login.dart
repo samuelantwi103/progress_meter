@@ -167,6 +167,8 @@ class LoginPageState extends State<LoginPage> {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text("Logging in...")));
                           // LoginLoading(context);
+                          AssignedTasks assigned = AssignedTasks();
+                          SelfTasks selfTasks = SelfTasks();
                           await fetchdata(context,code,pin);
                           // if (_codeController.text == "AAA-AAAAA") {
                           //   Navigator.pushReplacement(

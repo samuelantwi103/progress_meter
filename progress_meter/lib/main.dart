@@ -14,6 +14,8 @@ void main() async {
   runApp(MultiProvider(
     providers:[
       ChangeNotifierProvider(create: (_)=> MemberProvider()),
+      ChangeNotifierProvider(create: (_)=> AssignedProvider()),
+      ChangeNotifierProvider(create: (_)=> SelfTasksProvider()),
     ],
     child: const MyApp(),
   ));
