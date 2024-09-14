@@ -15,11 +15,11 @@ class _StandupFormState extends State<StandupForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _standupController = TextEditingController();
-  final List<String> _taskStatuses = [
-    "In Progress",
-    "Completed",
-    "Pending",
-  ];
+  // final List<String> _taskStatuses = [
+  //   "In Progress",
+  //   "Completed",
+  //   // "Pending",
+  // ];
   String? _selectedStatus;
 
   @override
@@ -66,33 +66,7 @@ class _StandupFormState extends State<StandupForm> {
             ),
             const SizedBox(height: 16),
 
-// Task Status Dropdown
-            DropdownButtonFormField<String>(
-              decoration: const InputDecoration(
-                labelText: "Task Status",
-                border: OutlineInputBorder(),
-                filled: true,
-              ),
-              value: _selectedStatus,
-              items: _taskStatuses.map((String status) {
-                return DropdownMenuItem<String>(
-                  value: status,
-                  child: Text(status),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _selectedStatus = newValue;
-                });
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please select a task status';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
+// Tas?onst SizedBox(height: 16),
 
             // Stand-Up Report
             TextFormField(

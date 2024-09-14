@@ -25,7 +25,7 @@ class _HistoryPageState extends State<HistoryPage> {
     {
       "date": "07/09/2024",
       "task": "Write unit tests",
-      "status": "Pending",
+      "status": "Overdue",
     },
     {
       "date": "06/09/2024",
@@ -42,6 +42,10 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text("History"),
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -50,13 +54,6 @@ class _HistoryPageState extends State<HistoryPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "History",
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
                 SizedBox(
                   height: 10,
                 ),

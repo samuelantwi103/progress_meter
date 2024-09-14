@@ -28,6 +28,7 @@ class _DashboardPageState extends State<DashboardPage> {
             "Increase the font size of app content and include theme change feature. Change theme colors to blue.",
         "dateAssigned": "12/12/2024",
         "dateDue": "24/12/2024",
+        "overdue":"true",
         "status": "In Progress"
       },
       {
@@ -36,7 +37,8 @@ class _DashboardPageState extends State<DashboardPage> {
             "Integrate Firebase for user authentication and sign-in.",
         "dateAssigned": "10/12/2024",
         "dateDue": "18/12/2024",
-        "status": "Pending"
+        "overdue":"false",
+        "status": "Overdue"
       },
       {
         "title": "Implement Firebase Auth",
@@ -44,6 +46,7 @@ class _DashboardPageState extends State<DashboardPage> {
             "Integrate Firebase for user authentication and sign-in.",
         "dateAssigned": "10/12/2024",
         "dateDue": "18/12/2024",
+        "overdue":"true",
         "status":"Completed"
       }
     ];
@@ -98,6 +101,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         description:
                             data["description"]!,
                         dateAssigned: data["dateAssigned"]!,
+                        overdue: data["overdue"]!,
                         dateDue: data["dateDue"]!,
                         status: data["status"]!,
                       ),

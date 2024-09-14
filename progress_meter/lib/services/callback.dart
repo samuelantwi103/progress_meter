@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:progress_meter/components/pop_up_dialog.dart';
 
 // Standup Form Handler
 void submitStandupForm(
@@ -34,7 +35,7 @@ void submitStandupForm(
 void formatLoginCode(TextEditingController controller) {
   String currentText = controller.text;
 
- currentText = currentText.replaceAll('-', '');
+  currentText = currentText.replaceAll('-', '');
 
   // if (currentText.length > 3) {
   //   currentText = currentText.substring(0, 3) + '-' + currentText.substring(3);
@@ -52,10 +53,10 @@ Color getStatusColor(String status) {
       return Colors.green;
     case "In Progress":
       return Colors.orange;
-    case "Pending":
-      return Colors.red;      
+    case "Overdue":
+      return Colors.red;
     default:
-    return Colors.grey;
+      return Colors.grey;
   }
 }
 
@@ -63,12 +64,59 @@ Color getStatusColor(String status) {
 IconData getStatusIcon(String status) {
   switch (status) {
     case "Completed":
-        return Icons.check_circle_outline;
-      case "In Progress":
-        return Icons.hourglass_bottom;
-      case "Pending":
-        return Icons.pending;
-      default:
-        return Icons.help_outline;
+      return Icons.check_circle_outline;
+    case "In Progress":
+      return Icons.hourglass_bottom;
+    case "Overdue":
+      return Icons.pending;
+    default:
+      return Icons.help_outline;
   }
+}
+
+void callBottomSheet({
+  required BuildContext context,
+  // required Function(void Function() fn) setState,
+  bool isCompleted = false,
+  required Widget content,
+
+  // string
+}) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return CustomBottomSheet(
+          title: "Task Completed?",
+          content: content,
+          actionText: "Yes",
+          onAction: () {
+            // setState(() {
+            //   isCompleted =true;
+            // });
+          });
+    },
+  );
+}
+
+void callDialog({
+  required BuildContext context,
+  required Widget content,
+  required String title,
+  required Function onConfirm,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return PopupDialog(
+          title: title,
+          message: content,
+          onConfirm: () {
+            onConfirm;
+            Navigator.pop(context);
+          },
+          onCancel: () {
+            Navigator.pop(context);
+          });
+    },
+  );
 }

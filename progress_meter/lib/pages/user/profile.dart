@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:progress_meter/components/card.dart';
+import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/pages/login.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:provider/provider.dart';
@@ -107,28 +108,21 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     // Task progress bar
                     Text(
-                      "Overall Task Progress",
-                      style: Theme.of(context).textTheme.titleLarge,
+                      "Personal Performance",
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
 
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: LinearProgressIndicator(
-                            value: progressPercentage,
-                            minHeight: 15,
-                            // backgroundColor: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                            "${(100 * progressPercentage).toStringAsFixed(0)}%",
-                            style: Theme.of(context).textTheme.titleMedium),
-                      ],
+                    SizedBox(height: 5),
+                    LoadingBar(percentage: 50),
+                    SizedBox(height:10),
+                    // Task progress bar
+                    Text(
+                      "Overall Performance",
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
 
+                    SizedBox(height: 5),
+                    LoadingBar(percentage: 12),
                     SizedBox(height: 40),
 
                     // Task breakdown section
@@ -141,10 +135,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     Center(
                       child: Wrap(
                         alignment: WrapAlignment.spaceAround,
+
                         children: [
                           // Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceAround,
                           // children: [
+                          taskStatusCard(
+                            context: context,
+                            title: "All",
+                            count: completedTasks,
+                            color: Colors.black,
+                          ),
                           taskStatusCard(
                             context: context,
                             title: "Completed",
@@ -159,7 +160,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           taskStatusCard(
                             context: context,
-                            title: "Pending",
+                            title: "Overdue",
                             count: pendingTasks,
                             color: Colors.red,
                           ),

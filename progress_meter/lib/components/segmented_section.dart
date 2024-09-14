@@ -35,7 +35,6 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedFilter = widget.segmentButtons[0];
   }

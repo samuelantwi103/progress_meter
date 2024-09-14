@@ -1,5 +1,7 @@
 // components/card.dart
 import 'package:flutter/material.dart';
+import 'package:progress_meter/components/dropdown_button.dart';
+import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/services/callback.dart';
 
 class CardHome extends StatefulWidget {
@@ -8,12 +10,14 @@ class CardHome extends StatefulWidget {
     required this.title,
     required this.description,
     required this.dateAssigned,
+    required this.overdue,
     required this.dateDue,
     required this.status,
   });
   final String title;
   final String description;
   final String dateAssigned;
+  final String overdue;
   final String dateDue;
   final String status;
 
@@ -26,6 +30,7 @@ class _CardHomeState extends State<CardHome> {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController reportText = TextEditingController();
     return Container(
       margin: EdgeInsets.only(
         left: 20,
@@ -49,113 +54,153 @@ class _CardHomeState extends State<CardHome> {
             ),
             // minwidth: 300,
             child: Card(
-              elevation: 3, // Elevation for subtle shadow in M3
+              elevation: 3,
               shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(12), // Rounded corners as per M3
+                borderRadius: BorderRadius.circular(12),
               ),
-              surfaceTintColor:
-                  Theme.of(context).colorScheme.surfaceTint, // M3 color scheme
+              surfaceTintColor: Theme.of(context).colorScheme.surfaceTint,
               child: Container(
-                padding: const EdgeInsets.fromLTRB(
-                    16, 12, 12, 16), // M3 consistent padding
+                padding: const EdgeInsets.fromLTRB(16, 12, 12, 16),
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // Aligning content to the left
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title
                     Text(
                       widget.title,
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onSurface, // Proper M3 color
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.onSurface,
                           ),
                     ),
-                    const SizedBox(
-                        height: 8), // Spacing between title and description
-
-                    // Description
+                    // const SizedBox(height: 8),
                     Text(
                       widget.description,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
                             color:
                                 Theme.of(context).colorScheme.onSurfaceVariant,
                           ),
                     ),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    // const SizedBox(height: 12),
+                    Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4), // Spacing between rows
-
-                            // Assigned date
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "Assigned: ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                        text: widget.dateAssigned,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall),
-                                  ],
-                                ),
-                              ),
-                            ),
-
-                            // Due date
-                            Align(
-                              alignment: Alignment.bottomLeft,
-                              child: Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: "Due: ",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall
-                                          ?.copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    ),
-                                    TextSpan(
-                                        text: widget.dateDue,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                         Align(
                           alignment: Alignment.bottomLeft,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                isCompleted = !isCompleted;
-                              });
-                            },
-                            child: Text(isCompleted ? 'Update' : 'Update'),
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Assigned: ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                    text: widget.dateAssigned,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Due date
+                        Align(
+                          alignment: Alignment.bottomLeft,
+                          child: Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Due: ",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                    text: widget.dateDue,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall),
+                              ],
+                            ),
                           ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+
+                    LoadingBar(
+                      percentage: 30,
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    if (!isCompleted || widget.status == "true")
+                      Align(
+                        alignment: Alignment.bottomLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                callDialog(
+                                  context: context,
+                                  title: "Complete Task",
+                                  content: Text(
+                                      "Are you sure you have completed this task?"),
+                                  onConfirm: () {
+                                    setState(() {
+                                      isCompleted = true;
+                                    });
+                                    // Navigator.pop(context);
+                                  },
+                                );
+                              },
+                              child: Text("Complete"),
+                            ),
+                            ElevatedButton(
+                                // style: ButtonStyle(
+                                //     elevation: WidgetStatePropertyAll(3)),
+                                onPressed: () {
+                                  callDialog(
+                                    context: context,
+                                    title: "Progress Report",
+                                    content: Form(
+                                      // key: ,
+                                      child: TextFormField(
+                                        controller: reportText,
+                                        maxLines: 4,
+
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                            // borderRadius: BorderRadius.circular(50)
+                                          ),
+                                          alignLabelWithHint: true,
+                                          filled: true,
+                                            labelText: "Progress Report"),
+                                            
+                                      ),
+                                    ),
+                                    onConfirm: () {},
+                                  );
+                                },
+                                child: Text("Report"))
+                          ],
+                        ),
+                        // child: ElevatedButton(
+                        //   onPressed: () {
+                        //     setState(() {
+                        //       isCompleted = !isCompleted;
+                        //     });
+                        //   },
+                        //   child: Text('Update'),
+                        // ),
+                      )
                   ],
                 ),
               ),
@@ -176,27 +221,31 @@ Widget taskStatusCard({
     // elevation: 10,
     // color: color.withOpacity(0.1),
     child: Container(
-      width: 90,
+      // width: 90,
       padding: const EdgeInsets.all(4.0),
+      constraints: BoxConstraints(minWidth: 120, minHeight: 120
+          // maxWidth: 200,
+          ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
             "$count",
             style: Theme.of(context)
                 .textTheme
-                .headlineMedium
+                .headlineLarge
                 ?.copyWith(color: color),
           ),
-          const SizedBox(height: 5),
+          // const SizedBox(height: 5),
           Text(
             title,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: color,
                   fontWeight: FontWeight.bold,
                 ),
           ),
-          const SizedBox(height: 10),
+          // const SizedBox(height: 10),
         ],
       ),
     ),
@@ -241,7 +290,8 @@ Widget historyCard({
 }
 
 // Helper method to create overview cards
-Widget overviewCard(String title, String value, Color color, BuildContext context) {
+Widget overviewCard(
+    String title, String value, Color color, BuildContext context) {
   return Container(
     width: 180,
     margin: const EdgeInsets.all(8.0),
@@ -265,9 +315,9 @@ Widget overviewCard(String title, String value, Color color, BuildContext contex
           Text(
             title,
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-              color: Theme.of(context).colorScheme.surface,
-              fontWeight: FontWeight.bold,
-            ),
+                  color: Theme.of(context).colorScheme.surface,
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           Spacer(),
           Text(
@@ -376,9 +426,7 @@ Widget adminTaskIndicator(Map<String, dynamic> employee, BuildContext context) {
               style: Theme.of(context).textTheme.titleMedium),
         ],
       ),
-      Divider(
-
-      )
+      Divider()
     ],
   );
 }

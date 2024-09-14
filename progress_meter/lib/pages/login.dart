@@ -170,6 +170,7 @@ class LoginPageState extends State<LoginPage> {
                           AssignedTasks assigned = AssignedTasks();
                           SelfTasks selfTasks = SelfTasks();
                           await fetchdata(context,code,pin);
+                          // Navigator.of(context).pop();
                           // if (_codeController.text == "AAA-AAAAA") {
                           //   Navigator.pushReplacement(
                           //       context,
