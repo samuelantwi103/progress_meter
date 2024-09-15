@@ -4,6 +4,7 @@ import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/empty_screen.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
 
 class HistoryPage extends StatefulWidget {
@@ -117,10 +118,10 @@ class _HistoryPageState extends State<HistoryPage>
                                   customBorder: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12)),
                                   onTap: () async {
-                                    List<Map<String, dynamic>> reportList = [];
-                                    // await fetchAllReports(
-                                    //     memberId!, taskid!);
+                                    List<Map<String, dynamic>> reportList = await fetchAllReports(member.memberInfo!['uniquecode'], historyData[index]['taskid']);
+                                     
                                     callBottomSheet(
+
                                         context: context,
                                         title: "Report Summary",
                                         content: SizedBox(
@@ -130,9 +131,8 @@ class _HistoryPageState extends State<HistoryPage>
                                             itemBuilder: (context, index) {
                                               dynamic data = reportList[index];
                                               return ListTile(
-                                                title: Text(
-                                                    data.reports.toString()),
-                                                subtitle: Text(data.date.toString()),
+                                                title: Text(data['report']),
+                                                subtitle: Text(formatDateString(data['date'])),
                                                 horizontalTitleGap: 5,
                                               );
                                             },
