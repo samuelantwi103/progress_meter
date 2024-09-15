@@ -6,6 +6,8 @@ import 'package:progress_meter/pages/admin/admin_home.dart';
 import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -169,7 +171,14 @@ class LoginPageState extends State<LoginPage> {
                           // LoginLoading(context);
                           AssignedTasks assigned = AssignedTasks();
                           SelfTasks selfTasks = SelfTasks();
+                          AssignedProvider assPro = Provider.of<AssignedProvider>(context,listen:false);
+                          SelfTasksProvider selfPro = Provider.of<SelfTasksProvider>(context,listen:false);
                           await fetchdata(context,code,pin);
+                          await fetchAssignedTasks(assigned, code, pin: pin);
+                          await fetchSelfTasks(selfTasks, code, pin: pin);
+                          assPro.setCurrentAssignedTasks(assigned);
+                          selfPro.setCurrentSelfTaks(selfTasks);
+
                           // Navigator.of(context).pop();
                           // if (_codeController.text == "AAA-AAAAA") {
                           //   Navigator.pushReplacement(

@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 
 class PopupDialog extends StatelessWidget {
-  final String title;
+  final String title, memberId,taskId;
+  final TextEditingController report;
   final Widget message;
-  final String confirmText;
-  final String cancelText;
-  final VoidCallback onConfirm;
   final VoidCallback onCancel;
+  final AssignedProvider assignPro;
+  
 
   const PopupDialog({
     Key? key,
     required this.title,
     required this.message,
-    this.confirmText = 'Confirm',
-    this.cancelText = 'Cancel',
-    required this.onConfirm,
+    required this.assignPro,
+    required this.memberId,
+    required this.report,
+    required this.taskId,
     required this.onCancel,
   }) : super(key: key);
 
@@ -29,11 +32,16 @@ class PopupDialog extends StatelessWidget {
       actions: <Widget>[
         TextButton(
           onPressed: onCancel,
-          child: Text(cancelText),
+          child: Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: onConfirm,
-          child: Text(confirmText),
+          onPressed: ()async{
+            await submitReport(memberId, report.text.trim(), taskId, assignPro);
+            report.clear();
+            Navigator.pop(context);
+            
+          },
+          child: Text('Confirm'),
         ),
       ],
     );

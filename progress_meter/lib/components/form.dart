@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/services/callback.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:provider/provider.dart';
 
 
 // Standup Form UI
 class StandupForm extends StatefulWidget {
-  const StandupForm({super.key});
+  const StandupForm({super.key, required this.memberId});
+
+  final String memberId;
 
   @override
   State<StandupForm> createState() => _StandupFormState();
@@ -24,6 +28,7 @@ class _StandupFormState extends State<StandupForm> {
 
   @override
   Widget build(BuildContext context) {
+    SelfTasksProvider selfPro = Provider.of<SelfTasksProvider>(context,listen: false);
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -90,16 +95,20 @@ class _StandupFormState extends State<StandupForm> {
             // Submit Button
             Center(
               child: ElevatedButton(
-                onPressed: () => submitStandupForm(
+                onPressed: (){
+                  
+                  submitStandupForm(
                   _formKey,
                   _titleController,
                   _descriptionController,
                   _standupController,
                   _selectedStatus,
+                  widget.memberId,
+                  selfPro,
                   (fn) {
                     setState(() {});
                   },
-                ),
+                );},
                 child: const Text('Submit'),
               ),
             ),

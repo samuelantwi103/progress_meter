@@ -30,6 +30,54 @@ class AssignedTasks {
   List<Map<String, dynamic>>? memberAssignedtasks;
 
   AssignedTasks();
+
+  List<Map<String, dynamic>> get getCompletedTasks {
+    // Ensure memberAssignedtasks is not null and contains data
+    if (memberAssignedtasks == null) {
+      return [];
+    }
+    
+    // Filter tasks that are marked as completed
+    List<Map<String, dynamic>> completed = memberAssignedtasks!.where((task) {
+      // Check if the task has a "status" field and if it indicates completion
+      return task['status'] == 'Completed'; // Adjust this condition based on your data structure
+    }).toList();
+    
+    return completed;
+  }
+
+
+    List<Map<String, dynamic>> get getProgressTasks {
+    // Ensure memberAssignedtasks is not null and contains data
+    if (memberAssignedtasks == null) {
+      return [];
+    }
+    
+    // Filter tasks that are marked as completed
+    List<Map<String, dynamic>> completed = memberAssignedtasks!.where((task) {
+      // Check if the task has a "status" field and if it indicates completion
+      return task['status'] == 'In Progress'; // Adjust this condition based on your data structure
+    }).toList();
+    
+    return completed;
+  }
+
+
+
+    List<Map<String, dynamic>> get getOverdueTasks {
+    // Ensure memberAssignedtasks is not null and contains data
+    if (memberAssignedtasks == null) {
+      return [];
+    }
+    
+    // Filter tasks that are marked as completed
+    List<Map<String, dynamic>> completed = memberAssignedtasks!.where((task) {
+      // Check if the task has a "status" field and if it indicates completion
+      return task['status'] == 'Overdue'; // Adjust this condition based on your data structure
+    }).toList();
+    
+    return completed;
+  }
 }
 
 class AssignedProvider extends ChangeNotifier {

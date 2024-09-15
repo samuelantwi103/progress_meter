@@ -19,40 +19,14 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
 
     Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
+    
     DateTime currentDate = DateTime.now();
     String formattedDate = convertDateTimeToString(currentDate);
-    final List<Map<String, String>> dummyData = [
-      {
-        "title": "Complete App UI",
-        "description":
-            "Increase the font size of app content and include theme change feature. Change theme colors to blue.",
-        "dateAssigned": "12/12/2024",
-        "dateDue": "24/12/2024",
-        "overdue":"true",
-        "status": "In Progress"
-      },
-      {
-        "title": "Implement Firebase Auth",
-        "description":
-            "Integrate Firebase for user authentication and sign-in.",
-        "dateAssigned": "10/12/2024",
-        "dateDue": "18/12/2024",
-        "overdue":"false",
-        "status": "Overdue"
-      },
-      {
-        "title": "Implement Firebase Auth",
-        "description":
-            "Integrate Firebase for user authentication and sign-in.",
-        "dateAssigned": "10/12/2024",
-        "dateDue": "18/12/2024",
-        "overdue":"true",
-        "status":"Completed"
-      }
-    ];
+    
+    AssignedProvider assPro = Provider.of<AssignedProvider>(context,listen: true);
+    if(assPro.currenMember == null || assPro.currenMember!.memberAssignedtasks == null){
 
-
-    return Scaffold(
+      return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -88,6 +62,55 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
               ),
 
+              Center(child: Text('Loading...'),)
+            ],
+          ),
+        ),
+      ),
+    );
+    }
+
+
+    
+    final assignedTasks = assPro.currenMember;
+    final List<Map<String, dynamic>> dummyData = assignedTasks!.memberAssignedtasks!;
+    debugPrint('length of map: ${dummyData[0]}');
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    formattedDate,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+              ),
+              Text(
+                "Welcome ${member.memberInfo!['firstname']},",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+
+              // Task Assigned Section Title
+              Align(
+                alignment: Alignment.topLeft,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: const Text(
+                    "Tasks Assigned",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              if(dummyData.isNotEmpty)
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -100,16 +123,22 @@ class _DashboardPageState extends State<DashboardPage> {
                         title: data["title"]!,
                         description:
                             data["description"]!,
-                        dateAssigned: data["dateAssigned"]!,
+                        dateAssigned: data["dateassigned"]!,
                         overdue: data["overdue"]!,
-                        dateDue: data["dateDue"]!,
+                        dateDue: data["datedue"]!,
                         status: data["status"]!,
+                        taskId: data["taskid"],
+                        memberId: member.memberInfo!['uniquecode'],
                       ),
                       const SizedBox(height: 10),
                     ],
                   );
                 },
-              ),
+              )
+
+              //=====else
+          else
+            Center(child: Text('Empty...'),)
             ],
           ),
         ),
