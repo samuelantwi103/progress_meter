@@ -305,60 +305,29 @@ Widget historyCard({
   return Card.filled(
     elevation: 2,
     margin: EdgeInsets.symmetric(vertical: 8),
-    child: InkWell(
-      splashColor: Theme.of(context).colorScheme.primaryContainer,
-      customBorder:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onTap: () async {
-        List<Map<String,dynamic>> reportList = await fetchAllReports(memberId!,taskid!);
-        callBottomSheet(
-            context: context,
-            title: "Report Summary",
-            content: SizedBox(
-              // height: 0.7*MediaQuery.of(context).size.height,
-              child: ListView.separated(
-                itemCount: 15,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                        "Content of each of the card. What you did every day."),
-                    subtitle: Text("12/12/2024"),
-                    horizontalTitleGap: 5,
-                  );
-                },
-                separatorBuilder: (context, index) {
-                  return Divider(
-                    thickness: 1,
-                    height: 1,
-                  );
-                },
-              ),
-            ));
-      },
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: getStatusColor(status),
-          child: Icon(
-            getStatusIcon(status),
-          ),
+    child: ListTile(
+      leading: CircleAvatar(
+        backgroundColor: getStatusColor(status),
+        child: Icon(
+          getStatusIcon(status),
         ),
-        title: Text(
-          task,
-          style: Theme.of(context).textTheme.bodyLarge,
-        ),
-        subtitle: Text(
-          formatDateString(date),
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: Colors.grey),
-        ),
-        trailing: Text(
-          status,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: getStatusColor(status),
-          ),
+      ),
+      title: Text(
+        task,
+        style: Theme.of(context).textTheme.bodyLarge,
+      ),
+      subtitle: Text(
+        formatDateString(date),
+        style: Theme.of(context)
+            .textTheme
+            .bodyMedium
+            ?.copyWith(color: Colors.grey),
+      ),
+      trailing: Text(
+        status,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: getStatusColor(status),
         ),
       ),
     ),
