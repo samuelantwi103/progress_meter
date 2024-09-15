@@ -37,8 +37,8 @@ class _CardHomeState extends State<CardHome> {
 
   @override
   Widget build(BuildContext context) {
-    AssignedProvider assignPro =
-        Provider.of<AssignedProvider>(context, listen: false);
+    AssignedProvider assignPro =Provider.of<AssignedProvider>(context, listen: false);
+    final member = Provider.of<MemberProvider>(context, listen: false).currenMember;
     TextEditingController reportText = TextEditingController();
     return Container(
       margin: EdgeInsets.only(
@@ -166,11 +166,9 @@ class _CardHomeState extends State<CardHome> {
                                       "Are you sure you have completed this task?"),
                                   onConfirm: () async {
                                     generalLoading(context);
-                                    await submitReport(
-                                        widget.memberId,
-                                        TextEditingController().text.trim(),
-                                        widget.taskId,
-                                        assignPro);
+                                    double score = (calculateDateTimePercentage(widget.dateAssigned, widget.dateDue).toDouble() > 50) ? 100 - calculateDateTimePercentage(widget.dateAssigned, widget.dateDue).toDouble(): 50;
+                                    int dayNumber = getDaysBetween(widget.dateAssigned, widget.dateDue);
+                                    await markComplete(widget.taskId, widget.memberId, assignPro,member!,score,dayNumber, Provider.of<MemberProvider>(context, listen: false));
                                     TextEditingController().clear();
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -188,10 +186,10 @@ class _CardHomeState extends State<CardHome> {
                                       generalLoading(context);
                                       await submitReport(
                                           widget.memberId,
-                                          TextEditingController().text.trim(),
+                                          reportText.text.trim(),
                                           widget.taskId,
                                           assignPro);
-                                      TextEditingController().clear();
+                                      reportText.clear();
                                       Navigator.pop(context);
                                       Navigator.pop(context);
                                     },
@@ -296,7 +294,7 @@ Widget historyCard({
           style: Theme.of(context).textTheme.bodyLarge,
         ),
         subtitle: Text(
-          date,
+          formatDateString(date),
           style: Theme.of(context)
               .textTheme
               .bodyMedium

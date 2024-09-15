@@ -11,6 +11,19 @@ class Member {
   Map<String, dynamic>? memberInfo;
 
   Member();
+
+  Future<void> updateData(double value) async{
+    memberInfo!['completedscores'] += value;
+    await FirebaseFirestore.instance
+      .collection('organisations')
+      .doc('son')
+      .collection('members')
+      .doc(memberInfo!['uniquecode'])
+      .update(memberInfo!);
+      debugPrint('successfully marked complete');
+
+
+  }
 }
 
 class MemberProvider extends ChangeNotifier {

@@ -32,6 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
     int inProgressTasks = assignedTasks.getProgressTasks.length;
     int pendingTasks = assignedTasks.getOverdueTasks.length;
     int completedStandUps = notAssignedTaks.memberSelftasks!.length;
+    int completeOverdue = completedTasks + pendingTasks;
 
     //final double progressPercentage = completedTasks / totalTasks;
 
@@ -121,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
 
                     SizedBox(height: 5),
-                    LoadingBar(percentage: 50),
+                    LoadingBar(percentage: double.parse((member.memberInfo!['completedscores']/(completeOverdue)).toStringAsFixed(2))),
                     SizedBox(height: 10),
                     // Task progress bar
                     Text(

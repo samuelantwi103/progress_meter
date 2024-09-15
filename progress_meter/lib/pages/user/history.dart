@@ -23,40 +23,14 @@ class _HistoryPageState extends State<HistoryPage>
   }
 
   // Dummy data for performance history
-  final List<Map<String, dynamic>> historyData = [
-    // {
-    //   "date": "09/09/2024",
-    //   "task": "Complete App UI Design",
-    //   "status": "Completed",
-    // },
-    // {
-    //   "date": "08/09/2024",
-    //   "task": "Fix bugs in API integration",
-    //   "status": "In Progress",
-    // },
-    // {
-    //   "date": "07/09/2024",
-    //   "task": "Write unit tests",
-    //   "status": "Overdue",
-    // },
-    // {
-    //   "date": "06/09/2024",
-    //   "task": "Standup report submitted",
-    //   "status": "Completed",
-    // },
-    // {
-    //   "date": "05/09/2024",
-    //   "task": "Refactor authentication flow",
-    //   "status": "Completed",
-    // },
-  ];
+  final List<Map<String, dynamic>> historyData = [];
+  final List<Map<String, dynamic>> standUpsData = [];
 
   @override
   Widget build(BuildContext context) {
     //Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    final assignedTasks =
-        Provider.of<AssignedProvider>(context, listen: true).currenMember!;
-
+    final assignedTasks = Provider.of<AssignedProvider>(context, listen: true).currenMember!;
+    final notAssignedTasks = Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
     TabController tabController = TabController(length: 2, vsync: this);
     //final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
     if (assignedTasks.getCompletedTasks.isNotEmpty) {
@@ -66,29 +40,33 @@ class _HistoryPageState extends State<HistoryPage>
     if (assignedTasks.getOverdueTasks.isNotEmpty) {
       historyData.addAll(assignedTasks.getOverdueTasks);
     }
-
-    if (historyData.isEmpty) {
-      return Scaffold(
-          appBar: AppBar(
-            title: Text("History"),
-            centerTitle: true,
-            bottom: TabBar(
-              controller: tabController,
-              tabs: [
-                Tab(
-                  text: "Tasks",
-                ),
-                Tab(
-                  text: "Standups",
-                ),
-              ],
-            ),
-          ),
-          body: TabBarView(controller: tabController, children: [
-            SafeArea(child: EmptyHistoryScreen()),
-            SafeArea(child: EmptyHistoryScreen()),
-          ]));
+    if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
+      standUpsData.addAll(notAssignedTasks.memberSelftasks!);
     }
+
+    // if (historyData.isEmpty) {
+
+    //   return Scaffold(
+    //       appBar: AppBar(
+    //         title: Text("History"),
+    //         centerTitle: true,
+    //         bottom: TabBar(
+    //           controller: tabController,
+    //           tabs: [
+    //             Tab(
+    //               text: "Tasks",
+    //             ),
+    //             Tab(
+    //               text: "Standups",
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //       body: TabBarView(controller: tabController, children: [
+    //         SafeArea(child: EmptyHistoryScreen()),
+    //         SafeArea(child: EmptyHistoryScreen()),
+    //       ]));
+    // }
 
     return Scaffold(
         appBar: AppBar(
@@ -109,7 +87,7 @@ class _HistoryPageState extends State<HistoryPage>
         body: TabBarView(controller: tabController, children: [
           // Tasks Section
           SafeArea(
-            child: SingleChildScrollView(
+            child: (historyData.isEmpty)? EmptyHistoryScreen(): SingleChildScrollView(
               child: Container(
                 height: MediaQuery.of(context).size.height,
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -142,7 +120,7 @@ class _HistoryPageState extends State<HistoryPage>
           // Standups Section
           SafeArea(
             child: SingleChildScrollView(
-              child: Container(
+              child: (standUpsData.isEmpty)? EmptyHistoryScreen(): Container(
                 height: MediaQuery.of(context).size.height,
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 child: Column(
@@ -154,13 +132,13 @@ class _HistoryPageState extends State<HistoryPage>
                     Expanded(
                       child: ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: historyData.length,
+                        itemCount: standUpsData.length,
                         itemBuilder: (context, index) {
-                          final historyItem = historyData[index];
+                          final historyItem = standUpsData[index];
                           return historyCard(
                               task: historyItem['title'],
-                              status: historyItem['status'],
-                              date: historyItem['datecompleted'],
+                              status: 'Completed',
+                              date: historyItem['time'],
                               context: context);
                         },
                       ),

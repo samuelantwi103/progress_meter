@@ -39,11 +39,11 @@ Future<void> fetchAssignedTasks(AssignedTasks assigned, String code, {String? pi
   final usersnap = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(code).collection('months').doc(monthdoc).collection('assigned').get();
   if (usersnap.docs.isNotEmpty){
     // do something
-    
+      
 
       assigned.memberAssignedtasks = usersnap.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
       //return assigned;
-      debugPrint('self tasks fetched. length is: ${assigned.memberAssignedtasks!.length}');
+      
       
     
   }
@@ -101,6 +101,39 @@ Future<void> submitStandUp(String title, String description,String challenges, S
   selfPro.setCurrentSelfTaks(notAssigned);
 }
 
+
+
+int getDaysBetween(String startDateString, String endDateString) {
+  // Parse the string dates into DateTime objects
+  DateTime startDate = DateTime.parse(startDateString);
+  DateTime endDate = DateTime.parse(endDateString);
+
+  // Calculate the difference in days
+  int daysDifference = endDate.difference(startDate).inDays;
+
+  return daysDifference;
+}
+
+
+Future<void> markComplete(String taskId, String memberId, AssignedProvider assPro, Member member, double rawScore, int dayNum, MemberProvider memPro) async {
+  //final docId = getCurrentMonthDay();
+  final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
+  final reports = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('assigned').doc(taskId).collection('reports').get();
+  int reportNum = reports.size;
+  await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('assigned').doc(taskId).update({
+    'status': 'Completed',
+    'reportsize': reportNum
+  });
+
+  final reportscore = rawScore + ((reportNum)/dayNum);
+  member.updateData(reportscore);
+  
+  AssignedTasks assignedTasks = AssignedTasks();
+  await fetchAssignedTasks(assignedTasks, memberId);
+  
+  assPro.setCurrentAssignedTasks(assignedTasks);
+  memPro.setCurrentMember(member);
+}
 
 //==================Evaluating difference in dates.
 
