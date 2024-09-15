@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/loading.dart';
-import 'package:progress_meter/components/pop_up_dialog.dart';
+import 'package:progress_meter/components/dialog.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
 
@@ -83,19 +83,24 @@ IconData getStatusIcon(String status) {
 
 void callBottomSheet({
   required BuildContext context,
-  // required Function(void Function() fn) setState,
+  required String title,
+  String? actionText,
   bool isCompleted = false,
   required Widget content,
 
   // string
 }) {
   showModalBottomSheet(
+    showDragHandle: true,
+    enableDrag: true,
+    isScrollControlled: true,
+    useSafeArea: true,
     context: context,
     builder: (context) {
       return CustomBottomSheet(
-          title: "Task Completed?",
+          title: title,
           content: content,
-          actionText: "Yes",
+          actionText: actionText,
           onAction: () {
             // setState(() {
             //   isCompleted =true;

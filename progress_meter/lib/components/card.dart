@@ -37,8 +37,10 @@ class _CardHomeState extends State<CardHome> {
 
   @override
   Widget build(BuildContext context) {
-    AssignedProvider assignPro =Provider.of<AssignedProvider>(context, listen: false);
-    final member = Provider.of<MemberProvider>(context, listen: false).currenMember;
+    AssignedProvider assignPro =
+        Provider.of<AssignedProvider>(context, listen: false);
+    final member =
+        Provider.of<MemberProvider>(context, listen: false).currenMember;
     TextEditingController reportText = TextEditingController();
     return Container(
       margin: EdgeInsets.only(
@@ -166,9 +168,28 @@ class _CardHomeState extends State<CardHome> {
                                       "Are you sure you have completed this task?"),
                                   onConfirm: () async {
                                     generalLoading(context);
-                                    double score = (calculateDateTimePercentage(widget.dateAssigned, widget.dateDue).toDouble() > 50) ? 100 - calculateDateTimePercentage(widget.dateAssigned, widget.dateDue).toDouble(): 50;
-                                    int dayNumber = getDaysBetween(widget.dateAssigned, widget.dateDue);
-                                    await markComplete(widget.taskId, widget.memberId, assignPro,member!,score,dayNumber, Provider.of<MemberProvider>(context, listen: false));
+                                    double score = (calculateDateTimePercentage(
+                                                    widget.dateAssigned,
+                                                    widget.dateDue)
+                                                .toDouble() >
+                                            50)
+                                        ? 100 -
+                                            calculateDateTimePercentage(
+                                                    widget.dateAssigned,
+                                                    widget.dateDue)
+                                                .toDouble()
+                                        : 50;
+                                    int dayNumber = getDaysBetween(
+                                        widget.dateAssigned, widget.dateDue);
+                                    await markComplete(
+                                        widget.taskId,
+                                        widget.memberId,
+                                        assignPro,
+                                        member!,
+                                        score,
+                                        dayNumber,
+                                        Provider.of<MemberProvider>(context,
+                                            listen: false));
                                     TextEditingController().clear();
                                     Navigator.pop(context);
                                     Navigator.pop(context);
@@ -280,8 +301,37 @@ Widget historyCard({
   required BuildContext context,
 }) {
   return Card.filled(
-      elevation: 2,
-      margin: EdgeInsets.symmetric(vertical: 8),
+    elevation: 2,
+    margin: EdgeInsets.symmetric(vertical: 8),
+    child: InkWell(
+      splashColor: Theme.of(context).colorScheme.primaryContainer,
+      customBorder:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      onTap: () {
+        callBottomSheet(
+            context: context,
+            title: "Report Summary",
+            content: SizedBox(
+              // height: 0.7*MediaQuery.of(context).size.height,
+              child: ListView.separated(
+                itemCount: 15,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(
+                        "Content of each of the card. What you did every day."),
+                    subtitle: Text("12/12/2024"),
+                    horizontalTitleGap: 5,
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Divider(
+                    thickness: 1,
+                    height: 1,
+                  );
+                },
+              ),
+            ));
+      },
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: getStatusColor(status),
@@ -307,7 +357,9 @@ Widget historyCard({
             color: getStatusColor(status),
           ),
         ),
-      ));
+      ),
+    ),
+  );
 }
 
 // Helper method to create overview cards
