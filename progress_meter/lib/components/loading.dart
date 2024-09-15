@@ -23,6 +23,7 @@ Future<dynamic> generalLoading(BuildContext context) {
       return Dialog(
         backgroundColor: Colors.transparent,
         child: Lottie.asset(
+
           "assets/general_loading.json",
         ),
         // insetAnimationCurve: Curves.bounceIn,
