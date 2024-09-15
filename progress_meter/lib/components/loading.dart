@@ -25,7 +25,7 @@ Future<dynamic> generalLoading(BuildContext context) {
         child: Lottie.asset(
           "assets/general_loading.json",
         ),
-        insetAnimationCurve: Curves.bounceIn,
+        // insetAnimationCurve: Curves.bounceIn,
       );
     },
   );
