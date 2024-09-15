@@ -175,15 +175,13 @@ class _CardHomeState extends State<CardHome> {
                                       child: TextFormField(
                                         controller: reportText,
                                         maxLines: 4,
-
                                         decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                            // borderRadius: BorderRadius.circular(50)
-                                          ),
-                                          alignLabelWithHint: true,
-                                          filled: true,
+                                            border: OutlineInputBorder(
+                                                // borderRadius: BorderRadius.circular(50)
+                                                ),
+                                            alignLabelWithHint: true,
+                                            filled: true,
                                             labelText: "Progress Report"),
-                                            
                                       ),
                                     ),
                                     onConfirm: () {},
@@ -291,7 +289,11 @@ Widget historyCard({
 
 // Helper method to create overview cards
 Widget overviewCard(
-    String title, String value, Color color, BuildContext context) {
+  String title,
+  String value,
+  Color color,
+  BuildContext context,
+) {
   return Container(
     width: 180,
     margin: const EdgeInsets.all(8.0),
@@ -332,7 +334,10 @@ Widget overviewCard(
 }
 
 // Helper method to create a Task Card
-Widget adminDashTask(Map<String, dynamic> task, BuildContext context) {
+Widget adminDashTask(
+  Map<String, dynamic> task,
+  BuildContext context,
+) {
   return Badge(
     label: Padding(
       padding: EdgeInsets.all(1),
@@ -399,7 +404,10 @@ Widget adminDashTask(Map<String, dynamic> task, BuildContext context) {
 }
 
 // Helper method to create Employee Productivity Ranking Card with LinearProgressIndicator
-Widget adminTaskIndicator(Map<String, dynamic> employee, BuildContext context) {
+Widget adminTaskIndicator(
+  Map<String, dynamic> employee,
+  BuildContext context,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -413,19 +421,34 @@ Widget adminTaskIndicator(Map<String, dynamic> employee, BuildContext context) {
       // SizedBox(height: 10),
       Row(
         children: [
-          Expanded(
-            child: LinearProgressIndicator(
-              value: employee["performance"],
-              minHeight: 15,
-              // backgroundColor: Colors.grey[300],
-              borderRadius: BorderRadius.circular(25),
-            ),
+          Text(
+            "Overall:  ",
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
-          const SizedBox(width: 10),
-          Text("${(100 * employee["performance"]).toStringAsFixed(0)}%",
-              style: Theme.of(context).textTheme.titleMedium),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+              child:
+                  LoadingBar(percentage: employee["personalperformance"].toDouble())),
         ],
       ),
+
+      Row(
+        children: [
+          Text(
+            "Personal:",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+              child:
+                  LoadingBar(percentage: employee["overallperformance"].toDouble())),
+        ],
+      ),
+
       Divider()
     ],
   );

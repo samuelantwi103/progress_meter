@@ -37,7 +37,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     },
     {
       "title": "Fix login bug",
-      "status": "Pending",
+      "status": "Overdue",
       "employee": "Mark Johnson",
       "assignedDate": "2024-09-05",
       "dueDate": "2024-09-12"
@@ -51,7 +51,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
     },
     {
       "title": "Fix login bug",
-      "status": "Pending",
+      "status": "Overdue",
       "employee": "Mark Johnson",
       "assignedDate": "2024-09-05",
       "dueDate": "2024-09-12"
@@ -66,12 +66,36 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   ];
 
   final List<Map<String, dynamic>> employees = [
-    {"name": "John Doe", "performance": 0.95},
-    {"name": "Jane Smith", "performance": 0.88},
-    {"name": "Mark Johnson", "performance": 0.80},
-    {"name": "Mark Johnson", "performance": 0.80},
-    {"name": "Mark Johnson", "performance": 0.80},
-    {"name": "Mark Johnson", "performance": 0.80},
+    {
+      "name": "John Doe",
+      "overallperformance": 95,
+      "personalperformance": 80,
+    },
+    {
+      "name": "Jane Smith",
+      "overallperformance": 88,
+      "personalperformance": 35,
+    },
+    {
+      "name": "Mark Johnson",
+      "overallperformance": 75,
+      "personalperformance": 65,
+    },
+    {
+      "name": "Mark Johnson",
+      "overallperformance": 40,
+      "personalperformance": 75,
+    },
+    {
+      "name": "Mark Johnson",
+      "overallperformance": 50,
+      "personalperformance": 60,
+    },
+    {
+      "name": "Mark Johnson",
+      "overallperformance": 40,
+      "personalperformance": 60,
+    },
   ];
 
   @override
@@ -86,7 +110,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                createSlideScaleTransition(LoginPage()),
+                logoutTransition(LoginPage()),
               );
             },
           ),
@@ -114,9 +138,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      overviewCard(
-                          "Employees Total", "20", Colors.blue, context),
-                      overviewCard("Pending Tasks", "4", Colors.red, context),
+                      overviewCard("All Tasks", "20", Colors.blue, context),
+                      overviewCard("Overdue Tasks", "4", Colors.red, context),
                       overviewCard(
                           "Tasks in Progress", "12", Colors.orange, context),
                       overviewCard(
@@ -138,13 +161,13 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 TaskSegmentedSection(
                   segmentButtons: [
                     "All",
-                    "Pending",
+                    "Overdue",
                     "In Progress",
                     "Completed",
                   ],
                   tasks: tasks,
                 ),
-               
+
                 SizedBox(
                   height: 30,
                 ),
