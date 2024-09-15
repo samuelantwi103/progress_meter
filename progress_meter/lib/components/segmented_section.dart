@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
+import 'package:progress_meter/components/empty_screen.dart';
 
 /// A segmented button section that displays a list of tasks.
 ///
 /// This widget creates a section with segmented buttons to filter tasks
-/// based on different statuses (e.g., Pending, In Progress, Completed). 
+/// based on different statuses (e.g., Pending, In Progress, Completed).
 /// The body displays a list of task cards based on the selected filter.
 ///
 /// [segmentButtons] A list of button labels to appear as the segmented buttons.
@@ -23,7 +24,6 @@ class TaskSegmentedSection extends StatefulWidget {
 
   /// A list of button labels that will appear as segmented buttons.
   List<String> segmentButtons;
-  
 
   @override
   State<TaskSegmentedSection> createState() => _TaskSegmentedSectionState();
@@ -41,7 +41,7 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
 
   @override
   Widget build(BuildContext context) {
-    if(widget.tasks.isEmpty){
+    if (widget.tasks.isEmpty) {
       return Container(
         child: Text("No Tasks yet. Create one"),
       );
@@ -53,7 +53,6 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
           alignment: Alignment.centerRight,
           child: SegmentedButton(
             showSelectedIcon: false,
-
             segments: widget.segmentButtons.map(
               (button) {
                 return ButtonSegment<String>(
@@ -80,14 +79,14 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
               ? widget.tasks
                   .where(
                     (task) =>
-                        selectedFilter == widget.segmentButtons[0]  ||
+                        selectedFilter == widget.segmentButtons[0] ||
                         task['status'] == selectedFilter,
                   )
                   .length
               : (widget.tasks
                           .where(
                             (task) =>
-                                selectedFilter == widget.segmentButtons[0]  ||
+                                selectedFilter == widget.segmentButtons[0] ||
                                 task['status'] == selectedFilter,
                           )
                           .length <
@@ -95,7 +94,7 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                   ? widget.tasks
                       .where(
                         (task) =>
-                            selectedFilter == widget.segmentButtons[0]  ||
+                            selectedFilter == widget.segmentButtons[0] ||
                             task['status'] == selectedFilter,
                       )
                       .length
@@ -111,6 +110,13 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
             return adminDashTask(filteredTasks[index], context);
           },
         ),
+        if (widget.tasks
+                .where(
+                  (task) =>
+                      selectedFilter == widget.segmentButtons[0] ||
+                      task['status'] == selectedFilter,
+                ).isEmpty)
+          EmptyTaskScreen(),
         SizedBox(
           height: 10,
         ),

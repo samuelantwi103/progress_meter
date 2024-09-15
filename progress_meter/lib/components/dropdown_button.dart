@@ -5,10 +5,10 @@ class DropdownButtonHome extends StatefulWidget {
   DropdownButtonHome({
     super.key,
     required this.menuItems,
-    required this.isCompleted,
+    // required this.isCompleted,
   });
   final List<String> menuItems;
-  bool isCompleted;
+  // bool isCompleted;
 
   @override
   State<DropdownButtonHome> createState() => _DropdownButtonHomeState();
@@ -25,27 +25,31 @@ class _DropdownButtonHomeState extends State<DropdownButtonHome> {
       decoration: BoxDecoration(
         color:
             Theme.of(context).colorScheme.surfaceContainer, // Background color
-        borderRadius: BorderRadius.circular(100), // Rounded corners
-        boxShadow: [
-          BoxShadow(
-            // spreadRadius: 100,
-            color: Colors.black26,
-            offset: Offset(0, 2),
-            blurRadius: 4, // Adds a subtle shadow effect
-          ),
-        ],
+            border: Border.all(
+              color: Theme.of(context).colorScheme.surfaceContainer, // Border color
+            ),
+        borderRadius: BorderRadius.circular(20), // Rounded corners
+        // boxShadow: [
+        //   BoxShadow(
+        //     // spreadRadius: 100,
+        //     color: Colors.black26,
+        //     offset: Offset(0, 2),
+        //     blurRadius: 4, // Adds a subtle shadow effect
+        //   ),
+        // ],
       ),
 
       child: DropdownButtonHideUnderline(
         // Hides the underline
         child: DropdownButton<String>(
           // menuWidth: 100,
-          elevation: 12,
-          isDense: true,
-          itemHeight: 50,
+          // elevation: 12,
+          isExpanded: true,
+          // isDense: true,
+          // itemHeight: 50,
           // dropdownColor: Colors.white, // Background color of dropdown
           hint: Text(
-            'Update',
+            'Employee',
             style: TextStyle(
               // color: Colors.white, // White text for the hint
               fontWeight: FontWeight.bold,

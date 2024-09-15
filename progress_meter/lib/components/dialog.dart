@@ -22,6 +22,7 @@ class PopupDialog extends StatelessWidget {
     return AlertDialog(
       title: Text(title),
       content: message,
+      
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

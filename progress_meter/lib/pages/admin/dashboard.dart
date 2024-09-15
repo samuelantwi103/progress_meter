@@ -17,53 +17,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   bool showMoreEmployees = false;
   int taskLength = 0;
 
-// Current selected task filter
-  String selectedFilter = 'All';
-  // Sample task and employee data
-  final List<Map<String, dynamic>> tasks = [
-    {
-      "title": "Update Dashboard UI",
-      "status": "In Progress",
-      "employee": "John Doe",
-      "assignedDate": "2024-09-01",
-      "dueDate": "2024-09-15"
-    },
-    {
-      "title": "Database Backup",
-      "status": "Completed",
-      "employee": "Jane Smith",
-      "assignedDate": "2024-08-25",
-      "dueDate": "2024-09-10"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "Overdue",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "Completed",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "Overdue",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "In Progress",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-  ];
 
   final List<Map<String, dynamic>> employees = [
     {
@@ -148,26 +101,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                // Task Overview Section
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Tasks',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                TaskSegmentedSection(
-                  segmentButtons: [
-                    "All",
-                    "Overdue",
-                    "In Progress",
-                    "Completed",
-                  ],
-                  tasks: tasks,
-                ),
-
+                
+                
                 SizedBox(
                   height: 30,
                 ),
@@ -190,7 +125,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           ? employees.length
                           : 3,
                   itemBuilder: (context, index) {
-                    return adminTaskIndicator(employees[index], context);
+                    return adminTaskIndicator(employees[index], context,overview:  true);
                   },
                 ),
                 TextButton(

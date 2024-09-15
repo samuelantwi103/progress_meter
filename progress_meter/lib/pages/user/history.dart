@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/empty_screen.dart';
+import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
@@ -50,30 +51,6 @@ class _HistoryPageState extends State<HistoryPage>
       standUpsData.addAll(notAssignedTasks.memberSelftasks!);
     }
 
-    // if (historyData.isEmpty) {
-
-    //   return Scaffold(
-    //       appBar: AppBar(
-    //         title: Text("History"),
-    //         centerTitle: true,
-    //         bottom: TabBar(
-    //           controller: tabController,
-    //           tabs: [
-    //             Tab(
-    //               text: "Tasks",
-    //             ),
-    //             Tab(
-    //               text: "Standups",
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //       body: TabBarView(controller: tabController, children: [
-    //         SafeArea(child: EmptyHistoryScreen()),
-    //         SafeArea(child: EmptyHistoryScreen()),
-    //       ]));
-    // }
-
     return Scaffold(
         appBar: AppBar(
           title: Text("History"),
@@ -118,7 +95,9 @@ class _HistoryPageState extends State<HistoryPage>
                                   customBorder: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12)),
                                   onTap: () async {
+                                    generalLoading(context);
                                     List<Map<String, dynamic>> reportList = await fetchAllReports(member.memberInfo!['uniquecode'], historyData[index]['taskid']);
+                                    Navigator.pop(context);
                                      
                                     callBottomSheet(
 

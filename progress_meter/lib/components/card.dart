@@ -1,6 +1,7 @@
 // components/card.dart
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/dropdown_button.dart';
+import 'package:progress_meter/components/form.dart';
 import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/services/callback.dart';
@@ -385,6 +386,7 @@ Widget adminDashTask(
   Map<String, dynamic> task,
   BuildContext context,
 ) {
+  final _formKeyAssign =  GlobalKey<FormState>();
   return Badge(
     label: Padding(
       padding: EdgeInsets.all(1),
@@ -443,6 +445,35 @@ Widget adminDashTask(
                 ),
               ],
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FilledButton.tonal(
+                  onPressed: () {
+                    callDialog(context: context, content: AssignTaskForm(formKey: _formKeyAssign), title: "Assign a task", onConfirm: (){
+                      if (_formKeyAssign.currentState!.validate()) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Task assigned to employee")));
+                      }
+                    });
+                    
+                  },
+                  child: Text("Assign"),
+                ),
+                SizedBox(width: 10),
+                FilledButton.tonal(
+                  onPressed: () {
+                    callDialog(context: context, content: Text("Are you sure you want to delete this task?"), title: "Delete task", onConfirm: (){});
+                  },
+                  style:  ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.error.withOpacity(0.5)) ,
+                  ),
+                  child: Text("Delete"),
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -453,8 +484,9 @@ Widget adminDashTask(
 // Helper method to create Employee Productivity Ranking Card with LinearProgressIndicator
 Widget adminTaskIndicator(
   Map<String, dynamic> employee,
-  BuildContext context,
-) {
+  BuildContext context, {
+  bool overview = false,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -480,21 +512,21 @@ Widget adminTaskIndicator(
                   percentage: employee["personalperformance"].toDouble())),
         ],
       ),
-
-      Row(
-        children: [
-          Text(
-            "Personal:",
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-              child: LoadingBar(
-                  percentage: employee["overallperformance"].toDouble())),
-        ],
-      ),
+      if (!overview)
+        Row(
+          children: [
+            Text(
+              "Personal:",
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+                child: LoadingBar(
+                    percentage: employee["overallperformance"].toDouble())),
+          ],
+        ),
 
       Divider()
     ],

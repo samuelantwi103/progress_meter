@@ -53,6 +53,34 @@ void formatLoginCode(TextEditingController controller) {
       selection: TextSelection.collapsed(offset: currentText.length));
 }
 
+  // Validators
+  String? validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field is required';
+    }
+    return null;
+  }
+
+  String? validateCode(String? value) {
+    final codeRegex = RegExp(r'^[A-Za-z]{3}[A-Za-z0-9]{5}$');
+    if (value == null || value.isEmpty) {
+      return 'Code is required';
+    } else if (!codeRegex.hasMatch(value)) {
+      return 'Invalid code format (e.g., ABC-12E4F)';
+    }
+    return null;
+  }
+
+  String? validatePin(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'PIN is required';
+    } else if (value.length != 4 || !RegExp(r'^\d{4}$').hasMatch(value)) {
+      return 'PIN must be 4 digits';
+    }
+    return null;
+  }
+
+
 // Get Color based on status
 Color getStatusColor(String status) {
   switch (status) {

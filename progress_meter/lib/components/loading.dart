@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 
 Future<dynamic> loginLoading(BuildContext context) {
   return showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (context) {
       return Dialog(
@@ -18,12 +19,12 @@ Future<dynamic> loginLoading(BuildContext context) {
 
 Future<dynamic> generalLoading(BuildContext context) {
   return showDialog(
+    barrierDismissible: false,
     context: context,
     builder: (context) {
       return Dialog(
         backgroundColor: Colors.transparent,
         child: Lottie.asset(
-
           "assets/general_loading.json",
         ),
         // insetAnimationCurve: Curves.bounceIn,
