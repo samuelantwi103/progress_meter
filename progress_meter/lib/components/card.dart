@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:progress_meter/components/dropdown_button.dart';
 import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/services/callback.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
+import 'package:provider/provider.dart';
 
 class CardHome extends StatefulWidget {
   const CardHome({
@@ -13,6 +16,8 @@ class CardHome extends StatefulWidget {
     required this.overdue,
     required this.dateDue,
     required this.status,
+    required this.taskId,
+    required this.memberId
   });
   final String title;
   final String description;
@@ -20,6 +25,8 @@ class CardHome extends StatefulWidget {
   final String overdue;
   final String dateDue;
   final String status;
+  final String taskId;
+  final String memberId;
 
   @override
   State<CardHome> createState() => _CardHomeState();
@@ -30,8 +37,10 @@ class _CardHomeState extends State<CardHome> {
 
   @override
   Widget build(BuildContext context) {
+    AssignedProvider assignPro = Provider.of<AssignedProvider>(context,listen:false);
     TextEditingController reportText = TextEditingController();
     return Container(
+
       margin: EdgeInsets.only(
         left: 20,
         right: 20,
@@ -98,7 +107,7 @@ class _CardHomeState extends State<CardHome> {
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 TextSpan(
-                                    text: widget.dateAssigned,
+                                    text: formatDateString(widget.dateAssigned),
                                     style:
                                         Theme.of(context).textTheme.bodySmall),
                               ],
@@ -120,7 +129,7 @@ class _CardHomeState extends State<CardHome> {
                                       ?.copyWith(fontWeight: FontWeight.bold),
                                 ),
                                 TextSpan(
-                                    text: widget.dateDue,
+                                    text: formatDateString(widget.dateDue),
                                     style:
                                         Theme.of(context).textTheme.bodySmall),
                               ],
@@ -134,7 +143,7 @@ class _CardHomeState extends State<CardHome> {
                     ),
 
                     LoadingBar(
-                      percentage: 30,
+                      percentage: calculateDateTimePercentage(widget.dateAssigned, widget.dateDue).toDouble(),
                       height: 10,
                     ),
                     SizedBox(
@@ -153,12 +162,16 @@ class _CardHomeState extends State<CardHome> {
                                   title: "Complete Task",
                                   content: Text(
                                       "Are you sure you have completed this task?"),
-                                  onConfirm: () {
-                                    setState(() {
-                                      isCompleted = true;
-                                    });
-                                    // Navigator.pop(context);
-                                  },
+                                  taskId: widget.taskId,
+                                  memberId: widget.memberId,
+                                  assignPro: assignPro,
+                                  report: TextEditingController(),
+                                  // onConfirm: () {
+                                  //   setState(() {
+                                  //     isCompleted = true;
+                                  //   });
+                                  //   // Navigator.pop(context);
+                                  // },
                                 );
                               },
                               child: Text("Complete"),
@@ -168,6 +181,7 @@ class _CardHomeState extends State<CardHome> {
                                 //     elevation: WidgetStatePropertyAll(3)),
                                 onPressed: () {
                                   callDialog(
+                                    
                                     context: context,
                                     title: "Progress Report",
                                     content: Form(
@@ -186,7 +200,11 @@ class _CardHomeState extends State<CardHome> {
                                             
                                       ),
                                     ),
-                                    onConfirm: () {},
+                                    taskId: widget.taskId,
+                                    memberId: widget.memberId,
+                                    assignPro: assignPro,
+                                    report: reportText
+                                    
                                   );
                                 },
                                 child: Text("Report"))

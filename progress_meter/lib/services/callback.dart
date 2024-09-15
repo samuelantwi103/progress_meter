@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/pop_up_dialog.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 
 // Standup Form Handler
-void submitStandupForm(
+Future<void> submitStandupForm(
   _formKey,
-  TextEditingController _titleController,
-  TextEditingController _descriptionController,
-  TextEditingController _standupController,
-  String? _selectedStatus,
+  TextEditingController titleController,
+  TextEditingController descriptionController,
+  TextEditingController standupController,
+  String? selectedStatus,
+  String memberId,
+  SelfTasksProvider selfPro,
   void setState(void Function() fn),
-) {
+) async {
   if (_formKey.currentState!.validate()) {
-    final String title = _titleController.text;
-    final String description = _descriptionController.text;
-    final String standupReport = _standupController.text;
-    final String status = _selectedStatus ?? 'No Status Selected';
+    final String title = titleController.text.trim();
+    final String description = descriptionController.text.trim();
+    final String standupReport = standupController.text.trim();
+    final String status = selectedStatus ?? 'No Status Selected';
+    
+    submitStandUp(title, description, standupReport, memberId,selfPro);
+
 
     print("Title: $title");
     print("Description: $description");
@@ -22,11 +29,11 @@ void submitStandupForm(
     print("Stand-Up Report: $standupReport");
 
     // Clear the form after submission
-    _titleController.clear();
-    _descriptionController.clear();
-    _standupController.clear();
+    titleController.clear();
+    descriptionController.clear();
+    standupController.clear();
     setState(() {
-      _selectedStatus = null;
+      selectedStatus = null;
     });
   }
 }
@@ -102,7 +109,10 @@ void callDialog({
   required BuildContext context,
   required Widget content,
   required String title,
-  required Function onConfirm,
+  required String memberId,taskId,
+  required TextEditingController report,
+  required AssignedProvider assignPro,
+  
 }) {
   showDialog(
     context: context,
@@ -110,10 +120,10 @@ void callDialog({
       return PopupDialog(
           title: title,
           message: content,
-          onConfirm: () {
-            onConfirm;
-            Navigator.pop(context);
-          },
+          report: report,
+          assignPro: assignPro,
+          taskId: taskId,
+          memberId: memberId,
           onCancel: () {
             Navigator.pop(context);
           });

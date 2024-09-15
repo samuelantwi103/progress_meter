@@ -2,7 +2,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/form.dart';
+import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
+import 'package:provider/provider.dart';
 
 class StandupsPage extends StatefulWidget {
   const StandupsPage({super.key});
@@ -17,6 +19,7 @@ class _StandupsPageState extends State<StandupsPage> {
   Widget build(BuildContext context) {
     DateTime currentDate = DateTime.now();
     String formattedDate = convertDateTimeToString(currentDate);
+    Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -50,7 +53,7 @@ class _StandupsPageState extends State<StandupsPage> {
                 SizedBox(height: 10),
                 ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: 500, minWidth: 300),
-                  child: StandupForm(),
+                  child: StandupForm(memberId:member.memberInfo!['uniquecode']),
                 ),
               ],
             ),

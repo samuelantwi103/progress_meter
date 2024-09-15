@@ -5,6 +5,7 @@ import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/pages/login.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -20,13 +21,15 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    int totalTasks = 10;
-    int completedTasks = 6;
-    int inProgressTasks = 3;
-    int pendingTasks = 1;
-    int completedStandUps = 15;
+    final assignedTasks = Provider.of<AssignedProvider>(context,listen: true).currenMember!;
+    final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
+    int totalTasks = assignedTasks.memberAssignedtasks!.length;
+    int completedTasks = assignedTasks.getCompletedTasks.length;
+    int inProgressTasks = assignedTasks.getProgressTasks.length;
+    int pendingTasks = assignedTasks.getOverdueTasks.length;
+    int completedStandUps = notAssignedTaks.memberSelftasks!.length;
 
-    final double progressPercentage = completedTasks / totalTasks;
+    //final double progressPercentage = completedTasks / totalTasks;
 
     return Scaffold(
       body: CustomScrollView(
@@ -143,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           taskStatusCard(
                             context: context,
                             title: "All",
-                            count: completedTasks,
+                            count: totalTasks,
                             color: Colors.black,
                           ),
                           taskStatusCard(
@@ -192,7 +195,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 text: " out of ",
                               ),
                               TextSpan(
-                                text: '30',
+                                text: '${getDaysInCurrentMonth()}',
                                 style: Theme.of(context).textTheme.displaySmall,
                               ),
                             ],
