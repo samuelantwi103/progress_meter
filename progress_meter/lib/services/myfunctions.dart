@@ -106,7 +106,7 @@ Future<void> submitStandUp(String title, String description,String challenges, S
 int getDaysBetween(String startDateString, String endDateString) {
   // Parse the string dates into DateTime objects
   DateTime startDate = DateTime.parse(startDateString);
-  DateTime endDate = DateTime.parse(endDateString);
+  DateTime endDate = DateTime.now();
 
   // Calculate the difference in days
   int daysDifference = endDate.difference(startDate).inDays;
