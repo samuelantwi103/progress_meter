@@ -230,3 +230,15 @@ Future<void> submitReport(String memberId, String reportText,String taskId, Assi
   assignPro.setCurrentAssignedTasks(assigned);
 
 }
+
+Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId) async{
+  //final docId = getCurrentMonthDay();
+  final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
+  final doc = await FirebaseFirestore.instance.collection('organisations').doc('son')
+  .collection('members').doc(memberId)
+  .collection('months').doc(monthdoc)
+  .collection('assigned').doc(taskId)
+  .collection('reports').get();
+  List<Map<String,dynamic>> reports = doc.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
+  return reports;
+}

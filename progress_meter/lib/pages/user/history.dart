@@ -31,6 +31,7 @@ class _HistoryPageState extends State<HistoryPage>
     //Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
     final assignedTasks = Provider.of<AssignedProvider>(context, listen: true).currenMember!;
     final notAssignedTasks = Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
+    final member = Provider.of<MemberProvider>(context, listen: true).currenMember!;
     TabController tabController = TabController(length: 2, vsync: this);
     //final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
     if (assignedTasks.getCompletedTasks.isNotEmpty) {
@@ -106,6 +107,8 @@ class _HistoryPageState extends State<HistoryPage>
                           return historyCard(
                               task: historyItem['title'],
                               status: historyItem['status'],
+                              memberId: member.memberInfo!['uniquecode'],
+                              taskid: historyItem['taskid'],
                               date: historyItem['datecompleted'],
                               context: context);
                         },

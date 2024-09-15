@@ -299,6 +299,8 @@ Widget historyCard({
   required String status,
   required String date,
   required BuildContext context,
+  String? taskid,
+  String? memberId,
 }) {
   return Card.filled(
     elevation: 2,
@@ -307,7 +309,8 @@ Widget historyCard({
       splashColor: Theme.of(context).colorScheme.primaryContainer,
       customBorder:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onTap: () {
+      onTap: () async {
+        List<Map<String,dynamic>> reportList = await fetchAllReports(memberId!,taskid!);
         callBottomSheet(
             context: context,
             title: "Report Summary",
