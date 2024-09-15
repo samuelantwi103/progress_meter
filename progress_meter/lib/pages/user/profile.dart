@@ -6,6 +6,7 @@ import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/pages/login.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
+import 'package:progress_meter/services/transitions.dart';
 import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -20,9 +21,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    final assignedTasks = Provider.of<AssignedProvider>(context,listen: true).currenMember!;
-    final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
+    Member member =
+        Provider.of<MemberProvider>(context, listen: true).currenMember!;
+    final assignedTasks =
+        Provider.of<AssignedProvider>(context, listen: true).currenMember!;
+    final notAssignedTaks =
+        Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
     int totalTasks = assignedTasks.memberAssignedtasks!.length;
     int completedTasks = assignedTasks.getCompletedTasks.length;
     int inProgressTasks = assignedTasks.getProgressTasks.length;
@@ -46,7 +50,8 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               TextButton.icon(
                 onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage(),));
+                  Navigator.pushReplacement(
+                      context, logoutTransition(LoginPage()));
                 },
                 icon: Icon(Icons.logout_outlined),
                 label: Text("Logout"),
@@ -117,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     SizedBox(height: 5),
                     LoadingBar(percentage: 50),
-                    SizedBox(height:10),
+                    SizedBox(height: 10),
                     // Task progress bar
                     Text(
                       "Overall Performance",
@@ -138,7 +143,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     Center(
                       child: Wrap(
                         alignment: WrapAlignment.spaceAround,
-
                         children: [
                           // Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceAround,

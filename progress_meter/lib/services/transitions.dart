@@ -55,7 +55,7 @@ Route logoutTransition(Widget page, {Duration duration = const Duration(millisec
           begin: begin,
           end: end,
         ).animate(curveAnimation),
-        child: ScaleTransition(
+        child: ScaleTransition(  
           scale: animation,
           child: child,
         ),

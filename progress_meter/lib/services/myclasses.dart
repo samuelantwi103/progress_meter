@@ -36,46 +36,46 @@ class AssignedTasks {
     if (memberAssignedtasks == null) {
       return [];
     }
-    
+
     // Filter tasks that are marked as completed
     List<Map<String, dynamic>> completed = memberAssignedtasks!.where((task) {
       // Check if the task has a "status" field and if it indicates completion
-      return task['status'] == 'Completed'; // Adjust this condition based on your data structure
+      return task['status'] ==
+          'Completed'; // Adjust this condition based on your data structure
     }).toList();
-    
+
     return completed;
   }
 
-
-    List<Map<String, dynamic>> get getProgressTasks {
+  List<Map<String, dynamic>> get getProgressTasks {
     // Ensure memberAssignedtasks is not null and contains data
     if (memberAssignedtasks == null) {
       return [];
     }
-    
+
     // Filter tasks that are marked as completed
     List<Map<String, dynamic>> completed = memberAssignedtasks!.where((task) {
       // Check if the task has a "status" field and if it indicates completion
-      return task['status'] == 'In Progress'; // Adjust this condition based on your data structure
+      return task['status'] ==
+          'In Progress'; // Adjust this condition based on your data structure
     }).toList();
-    
+
     return completed;
   }
 
-
-
-    List<Map<String, dynamic>> get getOverdueTasks {
+  List<Map<String, dynamic>> get getOverdueTasks {
     // Ensure memberAssignedtasks is not null and contains data
     if (memberAssignedtasks == null) {
       return [];
     }
-    
+
     // Filter tasks that are marked as completed
     List<Map<String, dynamic>> completed = memberAssignedtasks!.where((task) {
       // Check if the task has a "status" field and if it indicates completion
-      return task['status'] == 'Overdue'; // Adjust this condition based on your data structure
+      return task['status'] ==
+          'Overdue'; // Adjust this condition based on your data structure
     }).toList();
-    
+
     return completed;
   }
 }
@@ -124,13 +124,21 @@ Future<void> fetchdata(BuildContext context, String uid, String pin) async {
       member.memberInfo = usersnap.data() as Map<String, dynamic>;
       Provider.of<MemberProvider>(context, listen: false)
           .setCurrentMember(member);
-          // Navigator.pop(context);
+      Navigator.pop(context);
       Navigator.pushReplacement(
           context, createSlideScaleTransition(HomePage()));
     } else {
+      Navigator.pop(context);
       debugPrint('Wrong inputs');
+      ScaffoldMessenger.of(context).showSnackBar(
+         SnackBar(content: Text("Wrong Credentials")),
+      );
     }
   } else {
+    Navigator.pop(context);
     debugPrint('incorrect values');
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Wrong Credentials")),
+      );
   }
 }

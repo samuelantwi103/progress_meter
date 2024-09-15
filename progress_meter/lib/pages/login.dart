@@ -102,12 +102,14 @@ class LoginPageState extends State<LoginPage> {
                           return "Enter your code";
                         }
 
-                        if (!RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$').hasMatch(value)) {
+                        if (!RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$')
+                            .hasMatch(value)) {
                           return 'Please enter a valid code: eg.sonss001';
                         }
                         if (value != null &&
                             value.isNotEmpty &&
-                            !RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$').hasMatch(value)) {
+                            !RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$')
+                                .hasMatch(value)) {
                           setState(() {
                             _isCodeValid = false;
                           });
@@ -122,9 +124,7 @@ class LoginPageState extends State<LoginPage> {
                       keyboardType: TextInputType.number,
                       maxLength: 4,
                       obscureText: !_isPinVisible,
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly
-                      ],
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       obscuringCharacter: "*",
                       decoration: InputDecoration(
                           labelText: "PIN",
@@ -160,39 +160,26 @@ class LoginPageState extends State<LoginPage> {
                     const SizedBox(height: 32),
                     FilledButton(
                       onPressed: () async {
-                        
-
                         if (_formKey.currentState!.validate()) {
-
+                          loginLoading(context);
                           final code = _codeController.text.trim();
                           final pin = _pinController.text.trim();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text("Logging in...")));
+                          // ScaffoldMessenger.of(context).showSnackBar(
+                              // SnackBar(content: Text("Logging in...")));
                           // LoginLoading(context);
                           AssignedTasks assigned = AssignedTasks();
                           SelfTasks selfTasks = SelfTasks();
-                          AssignedProvider assPro = Provider.of<AssignedProvider>(context,listen:false);
-                          SelfTasksProvider selfPro = Provider.of<SelfTasksProvider>(context,listen:false);
-                          await fetchdata(context,code,pin);
+                          AssignedProvider assPro =
+                              Provider.of<AssignedProvider>(context,
+                                  listen: false);
+                          SelfTasksProvider selfPro =
+                              Provider.of<SelfTasksProvider>(context,
+                                  listen: false);
+                          await fetchdata(context, code, pin);
                           await fetchAssignedTasks(assigned, code, pin: pin);
                           await fetchSelfTasks(selfTasks, code, pin: pin);
                           assPro.setCurrentAssignedTasks(assigned);
                           selfPro.setCurrentSelfTaks(selfTasks);
-
-                          // Navigator.of(context).pop();
-                          // if (_codeController.text == "AAA-AAAAA") {
-                          //   Navigator.pushReplacement(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (context) => AdminHomePage(),
-                          //       ));
-                          // } else {
-                          //   Navigator.pushReplacement(
-                          //       context,
-                          //       MaterialPageRoute(
-                          //         builder: (context) => HomePage(),
-                          //       ));
-                          // }
                         }
                       },
                       child: Text("Login"),

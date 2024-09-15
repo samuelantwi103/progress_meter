@@ -1,6 +1,7 @@
 // components/card.dart
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/dropdown_button.dart';
+import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/components/loading_bar.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
@@ -8,17 +9,16 @@ import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
 
 class CardHome extends StatefulWidget {
-  const CardHome({
-    super.key,
-    required this.title,
-    required this.description,
-    required this.dateAssigned,
-    required this.overdue,
-    required this.dateDue,
-    required this.status,
-    required this.taskId,
-    required this.memberId
-  });
+  const CardHome(
+      {super.key,
+      required this.title,
+      required this.description,
+      required this.dateAssigned,
+      required this.overdue,
+      required this.dateDue,
+      required this.status,
+      required this.taskId,
+      required this.memberId});
   final String title;
   final String description;
   final String dateAssigned;
@@ -37,10 +37,10 @@ class _CardHomeState extends State<CardHome> {
 
   @override
   Widget build(BuildContext context) {
-    AssignedProvider assignPro = Provider.of<AssignedProvider>(context,listen:false);
+    AssignedProvider assignPro =
+        Provider.of<AssignedProvider>(context, listen: false);
     TextEditingController reportText = TextEditingController();
     return Container(
-
       margin: EdgeInsets.only(
         left: 20,
         right: 20,
@@ -143,7 +143,9 @@ class _CardHomeState extends State<CardHome> {
                     ),
 
                     LoadingBar(
-                      percentage: calculateDateTimePercentage(widget.dateAssigned, widget.dateDue).toDouble(),
+                      percentage: calculateDateTimePercentage(
+                              widget.dateAssigned, widget.dateDue)
+                          .toDouble(),
                       height: 10,
                     ),
                     SizedBox(
@@ -162,47 +164,52 @@ class _CardHomeState extends State<CardHome> {
                                   title: "Complete Task",
                                   content: Text(
                                       "Are you sure you have completed this task?"),
-                                  taskId: widget.taskId,
-                                  memberId: widget.memberId,
-                                  assignPro: assignPro,
-                                  report: TextEditingController(),
-                                  // onConfirm: () {
-                                  //   setState(() {
-                                  //     isCompleted = true;
-                                  //   });
-                                  //   // Navigator.pop(context);
-                                  // },
+                                  onConfirm: () async {
+                                    generalLoading(context);
+                                    await submitReport(
+                                        widget.memberId,
+                                        TextEditingController().text.trim(),
+                                        widget.taskId,
+                                        assignPro);
+                                    TextEditingController().clear();
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
                                 );
                               },
                               child: Text("Complete"),
                             ),
                             ElevatedButton(
-                                // style: ButtonStyle(
-                                //     elevation: WidgetStatePropertyAll(3)),
                                 onPressed: () {
                                   callDialog(
-                                    
                                     context: context,
                                     title: "Progress Report",
+                                    onConfirm: () async {
+                                      generalLoading(context);
+                                      await submitReport(
+                                          widget.memberId,
+                                          TextEditingController().text.trim(),
+                                          widget.taskId,
+                                          assignPro);
+                                      TextEditingController().clear();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
                                     content: Form(
                                       // key: ,
                                       child: TextFormField(
                                         controller: reportText,
                                         maxLines: 4,
                                         decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                                // borderRadius: BorderRadius.circular(50)
-                                                ),
-                                            alignLabelWithHint: true,
-                                            filled: true,
-                                            labelText: "Progress Report"),
+                                          border: OutlineInputBorder(
+                                              // borderRadius: BorderRadius.circular(50)
+                                              ),
+                                          alignLabelWithHint: true,
+                                          filled: true,
+                                          labelText: "Progress Report",
+                                        ),
                                       ),
                                     ),
-                                    taskId: widget.taskId,
-                                    memberId: widget.memberId,
-                                    assignPro: assignPro,
-                                    report: reportText
-                                    
                                   );
                                 },
                                 child: Text("Report"))
@@ -447,8 +454,8 @@ Widget adminTaskIndicator(
             width: 10,
           ),
           Expanded(
-              child:
-                  LoadingBar(percentage: employee["personalperformance"].toDouble())),
+              child: LoadingBar(
+                  percentage: employee["personalperformance"].toDouble())),
         ],
       ),
 
@@ -462,8 +469,8 @@ Widget adminTaskIndicator(
             width: 10,
           ),
           Expanded(
-              child:
-                  LoadingBar(percentage: employee["overallperformance"].toDouble())),
+              child: LoadingBar(
+                  percentage: employee["overallperformance"].toDouble())),
         ],
       ),
 
