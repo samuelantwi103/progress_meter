@@ -18,6 +18,7 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage>
     with TickerProviderStateMixin {
   late TabController tabController;
+    final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -100,7 +101,7 @@ class _HistoryPageState extends State<HistoryPage>
                                     Navigator.pop(context);
                                      
                                     callBottomSheet(
-
+                                      scrollController: scrollController,
                                         context: context,
                                         title: "Report Summary",
                                         content: SizedBox(

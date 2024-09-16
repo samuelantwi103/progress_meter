@@ -3,10 +3,14 @@ import 'package:intl/intl.dart';
 
 class DateSelectionField extends StatefulWidget {
   final TextEditingController dateController;
+  final String title;
+  final String errorText;
 
   const DateSelectionField({
     super.key,
     required this.dateController,
+    required this.title,
+    required this.errorText,
   });
 
   @override
@@ -34,7 +38,7 @@ class _DateSelectionFieldState extends State<DateSelectionField> {
       controller: widget.dateController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
-        labelText: 'Select Date',
+        labelText: widget.title,
         border: OutlineInputBorder(),
         filled: true,
         // fillColor: Colors.grey[200],
@@ -44,7 +48,7 @@ class _DateSelectionFieldState extends State<DateSelectionField> {
       onTap: () => _selectDate(context), // Open the date picker on tap
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Set due date';
+          return widget.errorText;
         }
         return null;
       },

@@ -7,6 +7,7 @@ import 'package:progress_meter/services/myfunctions.dart';
 // Standup Form Handler
 Future<void> submitStandupForm(
   _formKey,
+  BuildContext context,
   TextEditingController titleController,
   TextEditingController descriptionController,
   TextEditingController standupController,
@@ -16,6 +17,7 @@ Future<void> submitStandupForm(
   void setState(void Function() fn),
 ) async {
   if (_formKey.currentState!.validate()) {
+    generalLoading(context);
     final String title = titleController.text.trim();
     final String description = descriptionController.text.trim();
     final String standupReport = standupController.text.trim();
@@ -35,6 +37,7 @@ Future<void> submitStandupForm(
     setState(() {
       selectedStatus = null;
     });
+    Navigator.pop(context);
   }
 }
 
@@ -53,33 +56,32 @@ void formatLoginCode(TextEditingController controller) {
       selection: TextSelection.collapsed(offset: currentText.length));
 }
 
-  // Validators
-  String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This field is required';
-    }
-    return null;
+// Validators
+String? validateName(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'This field is required';
   }
+  return null;
+}
 
-  String? validateCode(String? value) {
-    final codeRegex = RegExp(r'^[A-Za-z]{3}[A-Za-z0-9]{5}$');
-    if (value == null || value.isEmpty) {
-      return 'Code is required';
-    } else if (!codeRegex.hasMatch(value)) {
-      return 'Invalid code format (e.g., ABC-12E4F)';
-    }
-    return null;
+String? validateCode(String? value) {
+  final codeRegex = RegExp(r'^[A-Za-z]{3}[A-Za-z0-9]{5}$');
+  if (value == null || value.isEmpty) {
+    return 'Code is required';
+  } else if (!codeRegex.hasMatch(value)) {
+    return 'Invalid code format (e.g., ABC-12E4F)';
   }
+  return null;
+}
 
-  String? validatePin(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'PIN is required';
-    } else if (value.length != 4 || !RegExp(r'^\d{4}$').hasMatch(value)) {
-      return 'PIN must be 4 digits';
-    }
-    return null;
+String? validatePin(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'PIN is required';
+  } else if (value.length != 4 || !RegExp(r'^\d{4}$').hasMatch(value)) {
+    return 'PIN must be 4 digits';
   }
-
+  return null;
+}
 
 // Get Color based on status
 Color getStatusColor(String status) {
@@ -115,6 +117,8 @@ void callBottomSheet({
   String? actionText,
   bool isCompleted = false,
   required Widget content,
+  bool full = true,
+  required ScrollController scrollController,
 
   // string
 }) {
@@ -125,15 +129,28 @@ void callBottomSheet({
     useSafeArea: true,
     context: context,
     builder: (context) {
-      return CustomBottomSheet(
-          title: title,
-          content: content,
-          actionText: actionText,
-          onAction: () {
-            // setState(() {
-            //   isCompleted =true;
-            // });
-          });
+      return DraggableScrollableSheet(
+        initialChildSize:full?0.9: 0.5, // Initial height is half of the screen
+        minChildSize: full?0.9: 0.3, // Minimum height of the bottom sheet
+        maxChildSize: 0.9, // Maximum height when dragged
+        expand: false,
+        // Prevents expanding to full screen
+
+        builder: (context, scrollController) {
+          return CustomBottomSheet(
+            title: title,
+            content: content,
+            full: full,
+            scrollController: scrollController,
+            actionText: actionText,
+            onAction: () {
+              // setState(() {
+              //   isCompleted =true;
+              // });
+            },
+          );
+        },
+      );
     },
   );
 }

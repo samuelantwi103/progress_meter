@@ -10,6 +10,7 @@ Future<dynamic> loginLoading(BuildContext context) {
         backgroundColor: Colors.transparent,
         child: Lottie.asset(
           "assets/login_loading_anim.json",
+          animate: true,
         ),
         // insetAnimationCurve: Curves.bounceIn,
       );
@@ -26,6 +27,8 @@ Future<dynamic> generalLoading(BuildContext context) {
         backgroundColor: Colors.transparent,
         child: Lottie.asset(
           "assets/general_loading.json",
+          animate: true,
+          
         ),
         // insetAnimationCurve: Curves.bounceIn,
       );

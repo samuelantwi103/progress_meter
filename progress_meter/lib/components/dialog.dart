@@ -45,14 +45,18 @@ class CustomBottomSheet extends StatefulWidget {
   final Widget content;
   final String? actionText;
   final VoidCallback? onAction;
+  final ScrollController scrollController;
+  final bool full;
 
   const CustomBottomSheet({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
     required this.actionText,
     required this.onAction,
-  }) : super(key: key);
+    required this.scrollController,
+    required this.full,
+  });
 
   @override
   State<CustomBottomSheet> createState() => _CustomBottomSheetState();
@@ -64,68 +68,64 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
     if (widget.actionText != null) {
       
     
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainer,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+          SizedBox(height: 10),
+          widget.content,
+          SizedBox(height: 20),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: ElevatedButton(
+              onPressed: widget.onAction,
+              child: Text(widget.actionText!),
             ),
-            SizedBox(height: 10),
-            Expanded(child: widget.content),
-            SizedBox(height: 20),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: ElevatedButton(
-                onPressed: widget.onAction,
-                child: Text(widget.actionText!),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   } else {
-    return SafeArea(
-      child: Container(
-        padding: const EdgeInsets.all(16.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceContainer,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.title,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
+      ),
+      child: Column(
+        // mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.title,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(height: 10),
-            Expanded(child: widget.content),
-            SizedBox(height: 20),
-           ],
-        ),
+          ),
+          SizedBox(height: 10),
+          Expanded(child: widget.content),
+          SizedBox(height: 20),
+         ],
       ),
     );
   

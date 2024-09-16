@@ -4,9 +4,11 @@ import 'package:progress_meter/components/dropdown_button.dart';
 import 'package:progress_meter/components/form.dart';
 import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/components/loading_bar.dart';
+import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
+import 'package:progress_meter/services/transitions.dart';
 import 'package:provider/provider.dart';
 
 class CardHome extends StatefulWidget {
@@ -487,48 +489,62 @@ Widget adminTaskIndicator(
   BuildContext context, {
   bool overview = false,
 }) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      // Employee name
-      Text(
-        employee["name"],
-        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-      ),
-      // SizedBox(height: 10),
-      Row(
-        children: [
-          Text(
-            "Overall:  ",
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Expanded(
-              child: LoadingBar(
-                  percentage: employee["personalperformance"].toDouble())),
-        ],
-      ),
-      if (!overview)
-        Row(
+  return Card.outlined(
+    elevation: 10,
+    child: InkWell(
+      onTap: (){
+        Navigator.push(context, logoutTransition(HomePage()));
+      },
+      enableFeedback: true,
+      splashColor: Theme.of(context).colorScheme.surfaceContainer,
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Employee name
             Text(
-              "Personal:",
-              style: Theme.of(context).textTheme.bodyMedium,
+              employee["name"],
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-            SizedBox(
-              width: 10,
+            // SizedBox(height: 10),
+            Row(
+              children: [
+                Text(
+                  "Overall:   ",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                    child: LoadingBar(
+                      
+                        percentage: employee["personalperformance"].toDouble())),
+              ],
             ),
-            Expanded(
-                child: LoadingBar(
-                    percentage: employee["overallperformance"].toDouble())),
+            if (!overview)
+              Row(
+                children: [
+                  Text(
+                    "Personal:",
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                      child: LoadingBar(
+                          percentage: employee["overallperformance"].toDouble())),
+                ],
+              ),
+        
+            // Divider()
           ],
         ),
-
-      Divider()
-    ],
+      ),
+    ),
   );
 }

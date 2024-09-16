@@ -1,9 +1,10 @@
 // pages/login.dart
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/pages/admin/admin_home.dart';
-import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
@@ -19,18 +20,6 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _codeController.addListener(() => formatLoginCode(_codeController));
-  // }
-
-  // @override
-  // void dispose() {
-  //   _codeController.removeListener(() => formatLoginCode(_codeController));
-  //   _codeController.dispose();
-  //   super.dispose();
-  // }
 
   // Controllers to capture user input
   final TextEditingController _codeController = TextEditingController();
@@ -156,18 +145,18 @@ class LoginPageState extends State<LoginPage> {
                         if (value.length != 4) {
                           return "PIN must be 4 digits";
                         }
+                        return null;
                       },
                     ),
                     const SizedBox(height: 32),
                     FilledButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-
                           loginLoading(context);
                           final code = _codeController.text.trim();
                           final pin = _pinController.text.trim();
                           // ScaffoldMessenger.of(context).showSnackBar(
-                              // SnackBar(content: Text("Logging in...")));
+                          // SnackBar(content: Text("Logging in...")));
                           // LoginLoading(context);
                           AssignedTasks assigned = AssignedTasks();
                           SelfTasks selfTasks = SelfTasks();
@@ -177,17 +166,18 @@ class LoginPageState extends State<LoginPage> {
                           SelfTasksProvider selfPro =
                               Provider.of<SelfTasksProvider>(context,
                                   listen: false);
-                          if(pin == '0000' && code == 'sonaa000'){
+                          if (pin == '0000' && code == 'sonaa000') {
                             Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                  context, createSlideScaleTransition(AdminHomePage()));
-                          }
-                          else{
-                              await fetchdata(context, code, pin);
-                              await fetchAssignedTasks(assigned, code, pin: pin);
-                              await fetchSelfTasks(selfTasks, code, pin: pin);
-                              assPro.setCurrentAssignedTasks(assigned);
-                              selfPro.setCurrentSelfTaks(selfTasks);
+                            Navigator.pushReplacement(
+                                context,
+                                createSlideScaleTransition(AdminHomePage(),
+                                    duration: Duration(milliseconds: 1000)));
+                          } else {
+                            await fetchdata(context, code, pin);
+                            await fetchAssignedTasks(assigned, code, pin: pin);
+                            await fetchSelfTasks(selfTasks, code, pin: pin);
+                            assPro.setCurrentAssignedTasks(assigned);
+                            selfPro.setCurrentSelfTaks(selfTasks);
                           }
                         }
                       },

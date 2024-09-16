@@ -63,7 +63,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                logoutTransition(LoginPage()),
+                logoutTransition(LoginPage(), duration: Duration(milliseconds: 1000)),
               );
             },
           ),

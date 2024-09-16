@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/date_field.dart';
-import 'package:progress_meter/components/dropdown_button.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:provider/provider.dart';
@@ -20,11 +19,6 @@ class _StandupFormState extends State<StandupForm> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _standupController = TextEditingController();
-  // final List<String> _taskStatuses = [
-  //   "In Progress",
-  //   "Completed",
-  //   // "Pending",
-  // ];
   String? _selectedStatus;
 
   @override
@@ -40,6 +34,7 @@ class _StandupFormState extends State<StandupForm> {
           children: [
             // Task Title
             TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _titleController,
               decoration: InputDecoration(
                 labelText: 'Task',
@@ -57,6 +52,7 @@ class _StandupFormState extends State<StandupForm> {
 
             // Task Description
             TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _descriptionController,
               decoration: InputDecoration(
                   labelText: 'Task Description',
@@ -77,6 +73,7 @@ class _StandupFormState extends State<StandupForm> {
 
             // Stand-Up Report
             TextFormField(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               controller: _standupController,
               decoration: InputDecoration(
                 labelText: 'Comments or Challenges',
@@ -98,8 +95,10 @@ class _StandupFormState extends State<StandupForm> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
+
                   submitStandupForm(
                     _formKey,
+                    context,
                     _titleController,
                     _descriptionController,
                     _standupController,
@@ -121,10 +120,11 @@ class _StandupFormState extends State<StandupForm> {
   }
 }
 
+// Add Employee Form UI
 class AddEmployeeForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from parent
 
-  AddEmployeeForm({Key? key, required this.formKey}) : super(key: key);
+  const AddEmployeeForm({super.key, required this.formKey});
 
   @override
   State<AddEmployeeForm> createState() => _AddEmployeeFormState();
@@ -226,10 +226,11 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
   }
 }
 
+// Add Task Form UI
 class AddTaskForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from parent
 
-  AddTaskForm({Key? key, required this.formKey}) : super(key: key);
+  const AddTaskForm({super.key, required this.formKey});
 
   @override
   State<AddTaskForm> createState() => _AddTaskFormState();
@@ -287,6 +288,7 @@ class _AddTaskFormState extends State<AddTaskForm> {
   }
 }
 
+// Assign a task Form UI
 class AssignTaskForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from the parent
 
@@ -300,14 +302,8 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
   // Controllers for the form fields
   final TextEditingController dateController = TextEditingController();
   final TextEditingController employeeController = TextEditingController();
-
-  // Simple name validator
-  String? validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'This field is required';
-    }
-    return null;
-  }
+    final ScrollController scrollController = ScrollController();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -316,17 +312,40 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DropdownButtonHome(menuItems: const [
-            "Francis",
-            "Samuel",
-          
-          ]),
           // Example Name Field
           TextFormField(
             controller: employeeController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
+            readOnly: true,
+            onTap: () {
+              final List<String> employeeList = ["Francis", "Samuel", "John", "Doe","Benjamin","Wilson"];
+              // Show a dialog to select an employee
+              callBottomSheet(
+                context: context,
+                scrollController: scrollController,
+                full: false,
+                title: "Select Employee",
+                content: ListView.builder(
+                  controller: scrollController,
+                  itemCount: employeeList.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      
+                      title: Text(employeeList[index]),
+                      onTap: () {
+                        setState(() {
+                          employeeController.text = employeeList[index];
+                        });
+                        Navigator.pop(context);
+                      },
+                    );
+                  },
+                ),
+              );
+            },
             decoration: InputDecoration(
               labelText: 'Employee',
+              suffixIcon: Icon(Icons.person_outline),
               border: OutlineInputBorder(),
               filled: true,
               // fillColor: Colors.grey[200],
@@ -337,6 +356,8 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
 
           // Date Selection Field
           DateSelectionField(
+            title: "Due date",
+            errorText: 'Set due date',
             dateController: dateController, // Pass the controller
           ),
         ],
