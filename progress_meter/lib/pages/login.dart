@@ -166,14 +166,14 @@ class LoginPageState extends State<LoginPage> {
                           SelfTasksProvider selfPro =
                               Provider.of<SelfTasksProvider>(context,
                                   listen: false);
-                          if (pin == '0000' && code == 'sonaa000') {
+                          if (await fetchAdminData(code, pin)) {
                             Navigator.pop(context);
                             Navigator.pushReplacement(
                                 context,
                                 createSlideScaleTransition(AdminHomePage(),
                                     duration: Duration(milliseconds: 1000)));
-                          } else {
-                            await fetchdata(context, code, pin);
+                          } 
+                          else if(await fetchdata(context, code, pin)){                            
                             await fetchAssignedTasks(assigned, code, pin: pin);
                             await fetchSelfTasks(selfTasks, code, pin: pin);
                             assPro.setCurrentAssignedTasks(assigned);
