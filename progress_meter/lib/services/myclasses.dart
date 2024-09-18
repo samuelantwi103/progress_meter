@@ -123,7 +123,67 @@ class SelfTasksProvider extends ChangeNotifier {
   }
 }
 
-Future<void> fetchdata(BuildContext context, String uid, String pin) async {
+
+//===========================================ADMIN CLASS
+class Admin{
+
+  Map<String, dynamic>? adminInfo;
+  List<Map<String, dynamic>>? employees;
+  List<Map<String, dynamic>>? tasks;
+
+  Admin();
+
+  List<Map<String, dynamic>> getTasksInProgress(){
+
+    List<Map<String, dynamic>> progress = tasks!.where((task) {
+          // Check if the task has a "status" field and if it indicates completion
+          return task['status'] ==
+              'In Progress'; // Adjust this condition based on your data structure
+        }).toList();
+
+    return progress;
+  }
+
+  List<Map<String, dynamic>> getTasksCompleted(){
+
+    List<Map<String, dynamic>> completed = tasks!.where((task) {
+          // Check if the task has a "status" field and if it indicates completion
+          return task['status'] ==
+              'Completed'; // Adjust this condition based on your data structure
+        }).toList();
+    return completed;
+  }
+
+  List<Map<String, dynamic>> getTasksOverdue(){
+
+    List<Map<String, dynamic>> overdues = tasks!.where((task) {
+      // Check if the task has a "status" field and if it indicates completion
+      return task['status'] ==
+          'Overdue'; // Adjust this condition based on your data structure
+    }).toList();
+
+    return overdues;
+  }
+
+}
+
+//=======================================ADMIN CLASS Provider
+
+class AdminProvider extends ChangeNotifier {
+  Admin? _currentAdmin;
+
+  Admin? get currenMember => _currentAdmin;
+
+  void setCurrentSelfTaks(Admin admin) {
+    _currentAdmin = admin;
+    notifyListeners();
+  }
+}
+
+//=================================================
+Future<bool> fetchdata(BuildContext context, String uid, String pin) async {
+
+  bool state = false;
   DocumentSnapshot usersnap = await FirebaseFirestore.instance
       .collection('organisations')
       .doc('son')
@@ -140,6 +200,7 @@ Future<void> fetchdata(BuildContext context, String uid, String pin) async {
       Navigator.pop(context);
       Navigator.pushReplacement(
           context, createSlideScaleTransition(HomePage()));
+      state = true;
     } else {
       Navigator.pop(context);
       debugPrint('Wrong inputs');
@@ -154,4 +215,5 @@ Future<void> fetchdata(BuildContext context, String uid, String pin) async {
         SnackBar(content: Text("Wrong Credentials")),
       );
   }
+  return state;
 }

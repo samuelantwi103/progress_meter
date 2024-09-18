@@ -2,7 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:progress_meter/pages/admin/admin_home.dart';
+import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/transitions.dart';
 import 'package:provider/provider.dart';
 
 String convertDateTimeToString(DateTime dateTime) {
@@ -239,6 +242,33 @@ Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId)
   .collection('months').doc(monthdoc)
   .collection('assigned').doc(taskId)
   .collection('reports').get();
-  List<Map<String,dynamic>> reports = doc.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
+  List<Map<String,dynamic>> reports = doc.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
   return reports;
+}
+
+
+//=================================Functions related to admin
+
+Future<bool> fetchAdminData( String uid, String pin) async {
+  bool state = false;
+  final usersnap = FirebaseFirestore.instance
+      .collection('organisations');
+
+  final adminorg = await usersnap.where('uniquecode', isEqualTo: uid).get();
+
+  if(adminorg.docs.isNotEmpty && adminorg.docs.first['pin'] == pin){
+    Admin admin = Admin();
+    admin.adminInfo = adminorg.docs.first.data();
+    final employees = await  usersnap.doc(adminorg.docs.first.id).collection('members').get();
+    admin.employees = employees.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
+    final tasks = await  usersnap.doc(adminorg.docs.first.id).collection('tasks').get();
+    admin.tasks = tasks.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
+    state = true;
+    
+  }
+
+  return state;
+      
+      
+  
 }
