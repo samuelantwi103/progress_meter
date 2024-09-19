@@ -296,8 +296,9 @@ class _AddTaskFormState extends State<AddTaskForm> {
 // Assign a task Form UI
 class AssignTaskForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from the parent
+  final Admin admin;
 
-  const AssignTaskForm({super.key, required this.formKey});
+  const AssignTaskForm({super.key, required this.formKey, required this.admin});
 
   @override
   State<AssignTaskForm> createState() => _AssignTaskFormState();
@@ -322,14 +323,7 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             readOnly: true,
             onTap: () {
-              final List<String> employeeList = [
-                "Francis",
-                "Samuel",
-                "John",
-                "Doe",
-                "Benjamin",
-                "Wilson"
-              ];
+              final List<Map<String,dynamic>> employeeList = widget.admin.employees!;
               // Show a dialog to select an employee
               callBottomSheet(
                 context: context,
@@ -341,10 +335,11 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(employeeList[index]),
+                      
+                      title: Text(employeeList[index]['firstname']),
                       onTap: () {
                         setState(() {
-                          employeeController.text = employeeList[index];
+                          employeeController.text = employeeList[index]['firstname'];
                         });
                         Navigator.pop(context);
                       },

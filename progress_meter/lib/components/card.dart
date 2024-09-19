@@ -387,6 +387,7 @@ Widget overviewCard(
 Widget adminDashTask(
   Map<String, dynamic> task,
   BuildContext context,
+  Admin admin,
 ) {
   final _formKeyAssign =  GlobalKey<FormState>();
   return Badge(
@@ -428,7 +429,7 @@ Widget adminDashTask(
 
             // Assigned Employee
             Text(
-              "Assigned to: ${task["employee"]}",
+              "Assigned to: ${task["assignedto"]}",
               style: Theme.of(context).textTheme.bodySmall,
             ),
             SizedBox(height: 4),
@@ -438,11 +439,11 @@ Widget adminDashTask(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Assigned: ${task["assignedDate"]}",
+                  "Assigned: ${formatDateString(task["timeassigned"])}",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
                 Text(
-                  "Due: ${task["dueDate"]}",
+                  "Due: ${formatDateString(task["deadline"])}",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
               ],
@@ -455,7 +456,7 @@ Widget adminDashTask(
               children: [
                 FilledButton.tonal(
                   onPressed: () {
-                    callDialog(context: context, content: AssignTaskForm(formKey: _formKeyAssign), title: "Assign a task", onConfirm: (){
+                    callDialog(context: context, content: AssignTaskForm(formKey: _formKeyAssign,admin: admin,), title: "Assign a task", onConfirm: (){
                       if (_formKeyAssign.currentState!.validate()) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Task assigned to employee")));
                       }
@@ -504,7 +505,7 @@ Widget adminTaskIndicator(
           children: [
             // Employee name
             Text(
-              employee["name"],
+              employee["firstname"],
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),

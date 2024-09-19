@@ -237,7 +237,7 @@ Future<void> submitReport(String memberId, String reportText,String taskId, Assi
 Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId) async{
   //final docId = getCurrentMonthDay();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
-  final doc = await FirebaseFirestore.instance.collection('organisations').doc('son')
+  final doc = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
   .collection('members').doc(memberId)
   .collection('months').doc(monthdoc)
   .collection('assigned').doc(taskId)
@@ -247,9 +247,21 @@ Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId)
 }
 
 
+
+String getFirstThreeLetters(String input) {
+  // Check if the input string has 3 or more characters
+  if (input.length >= 3) {
+    return input.substring(0, 3);  // Return the first 3 letters
+  } else {
+    return input;  // Return the string itself if it's less than 3 characters
+  }
+}
+
+
+
 //=================================Functions related to admin
 
-Future<bool> fetchAdminData( String uid, String pin) async {
+Future<bool> fetchAdminData( BuildContext context, String uid, String pin) async {
   bool state = false;
   final usersnap = FirebaseFirestore.instance
       .collection('organisations');
@@ -263,12 +275,12 @@ Future<bool> fetchAdminData( String uid, String pin) async {
     admin.employees = employees.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
     final tasks = await  usersnap.doc(adminorg.docs.first.id).collection('tasks').get();
     admin.tasks = tasks.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
+    Provider.of<AdminProvider>(context,listen:false).setCurrentAdmin(admin);
     state = true;
     
   }
 
   return state;
-      
-      
   
 }
+

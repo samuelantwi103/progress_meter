@@ -174,7 +174,7 @@ class AdminProvider extends ChangeNotifier {
 
   Admin? get currenMember => _currentAdmin;
 
-  void setCurrentSelfTaks(Admin admin) {
+  void setCurrentAdmin(Admin admin) {
     _currentAdmin = admin;
     notifyListeners();
   }

@@ -3,6 +3,8 @@ import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/form.dart';
 import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/services/callback.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:provider/provider.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({super.key});
@@ -85,6 +87,9 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Task Management'),
@@ -104,7 +109,8 @@ class _TaskPageState extends State<TaskPage> {
                     "In Progress",
                     "Completed",
                   ],
-                  tasks: tasks,
+                  tasks: admin.tasks!,
+                  admin: admin,
                 ),
                 SizedBox(
                   height: 30,
@@ -127,6 +133,7 @@ class _TaskPageState extends State<TaskPage> {
               title: "Add a task",
               onConfirm: () {
                 if (_formKeyAdd.currentState!.validate()) {
+                  
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Task Added!')),
                   );

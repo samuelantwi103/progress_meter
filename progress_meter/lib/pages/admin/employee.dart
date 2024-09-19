@@ -4,6 +4,8 @@ import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/form.dart';
 import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/services/callback.dart';
+import 'package:progress_meter/services/myclasses.dart';
+import 'package:provider/provider.dart';
 
 class EmployeePage extends StatefulWidget {
   const EmployeePage({super.key});
@@ -55,6 +57,8 @@ class _EmployeePageState extends State<EmployeePage> {
 
   @override
   Widget build(BuildContext context) {
+    final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Employee Management'),
@@ -77,13 +81,9 @@ class _EmployeePageState extends State<EmployeePage> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: showMoreEmployees
-                      ? employees.length
-                      : (employees.length < 3)
-                          ? employees.length
-                          : 3,
+                  itemCount: admin.employees!.length,
                   itemBuilder: (context, index) {
-                    return adminTaskIndicator(employees[index], context);
+                    return adminTaskIndicator(admin.employees![index], context);
                   },
                 ),
                 TextButton(
