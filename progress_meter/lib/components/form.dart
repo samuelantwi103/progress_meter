@@ -122,8 +122,21 @@ class _StandupFormState extends State<StandupForm> {
 // Add Employee Form UI
 class AddEmployeeForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from parent
+  final TextEditingController fnameController;
+  final TextEditingController mnameController;
+  final TextEditingController lnameController;
+  final TextEditingController codeController;
+  final TextEditingController pinController;
 
-  const AddEmployeeForm({super.key, required this.formKey});
+  const AddEmployeeForm({
+    super.key,
+    required this.formKey,
+    required this.fnameController,
+    required this.mnameController,
+    required this.lnameController,
+    required this.codeController,
+    required this.pinController,
+  });
 
   @override
   State<AddEmployeeForm> createState() => _AddEmployeeFormState();
@@ -131,11 +144,6 @@ class AddEmployeeForm extends StatefulWidget {
 
 class _AddEmployeeFormState extends State<AddEmployeeForm> {
   // Controllers for the form fields
-  final TextEditingController fnameController = TextEditingController();
-  final TextEditingController mnameController = TextEditingController();
-  final TextEditingController lnameController = TextEditingController();
-  final TextEditingController codeController = TextEditingController();
-  final TextEditingController pinController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +156,7 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
             // First Name Field
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: fnameController,
+              controller: widget.fnameController,
               decoration: InputDecoration(
                 labelText: 'First Name',
                 border: OutlineInputBorder(),
@@ -162,7 +170,7 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
             // Middle Name Field
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: mnameController,
+              controller: widget.mnameController,
               decoration: InputDecoration(
                 labelText: 'Middle Name',
                 border: OutlineInputBorder(),
@@ -175,7 +183,7 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
             // Last Name Field
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: lnameController,
+              controller: widget.lnameController,
               decoration: InputDecoration(
                 labelText: 'Last Name',
                 border: OutlineInputBorder(),
@@ -189,7 +197,7 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
             // Code Field
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: codeController,
+              controller: widget.codeController,
               maxLength: 8,
               decoration: InputDecoration(
                 labelText: 'Code (e.g., sonss000)',
@@ -205,7 +213,7 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
             // PIN Field
             TextFormField(
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              controller: pinController,
+              controller: widget.pinController,
               maxLength: 4,
               decoration: InputDecoration(
                 labelText: 'PIN (4 digits)',
@@ -244,8 +252,6 @@ class AddTaskForm extends StatefulWidget {
 }
 
 class _AddTaskFormState extends State<AddTaskForm> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -259,7 +265,7 @@ class _AddTaskFormState extends State<AddTaskForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               minLines: 1,
               maxLines: 2,
-              controller: titleController,
+              controller: widget.titleController,
               decoration: InputDecoration(
                 alignLabelWithHint: true,
                 labelText: 'Title',
@@ -276,7 +282,7 @@ class _AddTaskFormState extends State<AddTaskForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               minLines: 3,
               maxLines: 5,
-              controller: descriptionController,
+              controller: widget.descriptionController,
               decoration: InputDecoration(
                 alignLabelWithHint: true,
                 labelText: 'Description',
@@ -323,7 +329,8 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             readOnly: true,
             onTap: () {
-              final List<Map<String,dynamic>> employeeList = widget.admin.employees!;
+              final List<Map<String, dynamic>> employeeList =
+                  widget.admin.employees!;
               // Show a dialog to select an employee
               callBottomSheet(
                 context: context,
@@ -335,11 +342,11 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      
                       title: Text(employeeList[index]['firstname']),
                       onTap: () {
                         setState(() {
-                          employeeController.text = employeeList[index]['firstname'];
+                          employeeController.text =
+                              employeeList[index]['firstname'];
                         });
                         Navigator.pop(context);
                       },

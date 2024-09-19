@@ -16,6 +16,11 @@ class EmployeePage extends StatefulWidget {
 
 class _EmployeePageState extends State<EmployeePage> {
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController fnameController = TextEditingController();
+  final TextEditingController mnameController = TextEditingController();
+  final TextEditingController lnameController = TextEditingController();
+  final TextEditingController codeController = TextEditingController();
+  final TextEditingController pinController = TextEditingController();
 
   // Variables to track expanded or collapsed state
   bool showMoreTasks = false;
@@ -57,7 +62,8 @@ class _EmployeePageState extends State<EmployeePage> {
 
   @override
   Widget build(BuildContext context) {
-    final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
+    final admin =
+        Provider.of<AdminProvider>(context, listen: true).currenMember!;
 
     return Scaffold(
       appBar: AppBar(
@@ -106,12 +112,18 @@ class _EmployeePageState extends State<EmployeePage> {
               context: context,
               content: AddEmployeeForm(
                 formKey: _formKey,
+                fnameController: fnameController,
+                lnameController: lnameController,
+                mnameController: mnameController,
+                codeController: codeController,
+                pinController: pinController,
               ),
               title: "Add an employee",
               onConfirm: () {
                 if (_formKey.currentState!.validate()) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Employee Added!')),
+                    SnackBar(content: Text(codeController.text)),
+                    
                   );
                   Navigator.pop(context); // Close dialog on success
                 }

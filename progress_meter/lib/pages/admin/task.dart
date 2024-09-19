@@ -133,9 +133,10 @@ class _TaskPageState extends State<TaskPage> {
               title: "Add a task",
               onConfirm: () {
                 if (_formKeyAdd.currentState!.validate()) {
-                  
+                  // I've moved the controller here
+                  // You can use it now
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Task Added!')),
+                    SnackBar(content: Text(titleController.text)),
                   );
                   Navigator.pop(context); // Close dialog on success
                 }
