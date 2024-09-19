@@ -13,6 +13,9 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage> {
   final _formKeyAdd = GlobalKey<FormState>();
+  // Controllers for the form fields
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   // Variables to track expanded or collapsed state
   bool showMoreTasks = false;
   bool showMoreEmployees = false;
@@ -115,7 +118,12 @@ class _TaskPageState extends State<TaskPage> {
         onPressed: () {
           callDialog(
               context: context,
-              content: Form(child: AddTaskForm(formKey: _formKeyAdd)),
+              content: Form(
+                  child: AddTaskForm(
+                formKey: _formKeyAdd,
+                titleController: titleController,
+                descriptionController: descriptionController,
+              )),
               title: "Add a task",
               onConfirm: () {
                 if (_formKeyAdd.currentState!.validate()) {

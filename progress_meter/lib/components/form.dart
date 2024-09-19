@@ -95,7 +95,6 @@ class _StandupFormState extends State<StandupForm> {
             Center(
               child: ElevatedButton(
                 onPressed: () {
-
                   submitStandupForm(
                     _formKey,
                     context,
@@ -229,17 +228,23 @@ class _AddEmployeeFormState extends State<AddEmployeeForm> {
 // Add Task Form UI
 class AddTaskForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from parent
+  // Controllers for the form fields
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
 
-  const AddTaskForm({super.key, required this.formKey});
+  const AddTaskForm({
+    super.key,
+    required this.formKey,
+    required this.titleController,
+    required this.descriptionController,
+  });
 
   @override
   State<AddTaskForm> createState() => _AddTaskFormState();
 }
 
 class _AddTaskFormState extends State<AddTaskForm> {
-  // Controllers for the form fields
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController descriptionController = TextEditingController();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -302,8 +307,7 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
   // Controllers for the form fields
   final TextEditingController dateController = TextEditingController();
   final TextEditingController employeeController = TextEditingController();
-    final ScrollController scrollController = ScrollController();
-  
+  final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -318,7 +322,14 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             readOnly: true,
             onTap: () {
-              final List<String> employeeList = ["Francis", "Samuel", "John", "Doe","Benjamin","Wilson"];
+              final List<String> employeeList = [
+                "Francis",
+                "Samuel",
+                "John",
+                "Doe",
+                "Benjamin",
+                "Wilson"
+              ];
               // Show a dialog to select an employee
               callBottomSheet(
                 context: context,
@@ -330,7 +341,6 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
                   itemCount: employeeList.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      
                       title: Text(employeeList[index]),
                       onTap: () {
                         setState(() {

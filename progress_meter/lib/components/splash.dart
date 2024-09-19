@@ -15,16 +15,13 @@ class SplashScreen extends StatelessWidget {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
+          child: Column(mainAxisSize: MainAxisSize.min, children: [
             Text(
               "Progress Meter",
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontWeight: FontWeight.bold,
-                
-                fontSize: 0.1 * MediaQuery.of(context).size.width
-              ),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 0.1 * MediaQuery.of(context).size.width,
+                  ),
             ),
             SizedBox(
               height: 0.3 * MediaQuery.of(context).size.height,

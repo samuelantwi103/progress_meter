@@ -84,7 +84,7 @@ class LoginPageState extends State<LoginPage>
                       repeat: true,
                     )),
               ),
-              left: -0.06 * MediaQuery.of(context).size.height,
+              left:MediaQuery.of(context).size.aspectRatio > 0.6? -0.65* MediaQuery.of(context).size.height:-0.06 * MediaQuery.of(context).size.height,
               bottom: -0.06 * MediaQuery.of(context).size.height,
             ),
             Center(
