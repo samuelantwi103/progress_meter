@@ -1,6 +1,7 @@
 // main.dart
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:progress_meter/components/splash.dart';
 import 'package:progress_meter/firebase_options.dart';
 import 'package:progress_meter/pages/login.dart';
 import 'package:progress_meter/services/myclasses.dart';
@@ -56,7 +57,7 @@ class _MyAppState extends State<MyApp> {
             behavior: SnackBarBehavior.floating,
           )),
       themeMode: ThemeMode.light,
-      home: LoginPage(),
+      home: SplashScreen(),
     );
   }
 }

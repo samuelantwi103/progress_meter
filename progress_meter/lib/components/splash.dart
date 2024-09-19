@@ -13,11 +13,11 @@ class SplashScreen extends StatelessWidget {
     return AnimatedSplashScreen(
       splash: Column(children: [
         Center(
-          child: LottieBuilder.asset("assets/login_loading_anim.json"),
+          child: LottieBuilder.asset("assets/general_loading.json"),
         ),
       ]),
       splashIconSize: 400,
-      backgroundColor: Colors.orangeAccent,
+      backgroundColor: Colors.orangeAccent.shade100,
       nextScreen: LoginPage(),
     );
   }
