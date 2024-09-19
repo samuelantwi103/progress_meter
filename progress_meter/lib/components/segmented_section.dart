@@ -45,9 +45,7 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
   @override
   Widget build(BuildContext context) {
     if (widget.tasks.isEmpty) {
-      return Container(
-        child: Text("No Tasks yet. Create one"),
-      );
+      return EmptyTaskManagementScreen();
     }
     return Column(
       mainAxisSize: MainAxisSize.min,

@@ -11,6 +11,7 @@ import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
 import 'package:progress_meter/services/transitions.dart';
 import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -30,6 +31,30 @@ class LoginPageState extends State<LoginPage>
   bool _isPinVisible = false; // To toggle pin visibility
   bool _isCodeValid = false;
 
+  // // Video Controller
+  // late VideoPlayerController _controller;
+  // late Future<void> _initializeVideoPlayerFuture;
+
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+
+  //   _controller = VideoPlayerController.asset(
+  //     "assets/smoke_anim.mp4",
+  //   );
+  //   _controller.play();
+
+  //   _initializeVideoPlayerFuture = _controller.initialize();
+  // }
+
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   _controller.dispose();
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +73,13 @@ class LoginPageState extends State<LoginPage>
                 fit: BoxFit.cover,
               ),
             ),
+            // FutureBuilder(
+            //     future: _initializeVideoPlayerFuture,
+            //     builder: (context, snapshot) {
+            //       return AspectRatio(
+            //           aspectRatio: _controller.value.aspectRatio,
+            //           child: VideoPlayer(_controller));
+            //     }),
             Positioned(
               child: SizedBox(
                   width: MediaQuery.of(context).size.width,
@@ -84,7 +116,9 @@ class LoginPageState extends State<LoginPage>
                       repeat: true,
                     )),
               ),
-              left:MediaQuery.of(context).size.aspectRatio > 0.6? -0.65* MediaQuery.of(context).size.height:-0.06 * MediaQuery.of(context).size.height,
+              left: MediaQuery.of(context).size.aspectRatio > 0.6
+                  ? -0.65 * MediaQuery.of(context).size.height
+                  : -0.06 * MediaQuery.of(context).size.height,
               bottom: -0.06 * MediaQuery.of(context).size.height,
             ),
             Center(
@@ -102,21 +136,23 @@ class LoginPageState extends State<LoginPage>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(
-                            Icons.airplay,
-                            size: 100,
+                          AnimatedContainer(
+                            duration: Duration(seconds: 1),
+                            height: 0.3 * MediaQuery.of(context).size.height,
+                            child:
+                                Image.asset("assets/progress_meter_named.png"),
                           ),
 
-                          // Login text
-                          Text(
-                            "Login",
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
+                          // // Login text
+                          // Text(
+                          //   "Login",
+                          //   style: Theme.of(context)
+                          //       .textTheme
+                          //       .headlineMedium
+                          //       ?.copyWith(
+                          //         fontWeight: FontWeight.bold,
+                          //       ),
+                          // ),
 
                           const SizedBox(height: 32),
                           TextFormField(

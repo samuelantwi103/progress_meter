@@ -2,8 +2,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/empty_screen.dart';
+import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +20,8 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
-    Member member =Provider.of<MemberProvider>(context, listen: true).currenMember!;
+    Member member =
+        Provider.of<MemberProvider>(context, listen: true).currenMember!;
 
     DateTime currentDate = DateTime.now();
     String formattedDate = convertDateTimeToString(currentDate);
@@ -65,7 +68,10 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
 
                 Center(
-                  child: Text('Loading...'),
+                  child: Lottie.asset(
+                    "assets/general_loading.json",
+                    animate: true,
+                  ),
                 )
               ],
             ),
@@ -116,7 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
               if (dummyData.isNotEmpty ||
                   dummyData
                       .where((element) => element['status'] == 'Completed')
-                      .isNotEmpty) 
+                      .isNotEmpty)
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,

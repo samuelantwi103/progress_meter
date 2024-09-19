@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
+import 'package:progress_meter/components/empty_screen.dart';
 import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/pages/login.dart';
 import 'package:progress_meter/services/myclasses.dart';
@@ -18,7 +19,6 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
   bool showMoreTasks = false;
   bool showMoreEmployees = false;
   int taskLength = 0;
-
 
   final List<Map<String, dynamic>> employees = [
     {
@@ -55,8 +55,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
+    final admin =
+        Provider.of<AdminProvider>(context, listen: true).currenMember!;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +68,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             onPressed: () {
               Navigator.pushReplacement(
                 context,
-                logoutTransition(LoginPage(), duration: Duration(milliseconds: 1000)),
+                logoutTransition(LoginPage(),
+                    duration: Duration(milliseconds: 1000)),
               );
             },
           ),
@@ -96,18 +97,28 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      overviewCard("All Tasks", '${admin.tasks!.length}', Colors.blue, context),
-                      overviewCard("Overdue Tasks", "${admin.getTasksOverdue().length}", Colors.red, context),
+                      overviewCard("All Tasks", '${admin.tasks!.length}',
+                          Colors.blue, context),
                       overviewCard(
-                          "Tasks in Progress", "${admin.getTasksInProgress().length}", Colors.orange, context),
+                          "Overdue Tasks",
+                          "${admin.getTasksOverdue().length}",
+                          Colors.red,
+                          context),
                       overviewCard(
-                          "Completed Tasks", "${admin.getTasksCompleted().length}", Colors.green, context),
+                          "Tasks in Progress",
+                          "${admin.getTasksInProgress().length}",
+                          Colors.orange,
+                          context),
+                      overviewCard(
+                          "Completed Tasks",
+                          "${admin.getTasksCompleted().length}",
+                          Colors.green,
+                          context),
                     ],
                   ),
                 ),
                 SizedBox(height: 10),
-                
-                
+
                 SizedBox(
                   height: 30,
                 ),
@@ -124,11 +135,17 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: admin.employees!.length,
+                  itemCount: showMoreEmployees
+                      ? admin.employees!.length
+                      : (admin.employees!.length < 3)
+                          ? admin.employees!.length
+                          : 3,
                   itemBuilder: (context, index) {
-                    return adminTaskIndicator(admin.employees![index], context,overview:  true);
+                    return adminTaskIndicator(admin.employees![index], context,
+                        overview: true);
                   },
                 ),
+                if(admin.employees!.length > 3)
                 TextButton(
                   onPressed: () {
                     setState(() {
@@ -138,6 +155,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   },
                   child: Text(showMoreEmployees ? 'Show Less' : 'Show More'),
                 ),
+              if(admin.employees!.isEmpty)
+              EmptyEmployeeScreen(subComponent: true,),
               ],
             ),
           ),

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:progress_meter/components/card.dart';
+import 'package:progress_meter/components/empty_screen.dart';
 import 'package:progress_meter/components/form.dart';
-import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:provider/provider.dart';
@@ -28,36 +27,36 @@ class _EmployeePageState extends State<EmployeePage> {
   int taskLength = 0;
 
   final List<Map<String, dynamic>> employees = [
-    {
-      "name": "John Doe",
-      "overallperformance": 95,
-      "personalperformance": 80,
-    },
-    {
-      "name": "Jane Smith",
-      "overallperformance": 88,
-      "personalperformance": 35,
-    },
-    {
-      "name": "Mark Johnson",
-      "overallperformance": 75,
-      "personalperformance": 65,
-    },
-    {
-      "name": "Mark Johnson",
-      "overallperformance": 40,
-      "personalperformance": 75,
-    },
-    {
-      "name": "Mark Johnson",
-      "overallperformance": 50,
-      "personalperformance": 60,
-    },
-    {
-      "name": "Mark Johnson",
-      "overallperformance": 40,
-      "personalperformance": 60,
-    },
+    // {
+    //   "name": "John Doe",
+    //   "overallperformance": 95,
+    //   "personalperformance": 80,
+    // },
+    // {
+    //   "name": "Jane Smith",
+    //   "overallperformance": 88,
+    //   "personalperformance": 35,
+    // },
+    // {
+    //   "name": "Mark Johnson",
+    //   "overallperformance": 75,
+    //   "personalperformance": 65,
+    // },
+    // {
+    //   "name": "Mark Johnson",
+    //   "overallperformance": 40,
+    //   "personalperformance": 75,
+    // },
+    // {
+    //   "name": "Mark Johnson",
+    //   "overallperformance": 50,
+    //   "personalperformance": 60,
+    // },
+    // {
+    //   "name": "Mark Johnson",
+    //   "overallperformance": 40,
+    //   "personalperformance": 60,
+    // },
   ];
 
   @override
@@ -87,20 +86,13 @@ class _EmployeePageState extends State<EmployeePage> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: admin.employees!.length,
+                  itemCount:admin.employees!.length,
                   itemBuilder: (context, index) {
                     return adminTaskIndicator(admin.employees![index], context);
-                  },
+                  },                  
                 ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showMoreEmployees =
-                          !showMoreEmployees; // Toggle show more/less
-                    });
-                  },
-                  child: Text(showMoreEmployees ? 'Show Less' : 'Show More'),
-                ),
+                if(admin.employees!.isEmpty)
+                EmptyEmployeeScreen(),
               ],
             ),
           ),
