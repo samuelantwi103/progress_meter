@@ -23,7 +23,7 @@ class SplashScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                 fontWeight: FontWeight.bold,
                 
-                fontSize: 50
+                fontSize: 0.1 * MediaQuery.of(context).size.width
               ),
             ),
             SizedBox(
