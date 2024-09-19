@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/pages/login.dart';
+import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/transitions.dart';
+import 'package:provider/provider.dart';
 
 class AdminDashboardPage extends StatefulWidget {
   const AdminDashboardPage({super.key});
@@ -53,6 +55,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Admin Dashboard'),
@@ -91,12 +96,12 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      overviewCard("All Tasks", "20", Colors.blue, context),
-                      overviewCard("Overdue Tasks", "4", Colors.red, context),
+                      overviewCard("All Tasks", '${admin.tasks!.length}', Colors.blue, context),
+                      overviewCard("Overdue Tasks", "${admin.getTasksOverdue().length}", Colors.red, context),
                       overviewCard(
-                          "Tasks in Progress", "12", Colors.orange, context),
+                          "Tasks in Progress", "${admin.getTasksInProgress().length}", Colors.orange, context),
                       overviewCard(
-                          "Completed Tasks", "8", Colors.green, context),
+                          "Completed Tasks", "${admin.getTasksCompleted().length}", Colors.green, context),
                     ],
                   ),
                 ),
@@ -119,13 +124,9 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount: showMoreEmployees
-                      ? employees.length
-                      : (employees.length < 3)
-                          ? employees.length
-                          : 3,
+                  itemCount: admin.employees!.length,
                   itemBuilder: (context, index) {
-                    return adminTaskIndicator(employees[index], context,overview:  true);
+                    return adminTaskIndicator(admin.employees![index], context,overview:  true);
                   },
                 ),
                 TextButton(

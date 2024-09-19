@@ -229,7 +229,7 @@ class LoginPageState extends State<LoginPage>
                                 SelfTasksProvider selfPro =
                                     Provider.of<SelfTasksProvider>(context,
                                         listen: false);
-                                if (await fetchAdminData(code, pin)) {
+                                if (await fetchAdminData(context, code, pin)) {
                                   Navigator.pop(context);
                                   Navigator.pushReplacement(
                                       context,

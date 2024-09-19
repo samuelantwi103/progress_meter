@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/empty_screen.dart';
+import 'package:progress_meter/services/myclasses.dart';
 
 /// A segmented button section that displays a list of tasks.
 ///
@@ -17,10 +18,12 @@ class TaskSegmentedSection extends StatefulWidget {
     super.key,
     required this.segmentButtons,
     required this.tasks,
+    required this.admin
   });
 
   /// A list of tasks represented as a map of task data, including the title, status, and employee information.
   List<Map<String, dynamic>> tasks;
+  final Admin admin;
 
   /// A list of button labels that will appear as segmented buttons.
   List<String> segmentButtons;
@@ -107,7 +110,7 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                       task['status'] == selectedFilter,
                 )
                 .toList();
-            return adminDashTask(filteredTasks[index], context);
+            return adminDashTask(filteredTasks[index], context,widget.admin);
           },
         ),
         if (widget.tasks

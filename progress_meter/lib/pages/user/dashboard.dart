@@ -18,8 +18,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
-    Member member =
-        Provider.of<MemberProvider>(context, listen: true).currenMember!;
+    Member member =Provider.of<MemberProvider>(context, listen: true).currenMember!;
 
     DateTime currentDate = DateTime.now();
     String formattedDate = convertDateTimeToString(currentDate);

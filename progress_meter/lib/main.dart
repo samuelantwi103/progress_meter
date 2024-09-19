@@ -17,6 +17,7 @@ void main() async {
       ChangeNotifierProvider(create: (_)=> MemberProvider()),
       ChangeNotifierProvider(create: (_)=> AssignedProvider()),
       ChangeNotifierProvider(create: (_)=> SelfTasksProvider()),
+      ChangeNotifierProvider(create: (_)=> AdminProvider()),
     ],
     child: const MyApp(),
   ));
