@@ -49,8 +49,9 @@ class LoginPageState extends State<LoginPage>
               ),
             ),
             Positioned(
-              child: SizedBox.square(
-                  dimension: MediaQuery.of(context).size.width,
+              child: SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: 0.2 * MediaQuery.of(context).size.height,
                   child: LottieBuilder.asset(
                     "assets/corner_anim.json",
                     // controller: CurvedAnimation(
@@ -61,15 +62,16 @@ class LoginPageState extends State<LoginPage>
                     //     curve: Curves.bounceInOut),
                     repeat: true,
                   )),
-              right: 0,
-              top: -80,
+              right: -0.06 * MediaQuery.of(context).size.height,
+              top: -0.06 * MediaQuery.of(context).size.height,
             ),
             Positioned(
-
               child: RotatedBox(
                 quarterTurns: 2,
-                child: SizedBox.square(
-                    dimension: MediaQuery.of(context).size.width,
+                child: SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: 0.2 * MediaQuery.of(context).size.height,
+                    // height: 0.0 * MediaQuery.of(context).size.height,
                     child: LottieBuilder.asset(
                       "assets/corner_anim.json",
                       // frameRate: FrameRate(320),
@@ -77,13 +79,13 @@ class LoginPageState extends State<LoginPage>
                       //     parent: AnimationController(
                       //       vsync: this,
                       //     ),
-                
+
                       //     curve: Curves.bounceInOut),
                       repeat: true,
                     )),
               ),
-              left: 0,
-              bottom: -80,
+              left: -0.06 * MediaQuery.of(context).size.height,
+              bottom: -0.06 * MediaQuery.of(context).size.height,
             ),
             Center(
               child: Form(
