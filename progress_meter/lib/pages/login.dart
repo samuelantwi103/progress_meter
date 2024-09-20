@@ -74,14 +74,23 @@ class LoginPageState extends State<LoginPage>
       duration: Duration(seconds: 2),
     );
 
+    fastAnimationController.forward();
+    fastAnimationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        fastAnimationController.reverse();
+      } else if (status == AnimationStatus.dismissed) {
+        fastAnimationController.forward();
+      }
+    },);
+
     fastAnimationController.repeat();
-    fastAnimationController.duration = Duration(seconds: 2);
+    // fastAnimationController.duration = Duration(seconds: 2);
     logoFadeAnimation =
         Tween<double>(begin: 0, end: 1).animate(animationController);
     formSlideAnimation = Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)
         .animate(animationController);
 
-    // fastAnimationController.forward();
+    fastAnimationController.forward();
     animationController.forward();
   }
 
@@ -171,7 +180,7 @@ class LoginPageState extends State<LoginPage>
                     child: Lottie.asset(
                       'assets/corner_anim.json',
                       controller: fastAnimationController,
-                      repeat: true,
+                      repeat: false,
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -190,7 +199,7 @@ class LoginPageState extends State<LoginPage>
                       child: Lottie.asset(
                         'assets/corner_anim.json',
                         controller: fastAnimationController,
-                        repeat: true,
+                        repeat: false,
                         fit: BoxFit.fill,
                       ),
                     ),
