@@ -6,7 +6,7 @@ import 'package:progress_meter/services/myfunctions.dart';
 
 // Standup Form Handler
 Future<void> submitStandupForm(
-  _formKey,
+  GlobalKey<FormState> _formKey,
   BuildContext context,
   TextEditingController titleController,
   TextEditingController descriptionController,
@@ -22,22 +22,28 @@ Future<void> submitStandupForm(
     final String description = descriptionController.text.trim();
     final String standupReport = standupController.text.trim();
     final String status = selectedStatus ?? 'No Status Selected';
+    generalLoading(context);
 
     submitStandUp(title, description, standupReport, memberId, selfPro);
 
-    print("Title: $title");
-    print("Description: $description");
-    print("Status: $status");
-    print("Stand-Up Report: $standupReport");
+    debugPrint("Title: $title");
+    debugPrint("Description: $description");
+    debugPrint("Status: $status");
+    debugPrint("Stand-Up Report: $standupReport");
 
     // Clear the form after submission
+    _formKey.currentState!.reset();
     titleController.clear();
     descriptionController.clear();
     standupController.clear();
     setState(() {
-      selectedStatus = null;
+      // selectedStatus = null;
     });
     Navigator.pop(context);
+    Navigator.pop(context);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Stand-up submitted successfully.')),
+    );
   }
 }
 
@@ -130,8 +136,9 @@ void callBottomSheet({
     context: context,
     builder: (context) {
       return DraggableScrollableSheet(
-        initialChildSize:full?0.9: 0.5, // Initial height is half of the screen
-        minChildSize: full?0.9: 0.3, // Minimum height of the bottom sheet
+        initialChildSize:
+            full ? 0.9 : 0.5, // Initial height is half of the screen
+        minChildSize: full ? 0.9 : 0.3, // Minimum height of the bottom sheet
         maxChildSize: 0.9, // Maximum height when dragged
         expand: false,
         // Prevents expanding to full screen

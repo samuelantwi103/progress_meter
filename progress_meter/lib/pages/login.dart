@@ -20,8 +20,7 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage>
-    with TickerProviderStateMixin {
+class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers to capture user input
@@ -75,13 +74,15 @@ class LoginPageState extends State<LoginPage>
     );
 
     fastAnimationController.forward();
-    fastAnimationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        fastAnimationController.reverse();
-      } else if (status == AnimationStatus.dismissed) {
-        fastAnimationController.forward();
-      }
-    },);
+    fastAnimationController.addStatusListener(
+      (status) {
+        if (status == AnimationStatus.completed) {
+          fastAnimationController.reverse();
+        } else if (status == AnimationStatus.dismissed) {
+          fastAnimationController.forward();
+        }
+      },
+    );
 
     fastAnimationController.repeat();
     // fastAnimationController.duration = Duration(seconds: 2);
@@ -114,69 +115,17 @@ class LoginPageState extends State<LoginPage>
               alignment: Alignment.center,
               children: [
                 Positioned.fill(
-                  // width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height,
                   child: Image.asset(
                     "assets/bg-image.jpg",
                     fit: BoxFit.cover,
                   ),
                 ),
-                // FutureBuilder(
-                //     future: _initializeVideoPlayerFuture,
-                //     builder: (context, snapshot) {
-                //       return AspectRatio(
-                //           aspectRatio: _controller.value.aspectRatio,
-                //           child: VideoPlayer(_controller));
-                //     }),
-                // Positioned(
-                //   child: SizedBox(
-                //       width: MediaQuery.of(context).size.width,
-                //       height: 0.2 * MediaQuery.of(context).size.height,
-                //       child: LottieBuilder.asset(
-                //         "assets/corner_anim.json",
-                //         // controller: CurvedAnimation(
-                //         //     parent: AnimationController(
-                //         //       vsync: this,
-                //         //     ),
-
-                //         //     curve: Curves.bounceInOut),
-                //         repeat: true,
-                //       )),
-                //   right: -0.06 * MediaQuery.of(context).size.height,
-                //   top: -0.06 * MediaQuery.of(context).size.height,
-                // ),
-                // Positioned(
-                //   child: RotatedBox(
-                //     quarterTurns: 2,
-                //     child: SizedBox(
-                //         width: MediaQuery.of(context).size.width,
-                //         height: 0.2 * MediaQuery.of(context).size.height,
-                //         // height: 0.0 * MediaQuery.of(context).size.height,
-                //         child: LottieBuilder.asset(
-                //           "assets/corner_anim.json",
-                //           // frameRate: FrameRate(320),
-                //           // controller: CurvedAnimation(
-                //           //     parent: AnimationController(
-                //           //       vsync: this,
-                //           //     ),
-
-                //           //     curve: Curves.bounceInOut),
-                //           repeat: true,
-                //         )),
-                //   ),
-                //   left: MediaQuery.of(context).size.aspectRatio > 0.6
-                //       ? -0.65 * MediaQuery.of(context).size.height
-                //       : -0.06 * MediaQuery.of(context).size.height,
-                //   bottom: -0.06 * MediaQuery.of(context).size.height,
-                // ),
                 Positioned(
                   right: 0,
                   top: 0,
                   child: SizedBox(
-                    width: MediaQuery.of(context).size.width *
-                        0.5, // Adjust size relative to width
-                    height: MediaQuery.of(context).size.height *
-                        0.1, // Adjust size relative to height
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.1,
                     child: Lottie.asset(
                       'assets/corner_anim.json',
                       controller: fastAnimationController,
@@ -192,10 +141,8 @@ class LoginPageState extends State<LoginPage>
                   child: RotatedBox(
                     quarterTurns: 2,
                     child: SizedBox(
-                      width: MediaQuery.of(context).size.width *
-                          0.5, // Adjust size relative to width
-                      height: MediaQuery.of(context).size.height *
-                          0.1, // Adjust size relative to height
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.height * 0.1,
                       child: Lottie.asset(
                         'assets/corner_anim.json',
                         controller: fastAnimationController,
@@ -228,37 +175,19 @@ class LoginPageState extends State<LoginPage>
                                 child: Image.asset(
                                     "assets/progress_meter_named.png"),
                               ),
-
-                              // // Login text
-                              // Text(
-                              //   "Login",
-                              //   style: Theme.of(context)
-                              //       .textTheme
-                              //       .headlineMedium
-                              //       ?.copyWith(
-                              //         fontWeight: FontWeight.bold,
-                              //       ),
-                              // ),
-
                               const SizedBox(height: 32),
                               TextFormField(
                                 controller: _codeController,
+                                onTapOutside:  (event) => FocusScope.of(context).unfocus(),
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
-                                // inputFormatters: [
-                                //   FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]$'))
-                                // ],
                                 maxLength: 8,
-                                // textCapitalization: TextCapitalization.characters,
                                 decoration: InputDecoration(
                                   labelText: "Code",
                                   hintText: "Enter your code",
                                   prefixIcon:
                                       const Icon(Icons.vpn_key_outlined),
                                   filled: true,
-
-                                  // fillColor: Theme.of(context).colorScheme.primaryContainer,
-                                  // prefixIcon: Icon(Icons.numbers),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
@@ -270,7 +199,6 @@ class LoginPageState extends State<LoginPage>
                                 onChanged: (value) =>
                                     formatLoginCode(_codeController),
                                 validator: (value) {
-                                  // formatLoginCode(_codeController);
                                   if (value == null || value.isEmpty) {
                                     return "Enter your code";
                                   }
@@ -279,8 +207,7 @@ class LoginPageState extends State<LoginPage>
                                       .hasMatch(value)) {
                                     return 'Please enter a valid code: eg.sonss001';
                                   }
-                                  if (value != null &&
-                                      value.isNotEmpty &&
+                                  if (value.isNotEmpty &&
                                       !RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$')
                                           .hasMatch(value)) {
                                     setState(() {
@@ -292,10 +219,13 @@ class LoginPageState extends State<LoginPage>
                               ),
                               const SizedBox(height: 24),
                               TextFormField(
+                                onTapOutside:  (event) => FocusScope.of(context).unfocus(),
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 controller: _pinController,
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.numberWithOptions(
+                                  decimal: false, signed: false,
+                                ),
                                 maxLength: 4,
                                 obscureText: !_isPinVisible,
                                 inputFormatters: [

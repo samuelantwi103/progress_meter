@@ -43,13 +43,16 @@ class _HistoryPageState extends State<HistoryPage>
     //final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
     if (assignedTasks.getCompletedTasks.isNotEmpty) {
       historyData.addAll(assignedTasks.getCompletedTasks);
+    //  historyData.reversed.toList();
     }
 
     if (assignedTasks.getOverdueTasks.isNotEmpty) {
       historyData.addAll(assignedTasks.getOverdueTasks);
+      // historyData.reversed.toList();
     }
     if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
       standUpsData.addAll(notAssignedTasks.memberSelftasks!);
+      // standUpsData.reversed.toList();
     }
 
     return Scaffold(

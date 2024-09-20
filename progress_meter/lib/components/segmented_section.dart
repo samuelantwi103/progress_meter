@@ -87,7 +87,7 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                       selectedFilter == widget.segmentButtons[0] ||
                       task['status'] == selectedFilter,
                 )
-                .toList();
+                .toList().reversed.toList();
             return adminDashTask(filteredTasks[index], context, widget.admin);
           },
         ),
