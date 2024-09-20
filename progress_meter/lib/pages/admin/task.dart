@@ -4,6 +4,7 @@ import 'package:progress_meter/components/form.dart';
 import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
 
 class TaskPage extends StatefulWidget {
@@ -88,7 +89,7 @@ class _TaskPageState extends State<TaskPage> {
   @override
   Widget build(BuildContext context) {
     final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
-
+    AdminProvider adPro = Provider.of<AdminProvider>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(
@@ -131,14 +132,20 @@ class _TaskPageState extends State<TaskPage> {
                 descriptionController: descriptionController,
               )),
               title: "Add a task",
-              onConfirm: () {
+              onConfirm: () async {
                 if (_formKeyAdd.currentState!.validate()) {
                   // I've moved the controller here
                   // You can use it now
+                  await admin.addNewTask(titleController.text.trim(), descriptionController.text.trim());
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(titleController.text)),
                   );
-                  Navigator.pop(context); // Close dialog on success
+                  fetchAdminData(context, admin.adminInfo!['uniquecode'], admin.adminInfo!['pin']);
+                  Navigator.pop(context);
+                  
+                  adPro.setCurrentAdmin(admin);
+                   // Close dialog on success
                 }
               });
         },

@@ -428,6 +428,10 @@ Widget adminDashTask(
             // SizedBox(height: 4),
 
             // Assigned Employee
+            (task["assignedto"] == null) ? Text(
+              "Assigned to: N/A",
+              style: Theme.of(context).textTheme.bodySmall,
+            ) :
             Text(
               "Assigned to: ${task["assignedto"]}",
               style: Theme.of(context).textTheme.bodySmall,
@@ -435,13 +439,23 @@ Widget adminDashTask(
             SizedBox(height: 4),
 
             // Assigned and Due Dates
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                (task["timeassigned"] == null) ? 
+                Text(
+                  "Assigned: N/A",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ):
                 Text(
                   "Assigned: ${formatDateString(task["timeassigned"])}",
                   style: Theme.of(context).textTheme.bodySmall,
                 ),
+                (task["deadline"] == null) ? Text(
+                  "Due: N/A",
+                  style: Theme.of(context).textTheme.bodySmall,
+                ) :
                 Text(
                   "Due: ${formatDateString(task["deadline"])}",
                   style: Theme.of(context).textTheme.bodySmall,

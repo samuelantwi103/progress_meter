@@ -318,6 +318,7 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
 
   @override
   Widget build(BuildContext context) {
+    String employeeId ='';
     return Form(
       key: widget.formKey, // Use the passed form key
       child: Column(
@@ -347,6 +348,9 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
                         setState(() {
                           employeeController.text =
                               employeeList[index]['firstname'];
+                          // fetching the employee id to make sure I am able to update that side.
+                          employeeId = employeeList[index]['uniquecode'];
+                          
                         });
                         Navigator.pop(context);
                       },
