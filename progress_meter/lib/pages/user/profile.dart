@@ -76,39 +76,44 @@ class _ProfilePageState extends State<ProfilePage> {
                       height: 10,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          child: Icon(
-                            Icons.person,
-                            size: 50,
+                          child: Image.asset(
+                            "assets/son_logo.png",
+                            height: 0.1*MediaQuery.of(context).size.height,
                           ),
                           backgroundColor:
                               Theme.of(context).colorScheme.primaryContainer,
                         ),
-                        Expanded(
-                          child: Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${member.memberInfo!['firstname']} ${member.memberInfo!['middlename']} ${member.memberInfo!['lastname']}',
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  member.memberInfo!['uniquecode'],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                        color: Colors.grey,
-                                      ),
-                                ),
-                              ],
-                            ),
+                        
+                        SizedBox(
+                          width: 0.5*MediaQuery.of(context).size.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${member.memberInfo!['firstname']}',
+                                style:
+                                    Theme.of(context).textTheme.headlineSmall,
+                              ),
+                              Text(
+                                '${member.memberInfo!['middlename']} ${member.memberInfo!['lastname']}',
+                                style:
+                                    Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                member.memberInfo!['uniquecode'],
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Colors.grey,
+                                    ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -122,7 +127,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
 
                     SizedBox(height: 5),
-                    LoadingBar(percentage: double.parse((member.memberInfo!['completedscores']/(completeOverdue)).toStringAsFixed(2))),
+                    LoadingBar(
+                        percentage: double.parse(
+                            (member.memberInfo!['completedscores'] /
+                                    (completeOverdue))
+                                .toStringAsFixed(2))),
                     SizedBox(height: 10),
                     // Task progress bar
                     Text(

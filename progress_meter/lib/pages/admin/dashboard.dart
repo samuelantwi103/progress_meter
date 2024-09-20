@@ -81,6 +81,10 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Column(
               children: [
+                Image.asset(
+                  "assets/son_logo.png",
+                  height: 0.2*MediaQuery.of(context).size.height,
+                ),
                 // Section: Task Cards
                 Align(
                   alignment: Alignment.centerLeft,
@@ -145,18 +149,20 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                         overview: true);
                   },
                 ),
-                if(admin.employees!.length > 3)
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showMoreEmployees =
-                          !showMoreEmployees; // Toggle show more/less
-                    });
-                  },
-                  child: Text(showMoreEmployees ? 'Show Less' : 'Show More'),
-                ),
-              if(admin.employees!.isEmpty)
-              EmptyEmployeeScreen(subComponent: true,),
+                if (admin.employees!.length > 3)
+                  TextButton(
+                    onPressed: () {
+                      setState(() {
+                        showMoreEmployees =
+                            !showMoreEmployees; // Toggle show more/less
+                      });
+                    },
+                    child: Text(showMoreEmployees ? 'Show Less' : 'Show More'),
+                  ),
+                if (admin.employees!.isEmpty)
+                  EmptyEmployeeScreen(
+                    subComponent: true,
+                  ),
               ],
             ),
           ),
