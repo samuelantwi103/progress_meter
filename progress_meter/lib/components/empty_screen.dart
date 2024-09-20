@@ -37,6 +37,118 @@ class EmptyTaskScreen extends StatelessWidget {
     );
   }
 }
+// Admin Task Screen
+class EmptyOverdueTaskManagementScreen extends StatelessWidget {
+  const EmptyOverdueTaskManagementScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: SizedBox(
+        // color: Colors.amber,
+        height: 0.6 * MediaQuery.of(context).size.height,
+        child: Center(
+          child: RichText(
+            softWrap: true,
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(text: "Good job 🥳\n"),
+                TextSpan(text: "No overdue tasks so far\n"),
+                TextSpan(
+                    text: "Check up on other tasks\n",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+// Admin Task Screen
+class EmptyInProgressTaskManagementScreen extends StatelessWidget {
+  const EmptyInProgressTaskManagementScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: SizedBox(
+        // color: Colors.amber,
+        height: 0.6 * MediaQuery.of(context).size.height,
+        child: Center(
+          child: RichText(
+            softWrap: true,
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(text: "Great 😎\n"),
+                TextSpan(text: "No tasks in the pipeline\n"),
+                TextSpan(
+                    text: "Create more tasks\n",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Admin Task Screen
+class EmptyCompletedTaskManagementScreen extends StatelessWidget {
+  const EmptyCompletedTaskManagementScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: SizedBox(
+        // color: Colors.amber,
+        height: 0.6 * MediaQuery.of(context).size.height,
+        child: Center(
+          child: RichText(
+            softWrap: true,
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(text: "Sigh... 😪\n"),
+                TextSpan(text: "No tasks completed yet\n"),
+                TextSpan(
+                    text: "Let's get things done\n",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 // Admin Task Screen
 class EmptyTaskManagementScreen extends StatelessWidget {
@@ -48,7 +160,7 @@ class EmptyTaskManagementScreen extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       child: SizedBox(
         // color: Colors.amber,
-        height: 0.8 * MediaQuery.of(context).size.height,
+        height: 0.6 * MediaQuery.of(context).size.height,
         child: Center(
           child: RichText(
             softWrap: true,

@@ -389,7 +389,9 @@ Widget adminDashTask(
   BuildContext context,
   Admin admin,
 ) {
-  final _formKeyAssign =  GlobalKey<FormState>();
+  final formKeyAssign = GlobalKey<FormState>();
+  final TextEditingController dateController = TextEditingController();
+  final TextEditingController employeeController = TextEditingController();
   return Badge(
     label: Padding(
       padding: EdgeInsets.all(1),
@@ -398,7 +400,7 @@ Widget adminDashTask(
         color: getStatusColor(task["status"]),
       ),
     ),
-    alignment: Alignment(0.8, -0.6),
+    alignment: Alignment(0.85, -0.8),
     backgroundColor: Colors.transparent,
     child: Card(
       elevation: 3,
@@ -418,6 +420,9 @@ Widget adminDashTask(
                     fontWeight: FontWeight.bold,
                   ),
             ),
+            SizedBox(height: 5),
+            Text(task["description"]!,
+                style: Theme.of(context).textTheme.bodyMedium),
             SizedBox(height: 8),
 
             // Task status
@@ -428,14 +433,21 @@ Widget adminDashTask(
             // SizedBox(height: 4),
 
             // Assigned Employee
-            (task["assignedto"] == null) ? Text(
-              "Assigned to: N/A",
-              style: Theme.of(context).textTheme.bodySmall,
-            ) :
-            Text(
-              "Assigned to: ${task["assignedto"]}",
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
+            (task["assignedto"] == null)
+                ? Text(
+                    "Assigned to: N/A",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  )
+                : Text(
+                    "Assigned to: ${task["assignedto"]}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
             SizedBox(height: 4),
 
             // Assigned and Due Dates
@@ -443,23 +455,36 @@ Widget adminDashTask(
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                (task["timeassigned"] == null) ? 
-                Text(
-                  "Assigned: N/A",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ):
-                Text(
-                  "Assigned: ${formatDateString(task["timeassigned"])}",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                (task["deadline"] == null) ? Text(
-                  "Due: N/A",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ) :
-                Text(
-                  "Due: ${formatDateString(task["deadline"])}",
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                (task["timeassigned"] == null)
+                    ? Text(
+                        "Assigned: N/A",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      )
+                    : Text(
+                        "Assigned: ${formatDateString(task["timeassigned"])}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                (task["deadline"] == null)
+                    ? Text(
+                        "Due: N/A",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      )
+                    : Text(
+                        "Due: ${formatDateString(task["deadline"])}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
               ],
             ),
             SizedBox(
@@ -470,22 +495,42 @@ Widget adminDashTask(
               children: [
                 FilledButton.tonal(
                   onPressed: () {
-                    callDialog(context: context, content: AssignTaskForm(formKey: _formKeyAssign,admin: admin,), title: "Assign a task", onConfirm: (){
-                      if (_formKeyAssign.currentState!.validate()) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Task assigned to employee")));
-                      }
-                    });
-                    
+                    callDialog(
+                        context: context,
+                        content: AssignTaskForm(
+                          formKey: formKeyAssign,
+                          admin: admin,
+                          employeeController: employeeController,
+                          dateController: dateController,
+                        ),
+                        title: "Assign a task",
+                        onConfirm: () {
+                          if (formKeyAssign.currentState!.validate()) {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    "Task assigned to ${employeeController.text}")));
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text(
+                                    "Task due on ${dateController.text}")));
+                          }
+                        });
                   },
                   child: Text("Assign"),
                 ),
                 SizedBox(width: 10),
                 FilledButton.tonal(
                   onPressed: () {
-                    callDialog(context: context, content: Text("Are you sure you want to delete this task?"), title: "Delete task", onConfirm: (){});
+                    callDialog(
+                        context: context,
+                        content:
+                            Text("Are you sure you want to delete this task?"),
+                        title: "Delete task",
+                        onConfirm: () {});
                   },
-                  style:  ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Theme.of(context).colorScheme.error.withOpacity(0.5)) ,
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(
+                        Theme.of(context).colorScheme.error.withOpacity(0.5)),
                   ),
                   child: Text("Delete"),
                 ),
@@ -507,7 +552,7 @@ Widget adminTaskIndicator(
   return Card.outlined(
     elevation: 10,
     child: InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.push(context, logoutTransition(HomePage()));
       },
       enableFeedback: true,
@@ -536,8 +581,8 @@ Widget adminTaskIndicator(
                 ),
                 Expanded(
                     child: LoadingBar(
-                      
-                        percentage: employee["personalperformance"].toDouble())),
+                        percentage:
+                            employee["personalperformance"].toDouble())),
               ],
             ),
             if (!overview)
@@ -552,10 +597,11 @@ Widget adminTaskIndicator(
                   ),
                   Expanded(
                       child: LoadingBar(
-                          percentage: employee["overallperformance"].toDouble())),
+                          percentage:
+                              employee["overallperformance"].toDouble())),
                 ],
               ),
-        
+
             // Divider()
           ],
         ),

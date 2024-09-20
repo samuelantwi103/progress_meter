@@ -303,8 +303,16 @@ class _AddTaskFormState extends State<AddTaskForm> {
 class AssignTaskForm extends StatefulWidget {
   final GlobalKey<FormState> formKey; // Pass the form key from the parent
   final Admin admin;
+  final TextEditingController dateController;
+  final TextEditingController employeeController;
 
-  const AssignTaskForm({super.key, required this.formKey, required this.admin});
+  const AssignTaskForm({
+    super.key,
+    required this.formKey,
+    required this.admin,
+    required this.dateController,
+  required this.employeeController,
+  });
 
   @override
   State<AssignTaskForm> createState() => _AssignTaskFormState();
@@ -312,13 +320,12 @@ class AssignTaskForm extends StatefulWidget {
 
 class _AssignTaskFormState extends State<AssignTaskForm> {
   // Controllers for the form fields
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController employeeController = TextEditingController();
+
   final ScrollController scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    String employeeId ='';
+    String employeeId = '';
     return Form(
       key: widget.formKey, // Use the passed form key
       child: Column(
@@ -326,7 +333,7 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
         children: [
           // Example Name Field
           TextFormField(
-            controller: employeeController,
+            controller: widget.employeeController,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             readOnly: true,
             onTap: () {
@@ -346,11 +353,10 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
                       title: Text(employeeList[index]['firstname']),
                       onTap: () {
                         setState(() {
-                          employeeController.text =
+                          widget.employeeController.text =
                               employeeList[index]['firstname'];
                           // fetching the employee id to make sure I am able to update that side.
                           employeeId = employeeList[index]['uniquecode'];
-                          
                         });
                         Navigator.pop(context);
                       },
@@ -374,7 +380,7 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
           DateSelectionField(
             title: "Due date",
             errorText: 'Set due date',
-            dateController: dateController, // Pass the controller
+            dateController: widget.dateController, // Pass the controller
           ),
         ],
       ),

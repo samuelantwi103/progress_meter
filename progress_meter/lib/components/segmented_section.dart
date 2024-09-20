@@ -11,15 +11,13 @@ import 'package:progress_meter/services/myclasses.dart';
 ///
 /// [segmentButtons] A list of button labels to appear as the segmented buttons.
 /// [tasks] The list of tasks (as maps) to be displayed based on the selected filter.
-/// [showMoreTasks] A flag that controls whether more tasks should be shown in the list.
-/// [showMoreEmployees] A flag that controls whether more employee-related data should be shown.
+
 class TaskSegmentedSection extends StatefulWidget {
-  TaskSegmentedSection({
-    super.key,
-    required this.segmentButtons,
-    required this.tasks,
-    required this.admin
-  });
+  TaskSegmentedSection(
+      {super.key,
+      required this.segmentButtons,
+      required this.tasks,
+      required this.admin});
 
   /// A list of tasks represented as a map of task data, including the title, status, and employee information.
   List<Map<String, dynamic>> tasks;
@@ -33,7 +31,6 @@ class TaskSegmentedSection extends StatefulWidget {
 }
 
 class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
-  bool showMoreTasks = false;
   late String selectedFilter;
 
   @override
@@ -76,30 +73,13 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
         ListView.builder(
           shrinkWrap: true, // To avoid infinite height error
           physics: NeverScrollableScrollPhysics(),
-          itemCount: showMoreTasks
-              ? widget.tasks
-                  .where(
-                    (task) =>
-                        selectedFilter == widget.segmentButtons[0] ||
-                        task['status'] == selectedFilter,
-                  )
-                  .length
-              : (widget.tasks
-                          .where(
-                            (task) =>
-                                selectedFilter == widget.segmentButtons[0] ||
-                                task['status'] == selectedFilter,
-                          )
-                          .length <
-                      3)
-                  ? widget.tasks
-                      .where(
-                        (task) =>
-                            selectedFilter == widget.segmentButtons[0] ||
-                            task['status'] == selectedFilter,
-                      )
-                      .length
-                  : 3,
+          itemCount: widget.tasks
+              .where(
+                (task) =>
+                    selectedFilter == widget.segmentButtons[0] ||
+                    task['status'] == selectedFilter,
+              )
+              .length,
           itemBuilder: (context, index) {
             var filteredTasks = widget.tasks
                 .where(
@@ -108,26 +88,34 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                       task['status'] == selectedFilter,
                 )
                 .toList();
-            return adminDashTask(filteredTasks[index], context,widget.admin);
+            return adminDashTask(filteredTasks[index], context, widget.admin);
           },
         ),
-        if (widget.tasks
+        if (selectedFilter == widget.segmentButtons[0] && widget.tasks.isEmpty)
+          EmptyTaskManagementScreen()
+        else if (selectedFilter == widget.segmentButtons[1] &&
+            widget.tasks
                 .where(
-                  (task) =>
-                      selectedFilter == widget.segmentButtons[0] ||
-                      task['status'] == selectedFilter,
-                ).isEmpty)
-          EmptyTaskScreen(),
+                  (task) => task['status'] == "Overdue",
+                )
+                .isEmpty)
+          EmptyOverdueTaskManagementScreen()
+        else if (selectedFilter == widget.segmentButtons[2] &&
+            widget.tasks
+                .where(
+                  (task) => task['status'] == "In Progress",
+                )
+                .isEmpty)
+          EmptyInProgressTaskManagementScreen()
+        else if (selectedFilter == widget.segmentButtons[3] &&
+            widget.tasks
+                .where(
+                  (task) => task['status'] == "Completed",
+                )
+                .isEmpty)
+          EmptyCompletedTaskManagementScreen(),
         SizedBox(
           height: 10,
-        ),
-        TextButton(
-          onPressed: () {
-            setState(() {
-              showMoreTasks = !showMoreTasks;
-            });
-          },
-          child: Text(showMoreTasks ? 'Show Less' : 'Show more'),
         ),
       ],
     );

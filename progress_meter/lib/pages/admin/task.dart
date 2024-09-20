@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/form.dart';
+import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/components/segmented_section.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
@@ -27,68 +28,69 @@ class _TaskPageState extends State<TaskPage> {
 // Current selected task filter
   String selectedFilter = 'All';
   // Sample task and employee data
-  final List<Map<String, dynamic>> tasks = [
-    {
-      "title": "Update Dashboard UI",
-      "status": "In Progress",
-      "employee": "John Doe",
-      "assignedDate": "2024-09-01",
-      "dueDate": "2024-09-15"
-    },
-    // {
-    //   "title": "Database Backup",
-    //   "status": "Completed",
-    //   "employee": "Jane Smith",
-    //   "assignedDate": "2024-08-25",
-    //   "dueDate": "2024-09-10"
-    // },
-    {
-      "title": "Fix login bug",
-      "status": "Overdue",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    // {
-    //   "title": "Fix login bug",
-    //   "status": "Completed",
-    //   "employee": "Mark Johnson",
-    //   "assignedDate": "2024-09-05",
-    //   "dueDate": "2024-09-12"
-    // },
-    {
-      "title": "Fix login bug",
-      "status": "Overdue",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "In Progress",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "In Progress",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-    {
-      "title": "Fix login bug",
-      "status": "In Progress",
-      "employee": "Mark Johnson",
-      "assignedDate": "2024-09-05",
-      "dueDate": "2024-09-12"
-    },
-  ];
+  // final List<Map<String, dynamic>> tasks = [
+  //   {
+  //     "title": "Update Dashboard UI",
+  //     "status": "In Progress",
+  //     "employee": "John Doe",
+  //     "assignedDate": "2024-09-01",
+  //     "dueDate": "2024-09-15"
+  //   },
+  //   // {
+  //   //   "title": "Database Backup",
+  //   //   "status": "Completed",
+  //   //   "employee": "Jane Smith",
+  //   //   "assignedDate": "2024-08-25",
+  //   //   "dueDate": "2024-09-10"
+  //   // },
+  //   {
+  //     "title": "Fix login bug",
+  //     "status": "Overdue",
+  //     "employee": "Mark Johnson",
+  //     "assignedDate": "2024-09-05",
+  //     "dueDate": "2024-09-12"
+  //   },
+  //   // {
+  //   //   "title": "Fix login bug",
+  //   //   "status": "Completed",
+  //   //   "employee": "Mark Johnson",
+  //   //   "assignedDate": "2024-09-05",
+  //   //   "dueDate": "2024-09-12"
+  //   // },
+  //   {
+  //     "title": "Fix login bug",
+  //     "status": "Overdue",
+  //     "employee": "Mark Johnson",
+  //     "assignedDate": "2024-09-05",
+  //     "dueDate": "2024-09-12"
+  //   },
+  //   {
+  //     "title": "Fix login bug",
+  //     "status": "In Progress",
+  //     "employee": "Mark Johnson",
+  //     "assignedDate": "2024-09-05",
+  //     "dueDate": "2024-09-12"
+  //   },
+  //   {
+  //     "title": "Fix login bug",
+  //     "status": "In Progress",
+  //     "employee": "Mark Johnson",
+  //     "assignedDate": "2024-09-05",
+  //     "dueDate": "2024-09-12"
+  //   },
+  //   {
+  //     "title": "Fix login bug",
+  //     "status": "In Progress",
+  //     "employee": "Mark Johnson",
+  //     "assignedDate": "2024-09-05",
+  //     "dueDate": "2024-09-12"
+  //   },
+  // ];
 
   @override
   Widget build(BuildContext context) {
-    final admin =Provider.of<AdminProvider>(context, listen: true).currenMember!;
+    final admin =
+        Provider.of<AdminProvider>(context, listen: true).currenMember!;
     AdminProvider adPro = Provider.of<AdminProvider>(context, listen: true);
 
     return Scaffold(
@@ -136,16 +138,20 @@ class _TaskPageState extends State<TaskPage> {
                 if (_formKeyAdd.currentState!.validate()) {
                   // I've moved the controller here
                   // You can use it now
-                  await admin.addNewTask(titleController.text.trim(), descriptionController.text.trim());
+                  generalLoading(context);
+                  await admin.addNewTask(titleController.text.trim(),
+                      descriptionController.text.trim());
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(titleController.text)),
-                  );
-                  fetchAdminData(context, admin.adminInfo!['uniquecode'], admin.adminInfo!['pin']);
-                  Navigator.pop(context);
-                  
+                  fetchAdminData(context, admin.adminInfo!['uniquecode'],
+                      admin.adminInfo!['pin']);
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   SnackBar(content: Text(titleController.text)),
+                  // );
+
                   adPro.setCurrentAdmin(admin);
-                   // Close dialog on success
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  // Close dialog on success
                 }
               });
         },
