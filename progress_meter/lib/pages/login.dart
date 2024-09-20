@@ -21,7 +21,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers to capture user input
@@ -59,20 +59,37 @@ class LoginPageState extends State<LoginPage>
   late Animation<double> logoFadeAnimation;
   late Animation<Offset> formSlideAnimation;
   late AnimationController animationController;
+  late AnimationController fastAnimationController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    fastAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 5000),
+    );
     animationController = AnimationController(
       vsync: this,
       duration: Duration(seconds: 2),
     );
 
-    logoFadeAnimation = Tween<double>(begin: 0, end: 1).animate(animationController);
-    formSlideAnimation = Tween<Offset>(begin: Offset(0,1),end:Offset.zero ).animate(animationController);
+    fastAnimationController.repeat();
+    fastAnimationController.duration = Duration(seconds: 2);
+    logoFadeAnimation =
+        Tween<double>(begin: 0, end: 1).animate(animationController);
+    formSlideAnimation = Tween<Offset>(begin: Offset(0, 1), end: Offset.zero)
+        .animate(animationController);
 
+    // fastAnimationController.forward();
     animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    fastAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -87,9 +104,9 @@ class LoginPageState extends State<LoginPage>
             child: Stack(
               alignment: Alignment.center,
               children: [
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
+                Positioned.fill(
+                  // width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height,
                   child: Image.asset(
                     "assets/bg-image.jpg",
                     fit: BoxFit.cover,
@@ -102,47 +119,84 @@ class LoginPageState extends State<LoginPage>
                 //           aspectRatio: _controller.value.aspectRatio,
                 //           child: VideoPlayer(_controller));
                 //     }),
-                Positioned(
-                  child: SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      height: 0.2 * MediaQuery.of(context).size.height,
-                      child: LottieBuilder.asset(
-                        "assets/corner_anim.json",
-                        // controller: CurvedAnimation(
-                        //     parent: AnimationController(
-                        //       vsync: this,
-                        //     ),
+                // Positioned(
+                //   child: SizedBox(
+                //       width: MediaQuery.of(context).size.width,
+                //       height: 0.2 * MediaQuery.of(context).size.height,
+                //       child: LottieBuilder.asset(
+                //         "assets/corner_anim.json",
+                //         // controller: CurvedAnimation(
+                //         //     parent: AnimationController(
+                //         //       vsync: this,
+                //         //     ),
 
-                        //     curve: Curves.bounceInOut),
-                        repeat: true,
-                      )),
-                  right: -0.06 * MediaQuery.of(context).size.height,
-                  top: -0.06 * MediaQuery.of(context).size.height,
-                ),
+                //         //     curve: Curves.bounceInOut),
+                //         repeat: true,
+                //       )),
+                //   right: -0.06 * MediaQuery.of(context).size.height,
+                //   top: -0.06 * MediaQuery.of(context).size.height,
+                // ),
+                // Positioned(
+                //   child: RotatedBox(
+                //     quarterTurns: 2,
+                //     child: SizedBox(
+                //         width: MediaQuery.of(context).size.width,
+                //         height: 0.2 * MediaQuery.of(context).size.height,
+                //         // height: 0.0 * MediaQuery.of(context).size.height,
+                //         child: LottieBuilder.asset(
+                //           "assets/corner_anim.json",
+                //           // frameRate: FrameRate(320),
+                //           // controller: CurvedAnimation(
+                //           //     parent: AnimationController(
+                //           //       vsync: this,
+                //           //     ),
+
+                //           //     curve: Curves.bounceInOut),
+                //           repeat: true,
+                //         )),
+                //   ),
+                //   left: MediaQuery.of(context).size.aspectRatio > 0.6
+                //       ? -0.65 * MediaQuery.of(context).size.height
+                //       : -0.06 * MediaQuery.of(context).size.height,
+                //   bottom: -0.06 * MediaQuery.of(context).size.height,
+                // ),
                 Positioned(
+                  right: 0,
+                  top: 0,
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width *
+                        0.5, // Adjust size relative to width
+                    height: MediaQuery.of(context).size.height *
+                        0.1, // Adjust size relative to height
+                    child: Lottie.asset(
+                      'assets/corner_anim.json',
+                      controller: fastAnimationController,
+                      repeat: true,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                // Bottom-left Lottie animation (Rotated, no padding)
+                Positioned(
+                  left: 0,
+                  bottom: 0,
                   child: RotatedBox(
                     quarterTurns: 2,
                     child: SizedBox(
-                        width: MediaQuery.of(context).size.width,
-                        height: 0.2 * MediaQuery.of(context).size.height,
-                        // height: 0.0 * MediaQuery.of(context).size.height,
-                        child: LottieBuilder.asset(
-                          "assets/corner_anim.json",
-                          // frameRate: FrameRate(320),
-                          // controller: CurvedAnimation(
-                          //     parent: AnimationController(
-                          //       vsync: this,
-                          //     ),
-
-                          //     curve: Curves.bounceInOut),
-                          repeat: true,
-                        )),
+                      width: MediaQuery.of(context).size.width *
+                          0.5, // Adjust size relative to width
+                      height: MediaQuery.of(context).size.height *
+                          0.1, // Adjust size relative to height
+                      child: Lottie.asset(
+                        'assets/corner_anim.json',
+                        controller: fastAnimationController,
+                        repeat: true,
+                        fit: BoxFit.fill,
+                      ),
+                    ),
                   ),
-                  left: MediaQuery.of(context).size.aspectRatio > 0.6
-                      ? -0.65 * MediaQuery.of(context).size.height
-                      : -0.06 * MediaQuery.of(context).size.height,
-                  bottom: -0.06 * MediaQuery.of(context).size.height,
                 ),
+
                 Center(
                   child: Form(
                       key: _formKey,
@@ -193,7 +247,7 @@ class LoginPageState extends State<LoginPage>
                                   prefixIcon:
                                       const Icon(Icons.vpn_key_outlined),
                                   filled: true,
-                              
+
                                   // fillColor: Theme.of(context).colorScheme.primaryContainer,
                                   // prefixIcon: Icon(Icons.numbers),
                                   border: OutlineInputBorder(
@@ -211,7 +265,7 @@ class LoginPageState extends State<LoginPage>
                                   if (value == null || value.isEmpty) {
                                     return "Enter your code";
                                   }
-                              
+
                                   if (!RegExp(r'[A-Za-z]{3}[A-Za-z0-9]{5}$')
                                       .hasMatch(value)) {
                                     return 'Please enter a valid code: eg.sonss001';
