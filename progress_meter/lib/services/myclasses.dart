@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:progress_meter/pages/user/user_home.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 import 'package:progress_meter/services/transitions.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -163,6 +165,24 @@ class Admin{
     }).toList();
 
     return overdues;
+  }
+
+  Future<void> addNewTask(String title,String description) async {
+
+    DateTime taskId = DateTime.now();
+    await FirebaseFirestore.instance
+      .collection('organisations')
+      .doc(getFirstThreeLetters(adminInfo!['uniquecode']))
+      .collection('tasks')
+      .doc(convertDateTimeToCompactString(taskId))
+      .set({
+        'taskId': taskId,
+        'title': title,
+        'description': description,
+        'status': 'In Progress',
+        'month': DateFormat.MMMM().format(taskId),
+        'year': DateFormat.y().format(taskId)
+      });
   }
 
 }
