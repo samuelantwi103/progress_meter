@@ -97,35 +97,9 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                     .toList()
                     .reversed
                     .toList();
-                
-                // I copied this data from the history page
-                final List<Map<String, dynamic>> historyData = [];
-                final List<Map<String, dynamic>> standUpsData = [];
+
 
                 final ScrollController scrollController = ScrollController();
-                final assignedTasks =
-                    Provider.of<AssignedProvider>(context, listen: true)
-                        .currenMember!;
-                final notAssignedTasks =
-                    Provider.of<SelfTasksProvider>(context, listen: true)
-                        .currenMember!;
-                final member =
-                    Provider.of<MemberProvider>(context, listen: true)
-                        .currenMember!;
-
-                if (assignedTasks.getCompletedTasks.isNotEmpty) {
-                  historyData.addAll(assignedTasks.getCompletedTasks);
-                  //  historyData.reversed.toList();
-                }
-
-                if (assignedTasks.getOverdueTasks.isNotEmpty) {
-                  historyData.addAll(assignedTasks.getOverdueTasks);
-                  // historyData.reversed.toList();
-                }
-                if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
-                  standUpsData.addAll(notAssignedTasks.memberSelftasks!);
-                  // standUpsData.reversed.toList();
-                } 
 
                 return InkWell(
                   splashColor: Theme.of(context).colorScheme.primaryContainer,
@@ -133,9 +107,8 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                       borderRadius: BorderRadius.circular(12)),
                   onTap: () async {
                     generalLoading(context);
-                    List<Map<String, dynamic>> reportList =
-                        await fetchAllReports(member.memberInfo!['uniquecode'],
-                            historyData[index]['taskid']);
+                    List<Map<String, dynamic>> reportList = [];
+
                     Navigator.pop(context);
 
                     callBottomSheet(
