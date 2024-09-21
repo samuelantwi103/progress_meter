@@ -393,7 +393,7 @@ Widget adminDashTask(
   final TextEditingController dateController = TextEditingController();
   final TextEditingController employeeController = TextEditingController();
   Map<String, dynamic> employeeSelected = {};
-  
+
   return Badge(
     label: Padding(
       padding: EdgeInsets.all(1),
@@ -497,9 +497,10 @@ Widget adminDashTask(
               children: [
                 FilledButton.tonal(
                   onPressed: () {
-
+                    void getSelectedEmployee(Map<String, dynamic> selected ){
+                      employeeSelected = selected;
+                    }
                     callDialog(
-
                         context: context,
                         content: AssignTaskForm(
                           formKey: formKeyAssign,
@@ -507,17 +508,22 @@ Widget adminDashTask(
                           employeeController: employeeController,
                           dateController: dateController,
                           employeeSelected: employeeSelected,
+                          getSelectedEmployee: getSelectedEmployee,
                         ),
                         title: "Assign a task",
                         onConfirm: () async {
                           if (formKeyAssign.currentState!.validate()) {
+                            // final List<Map<String, dynamic>> employeeList =
+                            //     admin.employees!;
                             task['dateassigned'] = DateTime.now().toString();
                             task['dateassigned'] = dateController.text.trim();
                             admin.updateTask(task);
                             Navigator.pop(context);
-                            debugPrint('$employeeSelected');
-                            await assignTaskToMember(employeeSelected,task,context);
-                            Provider.of<AdminProvider>(context,listen:false).setCurrentAdmin(admin);
+                            debugPrint('Oncall: $employeeSelected');
+                            await assignTaskToMember(
+                                employeeSelected, task, context);
+                            Provider.of<AdminProvider>(context, listen: false)
+                                .setCurrentAdmin(admin);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     "Task assigned to ${employeeController.text}")));
