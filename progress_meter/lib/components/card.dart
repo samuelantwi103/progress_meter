@@ -17,7 +17,7 @@ class CardHome extends StatefulWidget {
       required this.title,
       required this.description,
       required this.dateAssigned,
-      required this.overdue,
+      // required this.overdue,
       required this.dateDue,
       required this.status,
       required this.taskId,
@@ -25,7 +25,7 @@ class CardHome extends StatefulWidget {
   final String title;
   final String description;
   final String dateAssigned;
-  final String overdue;
+  // final String overdue;
   final String dateDue;
   final String status;
   final String taskId;
