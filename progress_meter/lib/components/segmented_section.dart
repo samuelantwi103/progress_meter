@@ -44,80 +44,90 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
     if (widget.tasks.isEmpty) {
       return EmptyTaskManagementScreen();
     }
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Align(
-          alignment: Alignment.centerRight,
-          child: SegmentedButton(
-            showSelectedIcon: false,
-            segments: widget.segmentButtons.map(
-              (button) {
-                return ButtonSegment<String>(
-                  value: button,
-                  label: Text(
-                    button,
-                    style: TextStyle(fontSize: 10),
-                  ),
-                );
+    return SizedBox(
+      height: 0.75 * MediaQuery.of(context).size.height,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.centerRight,
+            child: SegmentedButton(
+              showSelectedIcon: false,
+              segments: widget.segmentButtons.map(
+                (button) {
+                  return ButtonSegment<String>(
+                    value: button,
+                    label: Text(
+                      button,
+                      style: TextStyle(fontSize: 10),
+                    ),
+                  );
+                },
+              ).toList(),
+              selected: {selectedFilter},
+              onSelectionChanged: (p0) {
+                setState(() {
+                  selectedFilter = p0.first;
+                });
               },
-            ).toList(),
-            selected: {selectedFilter},
-            onSelectionChanged: (p0) {
-              setState(() {
-                selectedFilter = p0.first;
-              });
-            },
+            ),
           ),
-        ),
-        ListView.builder(
-          shrinkWrap: true, // To avoid infinite height error
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: widget.tasks
-              .where(
-                (task) =>
-                    selectedFilter == widget.segmentButtons[0] ||
-                    task['status'] == selectedFilter,
-              )
-              .length,
-          itemBuilder: (context, index) {
-            var filteredTasks = widget.tasks
-                .where(
-                  (task) =>
-                      selectedFilter == widget.segmentButtons[0] ||
-                      task['status'] == selectedFilter,
-                )
-                .toList().reversed.toList();
-            return adminDashTask(filteredTasks[index], context, widget.admin);
-          },
-        ),
-        if (selectedFilter == widget.segmentButtons[0] && widget.tasks.isEmpty)
-          EmptyTaskManagementScreen()
-        else if (selectedFilter == widget.segmentButtons[1] &&
-            widget.tasks
-                .where(
-                  (task) => task['status'] == "Overdue",
-                )
-                .isEmpty)
-          EmptyOverdueTaskManagementScreen()
-        else if (selectedFilter == widget.segmentButtons[2] &&
-            widget.tasks
-                .where(
-                  (task) => task['status'] == "In Progress",
-                )
-                .isEmpty)
-          EmptyInProgressTaskManagementScreen()
-        else if (selectedFilter == widget.segmentButtons[3] &&
-            widget.tasks
-                .where(
-                  (task) => task['status'] == "Completed",
-                )
-                .isEmpty)
-          EmptyCompletedTaskManagementScreen(),
-        SizedBox(
-          height: 10,
-        ),
-      ],
+          Expanded(
+            child: ListView.builder(
+              // shrinkWrap: true, // To avoid infinite height error
+              // physics: NeverScrollableScrollPhysics(),
+              itemCount: widget.tasks
+                  .where(
+                    (task) =>
+                        selectedFilter == widget.segmentButtons[0] ||
+                        task['status'] == selectedFilter,
+                  )
+                  .length,
+              itemBuilder: (context, index) {
+                var filteredTasks = widget.tasks
+                    .where(
+                      (task) =>
+                          selectedFilter == widget.segmentButtons[0] ||
+                          task['status'] == selectedFilter,
+                    )
+                    .toList()
+                    .reversed
+                    .toList();
+                return adminDashTask(
+                    filteredTasks[index], context, widget.admin);
+              },
+            ),
+          ),
+          if (selectedFilter == widget.segmentButtons[0] &&
+              widget.tasks.isEmpty)
+            EmptyTaskManagementScreen()
+          else if (selectedFilter == widget.segmentButtons[1] &&
+              widget.tasks
+                  .where(
+                    (task) => task['status'] == "Overdue",
+                  )
+                  .isEmpty)
+            EmptyOverdueTaskManagementScreen()
+          else if (selectedFilter == widget.segmentButtons[2] &&
+              widget.tasks
+                  .where(
+                    (task) => task['status'] == "In Progress",
+                  )
+                  .isEmpty)
+            EmptyInProgressTaskManagementScreen()
+          else if (selectedFilter == widget.segmentButtons[3] &&
+              widget.tasks
+                  .where(
+                    (task) => task['status'] == "Completed",
+                  )
+                  .isEmpty)
+            EmptyCompletedTaskManagementScreen(),
+          // else
+            SizedBox(
+              height: 20,
+            ),
+        ],
+      ),
     );
   }
 }
