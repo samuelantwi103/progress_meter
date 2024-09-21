@@ -128,6 +128,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   shrinkWrap: true,
                   itemCount: dummyData.length,
                   itemBuilder: (context, index) {
+
                     final data = dummyData[index];
                     if (data["status"]! != "Completed") {
                       try{
@@ -143,7 +144,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             // overdue: data["overdue"]!,
                             dateDue: data["deadline"]!,
                             status: data["status"]!,
-                            taskId: data["taskid"],
+                            taskId: data["taskId"],
                             memberId: member.memberInfo!['uniquecode'],
                           ),
                           const SizedBox(height: 10),
