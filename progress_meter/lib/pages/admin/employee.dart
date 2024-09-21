@@ -22,8 +22,8 @@ class _EmployeePageState extends State<EmployeePage> {
   final TextEditingController pinController = TextEditingController();
 
   // Variables to track expanded or collapsed state
-  bool showMoreTasks = false;
-  bool showMoreEmployees = false;
+  // bool showMoreTasks = false;
+  // bool showMoreEmployees = false;
   int taskLength = 0;
 
   final List<Map<String, dynamic>> employees = [

@@ -119,9 +119,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ),
-              if (dummyData.isNotEmpty ||
+              if (dummyData.isNotEmpty &&
                   dummyData
-                      .where((element) => element['status'] == 'Completed')
+                      .where((element) => element['status'] != 'Completed')
                       .isNotEmpty)
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
@@ -133,6 +133,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     if (data["status"]! != "Completed") {
                       try{
 
+                        debugPrint(dummyData.toString());
                         debugPrint(data["status"]!);
                       debugPrint(member.memberInfo!['uniquecode']);
                       return Column(
@@ -160,13 +161,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     else if(dummyData.isEmpty) {
                       return EmptyTaskScreen();
                     }
+                    return null;
                   },
                 )
-
+                
               //=====else
               else
-                Center(
-                  child: Text('Empty...'),
+               Center(
+                  child: EmptyTaskScreen(),
                 )
             ],
           ),

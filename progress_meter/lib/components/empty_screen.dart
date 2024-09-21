@@ -37,6 +37,45 @@ class EmptyTaskScreen extends StatelessWidget {
     );
   }
 }
+
+// User Task Screen
+class EmptyReportScreen extends StatelessWidget {
+  const EmptyReportScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: NeverScrollableScrollPhysics(),
+      child: SizedBox(
+        // color: Colors.amber,
+        height: 0.6 * MediaQuery.of(context).size.height,
+        child: Center(
+          child: RichText(
+            softWrap: true,
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+              children: [
+                TextSpan(text: "Uh oh 😬\n"),
+                TextSpan(text: "No progress reports yet\n"),
+                TextSpan(
+                    text: "Attend to this task ASAP!\n",
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        )),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 // Admin Task Screen
 class EmptyOverdueTaskManagementScreen extends StatelessWidget {
   const EmptyOverdueTaskManagementScreen({super.key});

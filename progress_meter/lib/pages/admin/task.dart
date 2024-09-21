@@ -21,8 +21,8 @@ class _TaskPageState extends State<TaskPage> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   // Variables to track expanded or collapsed state
-  bool showMoreTasks = false;
-  bool showMoreEmployees = false;
+  // bool showMoreTasks = false;
+  // bool showMoreEmployees = false;
   int taskLength = 0;
 
 // Current selected task filter
@@ -116,9 +116,7 @@ class _TaskPageState extends State<TaskPage> {
                   tasks: admin.tasks!,
                   admin: admin,
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                
               ],
             ),
           ),

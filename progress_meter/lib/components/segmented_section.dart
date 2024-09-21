@@ -100,55 +100,74 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
 
                 final ScrollController scrollController = ScrollController();
 
-                return adminDashTask(
-                  filteredTasks[index],
-                  context,
-                  widget.admin,
-                  onTap: () async {
-                    generalLoading(context);
-                    List<Map<String, dynamic>> reportList = [];
+                return Column(
+                  children: [
+                    adminDashTask(
+                      filteredTasks[index],
+                      context,
+                      widget.admin,
+                      onTap: () async {
+                        generalLoading(context);
+                        List<Map<String, dynamic>> reportList = [];
 
-                    Navigator.pop(context);
-                    if (filteredTasks[index]["assignedto"] == null) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Assign an employee to this task")));
-                    } else if (filteredTasks[index]["assignedto"] != null) {
-                      callBottomSheet(
-                          scrollController: scrollController,
-                          context: context,
-                          title: "Report Summary",
-                          content: SizedBox(
-                            // height: 0.7*MediaQuery.of(context).size.height,
-                            child: ListView.separated(
-                              itemCount: reportList.length,
-                              itemBuilder: (context, index) {
-                                dynamic data = reportList[index];
-                                // debugPrint(data);
-                                if (data != null) {
-                                  return ListTile(
-                                    title: Text(data['report'].toString()),
-                                    subtitle:
-                                        Text(formatDateString(data['date'])),
-                                    horizontalTitleGap: 5,
-                                  );
-                                } else {
-                                  return EmptyCompletedTaskManagementScreen();
-                                }
-                              },
-                              separatorBuilder: (context, index) {
-                                return Divider(
-                                  thickness: 1,
-                                  height: 1,
-                                );
-                              },
-                            ),
-                          ));
-                    }
-                  },
+                        Navigator.pop(context);
+                        if (filteredTasks[index]["assignedto"] == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content:
+                                  Text("Assign an employee to this task")));
+                        } else if (filteredTasks[index]["assignedto"] != null) {
+                          callBottomSheet(
+                              scrollController: scrollController,
+                              context: context,
+                              title: "Report Summary",
+                              content: SizedBox(
+                                // height: 0.7*MediaQuery.of(context).size.height,
+                                child:reportList.isEmpty ? EmptyReportScreen():ListView.separated(
+                                  itemCount: reportList.length,
+                                  itemBuilder: (context, index) {
+                                    dynamic data = reportList[index];
+                                    // debugPrint(data);
+
+                                    return ListTile(
+                                      title: Text(data['report'].toString()),
+                                      subtitle:
+                                          Text(formatDateString(data['date'])),
+                                      horizontalTitleGap: 5,
+                                      trailing: Text("Not Null"),
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return Divider(
+                                      thickness: 1,
+                                      height: 1,
+                                    );
+                                  },
+                                ),
+                              ));
+                        }
+                      },
+                    ),
+                    if (index ==
+                        widget.tasks
+                                .where(
+                                  (task) =>
+                                      selectedFilter ==
+                                          widget.segmentButtons[0] ||
+                                      task['status'] == selectedFilter,
+                                )
+                                .length -
+                            1)
+                      SizedBox(
+                        height: 100,
+                      )
+                  ],
                 );
               },
             ),
           ),
+          // SizedBox(
+          // height: 10,
+          // ),
           if (selectedFilter == widget.segmentButtons[0] &&
               widget.tasks.isEmpty)
             EmptyTaskManagementScreen()
@@ -174,9 +193,9 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                   .isEmpty)
             EmptyCompletedTaskManagementScreen(),
           // else
-          SizedBox(
-            height: 20,
-          ),
+          // SizedBox(
+          //   height: 20,
+          // ),
         ],
       ),
     );
