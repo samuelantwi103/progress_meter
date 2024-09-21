@@ -579,13 +579,13 @@ Widget adminDashTask(
                               if (formKeyAssign.currentState!.validate()) {
                                 // final List<Map<String, dynamic>> employeeList =
                                 //     admin.employees!;
+                                generalLoading(context);
                                 task['dateassigned'] =
                                     DateTime.now().toString();
                                 task['deadline'] = dateController.text.trim();
                                 task['assignedto'] =
                                     '${employeeSelected['firstname']} ${employeeSelected['lastname']}';
                                 admin.updateTask(task);
-                                Navigator.pop(context);
                                 debugPrint('Oncall: $employeeSelected');
                                 debugPrint('Task content: $task');
                                 await assignTaskToMember(
@@ -593,6 +593,8 @@ Widget adminDashTask(
                                 Provider.of<AdminProvider>(context,
                                         listen: false)
                                     .setCurrentAdmin(admin);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                     content: Text(
                                         "Task assigned to ${employeeController.text}")));
