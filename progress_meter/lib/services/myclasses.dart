@@ -176,13 +176,30 @@ class Admin{
       .collection('tasks')
       .doc(convertDateTimeToCompactString(taskId))
       .set({
-        'taskId': taskId,
+        'taskId': convertDateTimeToCompactString(taskId),
         'title': title,
         'description': description,
         'status': 'In Progress',
         'month': DateFormat.MMMM().format(taskId),
         'year': DateFormat.y().format(taskId)
       });
+  }
+
+    Future<void> updateTask(Map<String,dynamic> task) async {
+
+    //DateTime taskId = DateTime.now();
+    int index = tasks.indexWhere((admintask) => admintask['taskid'] == taskask['taskid']);
+
+  // If the task is found (index is not -1), update it
+  if (index != -1) {
+    tasks[index] = newTask;
+  }
+    await FirebaseFirestore.instance
+      .collection('organisations')
+      .doc(getFirstThreeLetters(adminInfo!['uniquecode']))
+      .collection('tasks')
+      .doc(task['taskid'])
+      .update(task);
   }
 
 }

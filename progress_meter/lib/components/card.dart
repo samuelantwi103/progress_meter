@@ -392,6 +392,8 @@ Widget adminDashTask(
   final formKeyAssign = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController employeeController = TextEditingController();
+  Map<String, dynamic> employeeSelected = {};
+  
   return Badge(
     label: Padding(
       padding: EdgeInsets.all(1),
@@ -495,18 +497,26 @@ Widget adminDashTask(
               children: [
                 FilledButton.tonal(
                   onPressed: () {
+
                     callDialog(
+
                         context: context,
                         content: AssignTaskForm(
                           formKey: formKeyAssign,
                           admin: admin,
                           employeeController: employeeController,
                           dateController: dateController,
+                          employeeSelected: employeeSelected,
                         ),
                         title: "Assign a task",
-                        onConfirm: () {
+                        onConfirm: () async {
                           if (formKeyAssign.currentState!.validate()) {
+                            task['dateassigned'] = DateTime.now().toString();
+                            task['dateassigned'] = dateController.text.trim();
+                            admin.updateTask(task);
                             Navigator.pop(context);
+                            await assignTaskToMember(employeeSelected,task,context);
+                            Provider.of<AdminProvider>(context,listen:false).setCurrentAdmin(admin);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 content: Text(
                                     "Task assigned to ${employeeController.text}")));

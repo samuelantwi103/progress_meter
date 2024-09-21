@@ -305,13 +305,15 @@ class AssignTaskForm extends StatefulWidget {
   final Admin admin;
   final TextEditingController dateController;
   final TextEditingController employeeController;
+  Map<String,dynamic> employeeSelected;
 
-  const AssignTaskForm({
+  AssignTaskForm({
     super.key,
     required this.formKey,
     required this.admin,
     required this.dateController,
   required this.employeeController,
+  required this.employeeSelected,
   });
 
   @override
@@ -325,7 +327,7 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
 
   @override
   Widget build(BuildContext context) {
-    String employeeId = '';
+    
     return Form(
       key: widget.formKey, // Use the passed form key
       child: Column(
@@ -353,10 +355,10 @@ class _AssignTaskFormState extends State<AssignTaskForm> {
                       title: Text(employeeList[index]['firstname']),
                       onTap: () {
                         setState(() {
-                          widget.employeeController.text =
-                              employeeList[index]['firstname'];
+                          widget.employeeController.text =  employeeList[index]['firstname'];
+                          widget.employeeSelected = employeeList[index];
                           // fetching the employee id to make sure I am able to update that side.
-                          employeeId = employeeList[index]['uniquecode'];
+                        
                         });
                         Navigator.pop(context);
                       },

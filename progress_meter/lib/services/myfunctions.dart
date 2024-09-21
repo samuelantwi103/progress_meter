@@ -234,6 +234,37 @@ Future<void> submitReport(String memberId, String reportText,String taskId, Assi
 
 }
 
+
+//=====================================
+
+Future<void> assignTaskToMember(Map<String,dynamic> selectedMember,Map<String,dynamic> taskId, BuildContext context)async {
+  final docId = getCurrentMonthDay();
+  final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
+
+  //Setting task first before setting report field
+  await FirebaseFirestore.instance.collection('organisations').doc('son')
+  .collection('members').doc(selectedMember['uniquecode'])
+  .collection('months').doc(monthdoc)
+  .collection('assigned').doc(docId).set(taskId);
+
+  //setting report field for this new assigned task
+  await FirebaseFirestore.instance.collection('organisations').doc('son')
+  .collection('members').doc(selectedMember['uniquecode'])
+  .collection('months').doc(monthdoc)
+  .collection('assigned').doc(docId).collection('reports').doc('default').set({'name': 'default'});
+  
+  
+
+}
+
+//========================================================
+
+DateTime convertToDateTime(String dateString) {
+  DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+  return dateFormat.parse(dateString);
+}
+
+
 Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId) async{
   //final docId = getCurrentMonthDay();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
