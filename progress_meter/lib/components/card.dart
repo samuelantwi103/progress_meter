@@ -457,7 +457,7 @@ Widget adminDashTask(
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                (task["timeassigned"] == null)
+                (task["dateassigned"] == null)
                     ? Text(
                         "Assigned: N/A",
                         style: Theme.of(context)
@@ -466,7 +466,7 @@ Widget adminDashTask(
                             ?.copyWith(fontWeight: FontWeight.bold),
                       )
                     : Text(
-                        "Assigned: ${formatDateString(task["timeassigned"])}",
+                        "Assigned: ${formatDateString(task["dateassigned"])}",
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall
@@ -516,10 +516,12 @@ Widget adminDashTask(
                             // final List<Map<String, dynamic>> employeeList =
                             //     admin.employees!;
                             task['dateassigned'] = DateTime.now().toString();
-                            task['dateassigned'] = dateController.text.trim();
+                            task['deadline'] = dateController.text.trim();
+                            task['assignedto'] = '${employeeSelected['firstname']} ${employeeSelected['lastname']}';
                             admin.updateTask(task);
                             Navigator.pop(context);
                             debugPrint('Oncall: $employeeSelected');
+                            debugPrint('Task content: $task');
                             await assignTaskToMember(
                                 employeeSelected, task, context);
                             Provider.of<AdminProvider>(context, listen: false)

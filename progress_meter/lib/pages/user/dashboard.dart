@@ -130,6 +130,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   itemBuilder: (context, index) {
                     final data = dummyData[index];
                     if (data["status"]! != "Completed") {
+                      
                       return Column(
                         children: [
                           CardHome(
@@ -137,7 +138,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             description: data["description"]!,
                             dateAssigned: data["dateassigned"]!,
                             overdue: data["overdue"]!,
-                            dateDue: data["datedue"]!,
+                            dateDue: data["deadline"]!,
                             status: data["status"]!,
                             taskId: data["taskid"],
                             memberId: member.memberInfo!['uniquecode'],

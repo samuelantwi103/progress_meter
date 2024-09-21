@@ -188,7 +188,7 @@ class Admin{
     Future<void> updateTask(Map<String,dynamic> task) async {
 
     //DateTime taskId = DateTime.now();
-    int index = tasks!.indexWhere((admintask) => admintask['taskid'] == task['taskid']);
+    int index = tasks!.indexWhere((admintask) => admintask['taskId'] == task['taskId']);
 
   // If the task is found (index is not -1), update it
   if (index != -1) {
@@ -198,7 +198,7 @@ class Admin{
       .collection('organisations')
       .doc(getFirstThreeLetters(adminInfo!['uniquecode']))
       .collection('tasks')
-      .doc(task['taskid'])
+      .doc(task['taskId'])
       .update(task);
   }
 
