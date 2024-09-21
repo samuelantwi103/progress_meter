@@ -303,7 +303,6 @@ Widget historyCard({
   required String status,
   required String date,
   required BuildContext context,
-
   String? taskid,
   String? memberId,
 }) {
@@ -324,13 +323,9 @@ Widget historyCard({
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            description,
-            style: Theme.of(context)
-                .textTheme
-                .bodyMedium
-                // ?.copyWith(color: Colors.grey),
-          ),
+          Text(description, style: Theme.of(context).textTheme.bodyMedium
+              // ?.copyWith(color: Colors.grey),
+              ),
           Text(
             formatDateString(date),
             style: Theme.of(context)
@@ -402,8 +397,9 @@ Widget overviewCard(
 Widget adminDashTask(
   Map<String, dynamic> task,
   BuildContext context,
-  Admin admin,
-) {
+  Admin admin, {
+  void Function()? onTap,
+}) {
   final formKeyAssign = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController employeeController = TextEditingController();
@@ -425,160 +421,221 @@ Widget adminDashTask(
         borderRadius: BorderRadius.circular(15),
       ),
       margin: EdgeInsets.symmetric(vertical: 10),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Task title
-            Text(
-              task["title"]!,
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            SizedBox(height: 5),
-            Text(task["description"]!,
-                style: Theme.of(context).textTheme.bodyMedium),
-            SizedBox(height: 8),
-
-            // Task status
-            // Text(
-            //   "Status: ${task["status"]}",
-            //   style: Theme.of(context).textTheme.bodySmall,
-            // ),
-            // SizedBox(height: 4),
-
-            // Assigned Employee
-            (task["assignedto"] == null)
-                ? Text(
-                    "Assigned to: N/A",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  )
-                : Text(
-                    "Assigned to: ${task["assignedto"]}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-            SizedBox(height: 4),
-
-            // Assigned and Due Dates
-            
-            (task["dateassigned"] == null)
-                ? Text(
-                    "Assigned: N/A",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  )
-                : Text(
-                    "Assigned: ${formatDateString(task["dateassigned"])}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-            (task["deadline"] == null)
-                ? Text(
-                    "Due: N/A",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  )
-                : Text(
-                    "Due:          ${formatDateString(task["deadline"])}",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-            SizedBox(
-              height: 10,
-            ),
-            if (task["assignedto"] != null)
-            LoadingBar(
-                      percentage: calculateDateTimePercentage(
-                              task['dateassigned'], task['deadline'])
-                          .toDouble(),
-                      // height: 10,
+      child: InkWell(
+        splashColor: Theme.of(context).colorScheme.primaryContainer,
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Task title
+              Text(
+                task["title"]!,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
+              ),
+              SizedBox(height: 5),
+              Text(task["description"]!,
+                  style: Theme.of(context).textTheme.bodyMedium),
+              SizedBox(height: 8),
 
-            if (task["assignedto"] == null)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FilledButton.tonal(
-                  onPressed: () {
-                    void getSelectedEmployee(Map<String, dynamic> selected ){
-                      employeeSelected = selected;
-                    }
-                    callDialog(
-                        context: context,
-                        content: AssignTaskForm(
-                          formKey: formKeyAssign,
-                          admin: admin,
-                          employeeController: employeeController,
-                          dateController: dateController,
-                          employeeSelected: employeeSelected,
-                          getSelectedEmployee: getSelectedEmployee,
+              // Assigned Employee
+              (task["assignedto"] == null)
+                  ? Text(
+                      "Assigned to: N/A",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    )
+                  : Text(
+                      "Assigned to: ${task["assignedto"]}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+              SizedBox(height: 4),
+
+              // Assigned and Due Dates
+
+              (task["dateassigned"] == null)
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "Assigned:",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                        title: "Assign a task",
-                        onConfirm: () async {
-                          if (formKeyAssign.currentState!.validate()) {
-                            // final List<Map<String, dynamic>> employeeList =
-                            //     admin.employees!;
-                            task['dateassigned'] = DateTime.now().toString();
-                            task['deadline'] = dateController.text.trim();
-                            task['assignedto'] = '${employeeSelected['firstname']} ${employeeSelected['lastname']}';
-                            admin.updateTask(task);
-                            Navigator.pop(context);
-                            debugPrint('Oncall: $employeeSelected');
-                            debugPrint('Task content: $task');
-                            await assignTaskToMember(
-                                employeeSelected, task, context);
-                            Provider.of<AdminProvider>(context, listen: false)
-                                .setCurrentAdmin(admin);
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    "Task assigned to ${employeeController.text}")));
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(
-                                    "Task due on ${dateController.text}")));
-                          }
-                        });
-                  },
-                  child: Text("Assign"),
-                ),
-                SizedBox(width: 10),
-                FilledButton.tonal(
-                  onPressed: () {
-
-                    callDialog(
-                        context: context,
-                        content:
-                            Text("Are you sure you want to delete this task?"),
-                        title: "Delete task",
-                        onConfirm: () async{
-                          await admin.deleteTask(task['taskId']);                          
-                        });
-                        
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(
-                        Theme.of(context).colorScheme.error.withOpacity(0.5)),
+                      Text(
+                          "N/A",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                    ],
+                  )
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "Assigned:",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      Text(
+                          "${formatDateString(task["dateassigned"])}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                    ],
                   ),
-                  child: Text("Delete"),
+              (task["deadline"] == null)
+                  ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "Due:",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      Text(
+                          "N/A",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                    ],
+                  )
+                  : Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          "Due:",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      Text(
+                          "${formatDateString(task["deadline"])}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                    ],
+                  ),
+              SizedBox(
+                height: 10,
+              ),
+              if (task["assignedto"] != null)
+                LoadingBar(
+                  percentage: calculateDateTimePercentage(
+                          task['dateassigned'], task['deadline'])
+                      .toDouble(),
+                  // height: 10,
                 ),
-              ],
-            )
-          ],
+
+              if (task["assignedto"] == null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    FilledButton.tonal(
+                      onPressed: () {
+                        void getSelectedEmployee(
+                            Map<String, dynamic> selected) {
+                          employeeSelected = selected;
+                        }
+
+                        callDialog(
+                            context: context,
+                            content: AssignTaskForm(
+                              formKey: formKeyAssign,
+                              admin: admin,
+                              employeeController: employeeController,
+                              dateController: dateController,
+                              employeeSelected: employeeSelected,
+                              getSelectedEmployee: getSelectedEmployee,
+                            ),
+                            title: "Assign a task",
+                            onConfirm: () async {
+                              if (formKeyAssign.currentState!.validate()) {
+                                // final List<Map<String, dynamic>> employeeList =
+                                //     admin.employees!;
+                                task['dateassigned'] =
+                                    DateTime.now().toString();
+                                task['deadline'] = dateController.text.trim();
+                                task['assignedto'] =
+                                    '${employeeSelected['firstname']} ${employeeSelected['lastname']}';
+                                admin.updateTask(task);
+                                Navigator.pop(context);
+                                debugPrint('Oncall: $employeeSelected');
+                                debugPrint('Task content: $task');
+                                await assignTaskToMember(
+                                    employeeSelected, task, context);
+                                Provider.of<AdminProvider>(context,
+                                        listen: false)
+                                    .setCurrentAdmin(admin);
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Task assigned to ${employeeController.text}")));
+                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text(
+                                        "Task due on ${dateController.text}")));
+                              }
+                            });
+                      },
+                      child: Text("Assign"),
+                    ),
+                    SizedBox(width: 10),
+                    FilledButton.tonal(
+                      onPressed: () {
+                        callDialog(
+                            context: context,
+                            content: Text(
+                                "Are you sure you want to delete this task?"),
+                            title: "Delete task",
+                            onConfirm: () async {
+                              generalLoading(context);
+                              await admin.deleteTask(task['taskId']);
+                              Provider.of<AdminProvider>(context,
+                                        listen: false)
+                                    .setCurrentAdmin(admin);
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+
+                            });
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(
+                            Theme.of(context)
+                                .colorScheme
+                                .error
+                                .withOpacity(0.5)),
+                      ),
+                      child: Text("Delete"),
+                    ),
+                  ],
+                )
+            ],
+          ),
         ),
       ),
     ),

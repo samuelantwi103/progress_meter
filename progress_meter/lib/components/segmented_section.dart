@@ -98,47 +98,53 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                     .reversed
                     .toList();
 
-
                 final ScrollController scrollController = ScrollController();
 
-                return InkWell(
-                  splashColor: Theme.of(context).colorScheme.primaryContainer,
-                  customBorder: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                return adminDashTask(
+                  filteredTasks[index],
+                  context,
+                  widget.admin,
                   onTap: () async {
                     generalLoading(context);
                     List<Map<String, dynamic>> reportList = [];
 
                     Navigator.pop(context);
-
-                    callBottomSheet(
-                        
-                        scrollController: scrollController,
-                        context: context,
-                        title: "Report Summary",
-                        content: SizedBox(
-                          // height: 0.7*MediaQuery.of(context).size.height,
-                          child: ListView.separated(
-                            itemCount: reportList.length,
-                            itemBuilder: (context, index) {
-                              dynamic data = reportList[index];
-                              return ListTile(
-                                title: Text(data['report']),
-                                subtitle: Text(formatDateString(data['date'])),
-                                horizontalTitleGap: 5,
-                              );
-                            },
-                            separatorBuilder: (context, index) {
-                              return Divider(
-                                thickness: 1,
-                                height: 1,
-                              );
-                            },
-                          ),
-                        ));
+                    if (filteredTasks[index]["assignedto"] == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Assign an employee to this task")));
+                    } else if (filteredTasks[index]["assignedto"] != null) {
+                      callBottomSheet(
+                          scrollController: scrollController,
+                          context: context,
+                          title: "Report Summary",
+                          content: SizedBox(
+                            // height: 0.7*MediaQuery.of(context).size.height,
+                            child: ListView.separated(
+                              itemCount: reportList.length,
+                              itemBuilder: (context, index) {
+                                dynamic data = reportList[index];
+                                // debugPrint(data);
+                                if (data != null) {
+                                  return ListTile(
+                                    title: Text(data['report'].toString()),
+                                    subtitle:
+                                        Text(formatDateString(data['date'])),
+                                    horizontalTitleGap: 5,
+                                  );
+                                } else {
+                                  return EmptyCompletedTaskManagementScreen();
+                                }
+                              },
+                              separatorBuilder: (context, index) {
+                                return Divider(
+                                  thickness: 1,
+                                  height: 1,
+                                );
+                              },
+                            ),
+                          ));
+                    }
                   },
-                  child: adminDashTask(
-                      filteredTasks[index], context, widget.admin),
                 );
               },
             ),

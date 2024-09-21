@@ -145,11 +145,17 @@ class _TaskPageState extends State<TaskPage> {
 
                   fetchAdminData(context, admin.adminInfo!['uniquecode'],
                       admin.adminInfo!['pin']);
+
                   // ScaffoldMessenger.of(context).showSnackBar(
                   //   SnackBar(content: Text(titleController.text)),
                   // );
 
                   adPro.setCurrentAdmin(admin);
+
+                  _formKeyAdd.currentState!.reset();
+                  titleController.clear();
+                  descriptionController.clear();
+
                   Navigator.pop(context);
                   Navigator.pop(context);
                   // Close dialog on success

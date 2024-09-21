@@ -117,6 +117,12 @@ class _EmployeePageState extends State<EmployeePage> {
                     SnackBar(content: Text(codeController.text)),
                     
                   );
+                  codeController.clear();
+                  fnameController.clear();
+                  lnameController.clear();
+                  mnameController.clear();
+                  pinController.clear();
+                  _formKey.currentState!.reset();
                   Navigator.pop(context); // Close dialog on success
                 }
               });
