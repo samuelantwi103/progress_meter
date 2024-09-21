@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/empty_screen.dart';
+import 'package:progress_meter/components/loading.dart';
+import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
+import 'package:provider/provider.dart';
 
 /// A segmented button section that displays a list of tasks.
 ///
@@ -93,8 +97,75 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                     .toList()
                     .reversed
                     .toList();
-                return adminDashTask(
-                    filteredTasks[index], context, widget.admin);
+                
+                // I copied this data from the history page
+                final List<Map<String, dynamic>> historyData = [];
+                final List<Map<String, dynamic>> standUpsData = [];
+
+                final ScrollController scrollController = ScrollController();
+                final assignedTasks =
+                    Provider.of<AssignedProvider>(context, listen: true)
+                        .currenMember!;
+                final notAssignedTasks =
+                    Provider.of<SelfTasksProvider>(context, listen: true)
+                        .currenMember!;
+                final member =
+                    Provider.of<MemberProvider>(context, listen: true)
+                        .currenMember!;
+
+                if (assignedTasks.getCompletedTasks.isNotEmpty) {
+                  historyData.addAll(assignedTasks.getCompletedTasks);
+                  //  historyData.reversed.toList();
+                }
+
+                if (assignedTasks.getOverdueTasks.isNotEmpty) {
+                  historyData.addAll(assignedTasks.getOverdueTasks);
+                  // historyData.reversed.toList();
+                }
+                if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
+                  standUpsData.addAll(notAssignedTasks.memberSelftasks!);
+                  // standUpsData.reversed.toList();
+                }
+                
+                return InkWell(
+                  splashColor: Theme.of(context).colorScheme.primaryContainer,
+                  customBorder: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                  onTap: () async {
+                    generalLoading(context);
+                    List<Map<String, dynamic>> reportList =
+                        await fetchAllReports(member.memberInfo!['uniquecode'],
+                            historyData[index]['taskid']);
+                    Navigator.pop(context);
+
+                    callBottomSheet(
+                        scrollController: scrollController,
+                        context: context,
+                        title: "Report Summary",
+                        content: SizedBox(
+                          // height: 0.7*MediaQuery.of(context).size.height,
+                          child: ListView.separated(
+                            itemCount: reportList.length,
+                            itemBuilder: (context, index) {
+                              dynamic data = reportList[index];
+                              return ListTile(
+                                title: Text(data['report']),
+                                subtitle: Text(formatDateString(data['date'])),
+                                horizontalTitleGap: 5,
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return Divider(
+                                thickness: 1,
+                                height: 1,
+                              );
+                            },
+                          ),
+                        ));
+                  },
+                  child: adminDashTask(
+                      filteredTasks[index], context, widget.admin),
+                );
               },
             ),
           ),
@@ -123,9 +194,9 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                   .isEmpty)
             EmptyCompletedTaskManagementScreen(),
           // else
-            SizedBox(
-              height: 20,
-            ),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );

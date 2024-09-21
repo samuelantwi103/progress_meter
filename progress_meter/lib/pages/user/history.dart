@@ -130,6 +130,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   },
                                   child: historyCard(
                                       task: historyItem['title'],
+                                      description: historyItem['description'],
                                       status: historyItem['status'],
                                       memberId:
                                           member.memberInfo!['uniquecode'],
@@ -168,6 +169,7 @@ class _HistoryPageState extends State<HistoryPage>
                                 final historyItem = standUpsData[index];
                                 return historyCard(
                                     task: historyItem['title'],
+                                    description: historyItem['description'],
                                     status: 'Completed',
                                     date: historyItem['time'],
                                     context: context);

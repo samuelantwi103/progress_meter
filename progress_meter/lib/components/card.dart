@@ -299,9 +299,11 @@ Widget taskStatusCard({
 
 Widget historyCard({
   required String task,
+  required String description,
   required String status,
   required String date,
   required BuildContext context,
+
   String? taskid,
   String? memberId,
 }) {
@@ -319,20 +321,33 @@ Widget historyCard({
         task,
         style: Theme.of(context).textTheme.bodyLarge,
       ),
-      subtitle: Text(
-        formatDateString(date),
-        style: Theme.of(context)
-            .textTheme
-            .bodyMedium
-            ?.copyWith(color: Colors.grey),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            description,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                // ?.copyWith(color: Colors.grey),
+          ),
+          Text(
+            formatDateString(date),
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium
+                ?.copyWith(color: Colors.grey),
+          ),
+        ],
       ),
-      trailing: Text(
-        status,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: getStatusColor(status),
-        ),
-      ),
+
+      // trailing: Text(
+      //   status,
+      //   style: TextStyle(
+      //     fontWeight: FontWeight.bold,
+      //     color: getStatusColor(status),
+      //   ),
+      // ),
     ),
   );
 }
@@ -413,7 +428,7 @@ Widget adminDashTask(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Task title
             Text(
@@ -453,45 +468,49 @@ Widget adminDashTask(
             SizedBox(height: 4),
 
             // Assigned and Due Dates
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                (task["dateassigned"] == null)
-                    ? Text(
-                        "Assigned: N/A",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      )
-                    : Text(
-                        "Assigned: ${formatDateString(task["dateassigned"])}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                (task["deadline"] == null)
-                    ? Text(
-                        "Due: N/A",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      )
-                    : Text(
-                        "Due: ${formatDateString(task["deadline"])}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-              ],
-            ),
+            
+            (task["dateassigned"] == null)
+                ? Text(
+                    "Assigned: N/A",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  )
+                : Text(
+                    "Assigned: ${formatDateString(task["dateassigned"])}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+            (task["deadline"] == null)
+                ? Text(
+                    "Due: N/A",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  )
+                : Text(
+                    "Due:          ${formatDateString(task["deadline"])}",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
             SizedBox(
               height: 10,
             ),
+            if (task["assignedto"] != null)
+            LoadingBar(
+                      percentage: calculateDateTimePercentage(
+                              task['dateassigned'], task['deadline'])
+                          .toDouble(),
+                      // height: 10,
+                    ),
+
+            if (task["assignedto"] == null)
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

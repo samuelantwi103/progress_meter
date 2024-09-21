@@ -157,7 +157,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       }
                       
                     } 
-                    else {
+                    else if(dummyData.isEmpty) {
                       return EmptyTaskScreen();
                     }
                   },
