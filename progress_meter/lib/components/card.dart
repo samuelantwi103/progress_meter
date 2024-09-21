@@ -515,6 +515,7 @@ Widget adminDashTask(
                             task['dateassigned'] = dateController.text.trim();
                             admin.updateTask(task);
                             Navigator.pop(context);
+                            debugPrint('$employeeSelected');
                             await assignTaskToMember(employeeSelected,task,context);
                             Provider.of<AdminProvider>(context,listen:false).setCurrentAdmin(admin);
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
