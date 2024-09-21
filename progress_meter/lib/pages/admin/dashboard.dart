@@ -55,8 +55,8 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final admin =
-        Provider.of<AdminProvider>(context, listen: true).currenMember!;
+
+    final admin = Provider.of<AdminProvider>(context, listen: true).currenMember!;
 
     return Scaffold(
       appBar: AppBar(
@@ -82,9 +82,12 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
             child: Column(
               children: [
                 Image.asset(
+
                   "assets/son_logo.png",
                   height: 0.2*MediaQuery.of(context).size.height,
+
                 ),
+
                 // Section: Task Cards
                 Align(
                   alignment: Alignment.centerLeft,
@@ -145,6 +148,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           ? admin.employees!.length
                           : 3,
                   itemBuilder: (context, index) {
+                    
                     return adminTaskIndicator(admin.employees![index], context,overview: true);
                   },
                 ),

@@ -559,12 +559,16 @@ Widget adminDashTask(
                 SizedBox(width: 10),
                 FilledButton.tonal(
                   onPressed: () {
+
                     callDialog(
                         context: context,
                         content:
                             Text("Are you sure you want to delete this task?"),
                         title: "Delete task",
-                        onConfirm: () {});
+                        onConfirm: () async{
+                          await admin.deleteTask(task['taskId']);                          
+                        });
+                        
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStatePropertyAll(

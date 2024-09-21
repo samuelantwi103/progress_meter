@@ -185,6 +185,25 @@ class Admin{
       });
   }
 
+  Future<void> deleteTask(String taskId) async {
+
+    try{
+      await FirebaseFirestore.instance
+      .collection('organisations')
+      .doc(getFirstThreeLetters(adminInfo!['uniquecode']))
+      .collection('tasks')
+      .doc(taskId)
+      .delete();
+
+      int index = tasks!.indexWhere((admintask) => admintask['taskId'] == taskId);
+      tasks!.remove(tasks![index]);
+    }
+    catch(e){
+      debugPrint('Error deleting task: $e');
+    }
+    
+  }
+
     Future<void> updateTask(Map<String,dynamic> task) async {
 
     //DateTime taskId = DateTime.now();

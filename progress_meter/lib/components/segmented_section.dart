@@ -112,6 +112,7 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                     Navigator.pop(context);
 
                     callBottomSheet(
+                        
                         scrollController: scrollController,
                         context: context,
                         title: "Report Summary",
