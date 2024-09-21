@@ -125,8 +125,8 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                 if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
                   standUpsData.addAll(notAssignedTasks.memberSelftasks!);
                   // standUpsData.reversed.toList();
-                }
-                
+                } 
+
                 return InkWell(
                   splashColor: Theme.of(context).colorScheme.primaryContainer,
                   customBorder: RoundedRectangleBorder(
