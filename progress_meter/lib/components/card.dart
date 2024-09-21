@@ -156,7 +156,7 @@ class _CardHomeState extends State<CardHome> {
                     SizedBox(
                       height: 10,
                     ),
-                    if (!isCompleted || widget.status == "true")
+                    if (!isCompleted || widget.status == "In Progress")
                       Align(
                         alignment: Alignment.bottomLeft,
                         child: Row(

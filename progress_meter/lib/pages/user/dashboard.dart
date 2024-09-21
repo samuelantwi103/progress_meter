@@ -130,7 +130,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   itemBuilder: (context, index) {
                     final data = dummyData[index];
                     if (data["status"]! != "Completed") {
-                      
+                      try{
+
+                        debugPrint(data["status"]!);
+                      debugPrint(member.memberInfo!['uniquecode']);
                       return Column(
                         children: [
                           CardHome(
@@ -146,7 +149,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           const SizedBox(height: 10),
                         ],
                       );
-                    } else {
+
+                      }catch(e){
+                        debugPrint('error: $e');
+
+                      }
+                      
+                    } 
+                    else {
                       return EmptyTaskScreen();
                     }
                   },

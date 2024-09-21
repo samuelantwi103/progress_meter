@@ -145,8 +145,7 @@ class _AdminDashboardPageState extends State<AdminDashboardPage> {
                           ? admin.employees!.length
                           : 3,
                   itemBuilder: (context, index) {
-                    return adminTaskIndicator(admin.employees![index], context,
-                        overview: true);
+                    return adminTaskIndicator(admin.employees![index], context,overview: true);
                   },
                 ),
                 if (admin.employees!.length > 3)
