@@ -188,11 +188,11 @@ class Admin{
     Future<void> updateTask(Map<String,dynamic> task) async {
 
     //DateTime taskId = DateTime.now();
-    int index = tasks.indexWhere((admintask) => admintask['taskid'] == taskask['taskid']);
+    int index = tasks!.indexWhere((admintask) => admintask['taskid'] == task['taskid']);
 
   // If the task is found (index is not -1), update it
   if (index != -1) {
-    tasks[index] = newTask;
+    tasks![index] = task;
   }
     await FirebaseFirestore.instance
       .collection('organisations')
