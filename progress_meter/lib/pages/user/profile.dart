@@ -128,7 +128,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     SizedBox(height: 5),
                     LoadingBar(
-                        percentage: double.parse(
+                        percentage: (completeOverdue == 0)? 0: double.parse(
                             (member.memberInfo!['completedscores'] /
                                     (completeOverdue))
                                 .toStringAsFixed(2))),

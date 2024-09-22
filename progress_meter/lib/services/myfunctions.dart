@@ -173,15 +173,19 @@ String getCurrentMonthDay() {
   // Get the current date and time
   DateTime now = DateTime.now();
 
-  // Define the format for the month and day
+  // Define the format for the month, day, hour, minute, and second
   String month = DateFormat('MMMM').format(now).toLowerCase(); // Full month name in lowercase
   String day = DateFormat('d').format(now); // Day of the month
+  String hour = DateFormat('HH').format(now); // Hour in 24-hour format
+  String minute = DateFormat('mm').format(now); // Minutes
+  String second = DateFormat('ss').format(now); // Seconds
 
-  // Combine month and day into the desired format
-  String monthDay = '$month$day';
+  // Combine month, day, hour, minute, and second into the desired format
+  String monthDayHourMinuteSecond = '$month$day$hour$minute$second';
 
-  return monthDay;
+  return monthDayHourMinuteSecond;
 }
+
 
 
 int getDaysInCurrentMonth() {
@@ -317,7 +321,47 @@ Future<bool> fetchAdminData( BuildContext context, String uid, String pin) async
   
 }
 
+Future<void> createNewMember(String firstname,String middlename,String lastname,String uniquecode, int pin) async {
 
+    try{
+
+
+      await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(uniquecode))
+            .collection('members').doc(uniquecode).set({
+              'firstname': firstname,
+              'lastname': lastname,
+              'middlename': middlename,
+              'pin': pin,
+              'uniquecode': uniquecode,
+              'personalperformance': 0,
+              'overallperformance': 0,
+              'completedscores': 0,
+              'personal': "None",
+              'overall': 'none',       
+            });
+      // creating assigned field of new member
+      final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
+      await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(uniquecode))
+          .collection('members').doc(uniquecode)
+          .collection('months').doc(monthdoc)
+          .collection('assigned').doc('default').set({
+            'name': 'default'
+          });
+
+      // creating not assigned field of new member
+      await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(uniquecode))
+          .collection('members').doc(uniquecode)
+          .collection('months').doc(monthdoc)
+          .collection('notassigned').doc('default').set({
+            'name': 'default'
+          });
+          
+    }
+    catch(e){
+      debugPrint('Error creating new member: $e');
+    }
+
+}
 
 String convertDateTimeToCompactString(DateTime dateTime) {
   String day = dateTime.day.toString().padLeft(2, '0');

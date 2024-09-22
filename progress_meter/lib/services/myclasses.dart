@@ -253,9 +253,7 @@ Future<bool> fetchdata(BuildContext context, String uid, String pin) async {
       member.memberInfo = usersnap.data() as Map<String, dynamic>;
       Provider.of<MemberProvider>(context, listen: false)
           .setCurrentMember(member);
-      Navigator.pop(context);
-      Navigator.pushReplacement(
-          context, createSlideScaleTransition(HomePage()));
+      
       state = true;
     } else {
       Navigator.pop(context);

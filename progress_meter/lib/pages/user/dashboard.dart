@@ -83,7 +83,7 @@ class _DashboardPageState extends State<DashboardPage> {
     final assignedTasks = assPro.currenMember;
     final List<Map<String, dynamic>> dummyData =
         assignedTasks!.memberAssignedtasks!;
-    debugPrint('length of map: ${dummyData[0]}');
+    //debugPrint('length of map: ${dummyData[0]}');
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(

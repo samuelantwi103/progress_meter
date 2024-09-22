@@ -4,6 +4,7 @@ import 'package:progress_meter/components/empty_screen.dart';
 import 'package:progress_meter/components/form.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
+import 'package:progress_meter/services/myfunctions.dart';
 import 'package:provider/provider.dart';
 
 class EmployeePage extends StatefulWidget {
@@ -111,8 +112,18 @@ class _EmployeePageState extends State<EmployeePage> {
                 pinController: pinController,
               ),
               title: "Add an employee",
-              onConfirm: () {
+              onConfirm: () async {
                 if (_formKey.currentState!.validate()) {
+
+                  // creating the new member
+                  await createNewMember(fnameController.text.trim(), 
+                  mnameController.text.trim(), 
+                  lnameController.text.trim(), 
+                  codeController.text.trim(), 
+                  int.parse(pinController.text.trim()));
+
+                  await fetchAdminData(context, admin.adminInfo!['uniquecode'], admin.adminInfo!['pin']);
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(codeController.text)),
                     

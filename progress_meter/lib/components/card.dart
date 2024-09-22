@@ -653,8 +653,22 @@ Widget adminTaskIndicator(
   return Card.outlined(
     elevation: 10,
     child: InkWell(
-      onTap: () {
-        Navigator.push(context, logoutTransition(HomePage()));
+      onTap: () async {
+        final assPro = Provider.of<AssignedProvider>(context,listen:false);
+        final selfPro = Provider.of<SelfTasksProvider>(context,listen:false);
+        final assigned = AssignedTasks();
+        final selfTasks = SelfTasks();
+        if(await fetchdata(context, employee['uniquecode'], employee['pin'].toString())){
+
+            Navigator.pop(context);
+            Navigator.push( context, createSlideScaleTransition(HomePage()));
+            await fetchAssignedTasks(assigned, employee['uniquecode'], pin: employee['pin'].toString());
+            await fetchSelfTasks(selfTasks, employee['uniquecode'], pin: employee['pin'].toString());
+            assPro.setCurrentAssignedTasks(assigned);
+            selfPro.setCurrentSelfTaks(selfTasks);
+        }
+        
+        //Navigator.push(context, logoutTransition(HomePage()));
       },
       enableFeedback: true,
       splashColor: Theme.of(context).colorScheme.surfaceContainer,

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/pages/admin/admin_home.dart';
+import 'package:progress_meter/pages/user/user_home.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
@@ -293,6 +294,9 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                   milliseconds: 1000)));
                                     } else if (await fetchdata(
                                         context, code, pin)) {
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                          context, createSlideScaleTransition(HomePage()));
                                       await fetchAssignedTasks(assigned, code,
                                           pin: pin);
                                       await fetchSelfTasks(selfTasks, code,
