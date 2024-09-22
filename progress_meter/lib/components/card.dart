@@ -466,82 +466,82 @@ Widget adminDashTask(
 
               (task["dateassigned"] == null)
                   ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           "Assigned:",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                      Text(
+                        Text(
                           "N/A",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                    ],
-                  )
+                      ],
+                    )
                   : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           "Assigned:",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                      Text(
+                        Text(
                           "${formatDateString(task["dateassigned"])}",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                    ],
-                  ),
+                      ],
+                    ),
               (task["deadline"] == null)
                   ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           "Due:",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                      Text(
+                        Text(
                           "N/A",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                    ],
-                  )
+                      ],
+                    )
                   : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
                           "Due:",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                      Text(
+                        Text(
                           "${formatDateString(task["deadline"])}",
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                    ],
-                  ),
+                      ],
+                    ),
               SizedBox(
                 height: 10,
               ),
@@ -617,12 +617,10 @@ Widget adminDashTask(
                             onConfirm: () async {
                               generalLoading(context);
                               await admin.deleteTask(task['taskId']);
-                              Provider.of<AdminProvider>(context,
-                                        listen: false)
-                                    .setCurrentAdmin(admin);
+                              Provider.of<AdminProvider>(context, listen: false)
+                                  .setCurrentAdmin(admin);
                               Navigator.pop(context);
                               Navigator.pop(context);
-
                             });
                       },
                       style: ButtonStyle(
@@ -654,21 +652,23 @@ Widget adminTaskIndicator(
     elevation: 10,
     child: InkWell(
       onTap: () async {
-        final assPro = Provider.of<AssignedProvider>(context,listen:false);
-        final selfPro = Provider.of<SelfTasksProvider>(context,listen:false);
+        final assPro = Provider.of<AssignedProvider>(context, listen: false);
+        final selfPro = Provider.of<SelfTasksProvider>(context, listen: false);
         final assigned = AssignedTasks();
         final selfTasks = SelfTasks();
-        if(await fetchdata(context, employee['uniquecode'], employee['pin'].toString())){
-
-            Navigator.push( context, logoutTransition(HomePage()));
-            generalLoading(context);
-            await fetchAssignedTasks(assigned, employee['uniquecode'], pin: employee['pin'].toString());
-            await fetchSelfTasks(selfTasks, employee['uniquecode'], pin: employee['pin'].toString());
-            assPro.setCurrentAssignedTasks(assigned);
-            selfPro.setCurrentSelfTaks(selfTasks);
-            Navigator.pop(context);
+        if (await fetchdata(
+            context, employee['uniquecode'], employee['pin'].toString())) {
+          Navigator.push(context, logoutTransition(HomePage()));
+          generalLoading(context);
+          await fetchAssignedTasks(assigned, employee['uniquecode'],
+              pin: employee['pin'].toString());
+          await fetchSelfTasks(selfTasks, employee['uniquecode'],
+              pin: employee['pin'].toString());
+          assPro.setCurrentAssignedTasks(assigned);
+          selfPro.setCurrentSelfTaks(selfTasks);
+          Navigator.pop(context);
         }
-        
+
         //Navigator.push(context, logoutTransition(HomePage()));
       },
       enableFeedback: true,
@@ -717,6 +717,33 @@ Widget adminTaskIndicator(
                               employee["overallperformance"].toDouble())),
                 ],
               ),
+            if (!overview)
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FilledButton.tonal(
+                    onPressed: () {
+                      callDialog(
+                          context: context,
+                          content: Text(
+                              "Are you sure you want to delete this account?\n\nThis action cannot be reversed and all employee information will be lost."),
+                          title: "Terminate employee account",
+                          onConfirm: () {
+                            generalLoading(context);
+                            // Put the code here
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.error.withOpacity(0.5)),
+                    ),
+                    child: Text("Delete"),
+                  ),
+                ),
+              )
 
             // Divider()
           ],

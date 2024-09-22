@@ -78,7 +78,7 @@ class _HistoryPageState extends State<HistoryPage>
                 ? EmptyHistoryScreen()
                 : SingleChildScrollView(
                     child: Container(
-                      height: MediaQuery.of(context).size.height,
+                      height: 0.7*MediaQuery.of(context).size.height,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +88,7 @@ class _HistoryPageState extends State<HistoryPage>
                           ),
                           Expanded(
                             child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollableScrollPhysics(),
                               itemCount: historyData.length,
                               itemBuilder: (context, index) {
                                 final historyItem = historyData[index];
@@ -128,16 +128,22 @@ class _HistoryPageState extends State<HistoryPage>
                                           ),
                                         ));
                                   },
-                                  child: historyCard(
-                                      task: historyItem['title'],
-                                      description: historyItem['description'],
-                                      status: historyItem['status'],
-                                      memberId:
-                                          member.memberInfo!['uniquecode'],
-                                      taskid: historyItem['taskid'],
-                                      date: historyItem['datecompleted'],
-                                      context: context),
+                                  child: Column(
+                                    children: [
+                                      historyCard(
+                                          task: historyItem['title'],
+                                          description: historyItem['description'],
+                                          status: historyItem['status'],
+                                          memberId:
+                                              member.memberInfo!['uniquecode'],
+                                          taskid: historyItem['taskid'],
+                                          date: historyItem['datecompleted'],
+                                          context: context),
+                                          
+                                    ],
+                                  ),
                                 );
+                                
                               },
                             ),
                           ),
@@ -153,7 +159,7 @@ class _HistoryPageState extends State<HistoryPage>
               child: (standUpsData.isEmpty)
                   ? EmptyHistoryScreen()
                   : Container(
-                      height: MediaQuery.of(context).size.height,
+                      height: 0.7*MediaQuery.of(context).size.height,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,16 +169,25 @@ class _HistoryPageState extends State<HistoryPage>
                           ),
                           Expanded(
                             child: ListView.builder(
-                              physics: NeverScrollableScrollPhysics(),
+                              // physics: NeverScrollableScrollPhysics(),
                               itemCount: standUpsData.length,
                               itemBuilder: (context, index) {
                                 final historyItem = standUpsData[index];
-                                return historyCard(
-                                    task: historyItem['title'],
-                                    description: historyItem['description'],
-                                    status: 'Completed',
-                                    date: historyItem['time'],
-                                    context: context);
+                                return Column(
+                                  children: [
+                                    historyCard(
+                                        task: historyItem['title'],
+                                        description: historyItem['description'],
+                                        status: 'Completed',
+                                        date: historyItem['time'],
+                                        context: context),
+                                        if (index == standUpsData.length - 1)
+                                          SizedBox(
+                                            height: 10,
+                                          )
+                                  ],
+                                );
+                                    
                               },
                             ),
                           ),
