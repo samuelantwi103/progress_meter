@@ -248,8 +248,8 @@ class EmptyHistoryScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
               children: [
-                TextSpan(text: "Oops...\n"),
-                TextSpan(text: "No history yet"),
+                TextSpan(text: "Oops...🥲\n"),
+                TextSpan(text: "No history yet\n"),
                 TextSpan(
                     text: "Your previous activities show here.\n",
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(

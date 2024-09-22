@@ -660,12 +660,13 @@ Widget adminTaskIndicator(
         final selfTasks = SelfTasks();
         if(await fetchdata(context, employee['uniquecode'], employee['pin'].toString())){
 
-            Navigator.pop(context);
-            Navigator.push( context, createSlideScaleTransition(HomePage()));
+            Navigator.push( context, logoutTransition(HomePage()));
+            generalLoading(context);
             await fetchAssignedTasks(assigned, employee['uniquecode'], pin: employee['pin'].toString());
             await fetchSelfTasks(selfTasks, employee['uniquecode'], pin: employee['pin'].toString());
             assPro.setCurrentAssignedTasks(assigned);
             selfPro.setCurrentSelfTaks(selfTasks);
+            Navigator.pop(context);
         }
         
         //Navigator.push(context, logoutTransition(HomePage()));

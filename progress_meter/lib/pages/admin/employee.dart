@@ -22,43 +22,9 @@ class _EmployeePageState extends State<EmployeePage> {
   final TextEditingController codeController = TextEditingController();
   final TextEditingController pinController = TextEditingController();
 
-  // Variables to track expanded or collapsed state
-  // bool showMoreTasks = false;
-  // bool showMoreEmployees = false;
   int taskLength = 0;
 
-  final List<Map<String, dynamic>> employees = [
-    // {
-    //   "name": "John Doe",
-    //   "overallperformance": 95,
-    //   "personalperformance": 80,
-    // },
-    // {
-    //   "name": "Jane Smith",
-    //   "overallperformance": 88,
-    //   "personalperformance": 35,
-    // },
-    // {
-    //   "name": "Mark Johnson",
-    //   "overallperformance": 75,
-    //   "personalperformance": 65,
-    // },
-    // {
-    //   "name": "Mark Johnson",
-    //   "overallperformance": 40,
-    //   "personalperformance": 75,
-    // },
-    // {
-    //   "name": "Mark Johnson",
-    //   "overallperformance": 50,
-    //   "personalperformance": 60,
-    // },
-    // {
-    //   "name": "Mark Johnson",
-    //   "overallperformance": 40,
-    //   "personalperformance": 60,
-    // },
-  ];
+  final List<Map<String, dynamic>> employees = [];
 
   @override
   Widget build(BuildContext context) {
@@ -76,24 +42,16 @@ class _EmployeePageState extends State<EmployeePage> {
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Column(
               children: [
-                // Align(
-                //   alignment: Alignment.centerLeft,
-                //   child: Text(
-                //     'Employee Productivity',
-                //     style: Theme.of(context).textTheme.titleLarge,
-                //   ),
-                // ),
                 SizedBox(height: 10),
                 ListView.builder(
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
-                  itemCount:admin.employees!.length,
+                  itemCount: admin.employees!.length,
                   itemBuilder: (context, index) {
                     return adminTaskIndicator(admin.employees![index], context);
-                  },                  
+                  },
                 ),
-                if(admin.employees!.isEmpty)
-                EmptyEmployeeScreen(),
+                if (admin.employees!.isEmpty) EmptyEmployeeScreen(),
               ],
             ),
           ),
@@ -114,19 +72,19 @@ class _EmployeePageState extends State<EmployeePage> {
               title: "Add an employee",
               onConfirm: () async {
                 if (_formKey.currentState!.validate()) {
-
                   // creating the new member
-                  await createNewMember(fnameController.text.trim(), 
-                  mnameController.text.trim(), 
-                  lnameController.text.trim(), 
-                  codeController.text.trim(), 
-                  int.parse(pinController.text.trim()));
+                  await createNewMember(
+                      fnameController.text.trim(),
+                      mnameController.text.trim(),
+                      lnameController.text.trim(),
+                      codeController.text.trim(),
+                      int.parse(pinController.text.trim()));
 
-                  await fetchAdminData(context, admin.adminInfo!['uniquecode'], admin.adminInfo!['pin']);
+                  await fetchAdminData(context, admin.adminInfo!['uniquecode'],
+                      admin.adminInfo!['pin']);
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(codeController.text)),
-                    
                   );
                   codeController.clear();
                   fnameController.clear();
