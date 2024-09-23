@@ -39,12 +39,26 @@ String convertDateTimeToLowercaseString(DateTime dateTime) {
 Future<void> fetchAssignedTasks(AssignedTasks assigned, String code, {String? pin}) async {
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
 
-  final usersnap = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code)).collection('members').doc(code).collection('months').doc(monthdoc).collection('assigned').get();
+  // final docToCheck = await FirebaseFirestore.instance.collection('organisations')
+  // .doc(getFirstThreeLetters(code))
+  // .collection('members').doc(code)
+  // .collection('months').doc(monthdoc).get();
+  final docToCheck = await FirebaseFirestore.instance.collection('organisations')
+  .doc(getFirstThreeLetters(code))
+  .collection('members').doc(code).collection('months').doc(monthdoc)
+  .get();
+
+  debugPrint('member assigned doc exist : ${docToCheck.exists}');
+
+  final usersnap = await FirebaseFirestore.instance.collection('organisations')
+  .doc(getFirstThreeLetters(code)).collection('members').doc(code)
+  .collection('months').doc(monthdoc).collection('assigned').get();
   if (usersnap.docs.isNotEmpty){
     // do something
       
 
-      assigned.memberAssignedtasks = usersnap.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
+      assigned.memberAssignedtasks = usersnap.docs.where((doc) => doc.id != 'default')
+      .map((doc){return doc.data();}).toList();
       //return assigned;
       
       
@@ -62,6 +76,7 @@ Future<void> fetchAssignedTasks(AssignedTasks assigned, String code, {String? pi
 //=======================================================
 
 Future<void> fetchSelfTasks(SelfTasks notAssigned, String code, {String? pin}) async {
+
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
 
   final docToCheck = await FirebaseFirestore.instance.collection('organisations')
@@ -69,15 +84,19 @@ Future<void> fetchSelfTasks(SelfTasks notAssigned, String code, {String? pin}) a
   .collection('members').doc(code)
   .collection('months').doc(monthdoc).get();
 
+  debugPrint('member doc exist value: ${docToCheck.exists}');
+
   if(docToCheck.exists){
 
     final usersnap = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code))
       .collection('members').doc(code).collection('months').doc(monthdoc).collection('notassigned').get();
+       debugPrint('member doc size: ${usersnap.size}');
       if (usersnap.docs.isNotEmpty){
         // do something
         
-
-          notAssigned.memberSelftasks = usersnap.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
+          debugPrint('Before inside function check: ${notAssigned.memberSelftasks}');
+          notAssigned.memberSelftasks = usersnap.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
+          debugPrint('inside function check: ${notAssigned.memberSelftasks}');
               
         
       }
@@ -97,17 +116,18 @@ Future<void> fetchSelfTasks(SelfTasks notAssigned, String code, {String? pin}) a
       .collection('months').doc(monthdoc)
       .collection('assigned').doc('default').set({'name': 'default'});
 
-  }
-
-  
+  }  
   
 }
+
+
 
 Future<void> submitStandUp(String title, String description,String challenges, String memberId,SelfTasksProvider selfPro) async{
   final docId = getCurrentMonthDay();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
   final doc = await FirebaseFirestore.instance.collection('organisations')
-  .doc(getFirstThreeLetters(memberId)).collection('members').doc(memberId).collection('months').doc(monthdoc).collection('notassigned').doc(docId).get();
+  .doc(getFirstThreeLetters(memberId)).collection('members').doc(memberId).collection('months').doc(monthdoc)
+  .collection('notassigned').doc(docId).get();
   
 
   (doc.exists) ?
@@ -393,10 +413,14 @@ DateTime convertToDateTime(String dateString) {
 Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId) async{
   //final docId = getCurrentMonthDay();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
+  final assignedDocs = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('members').doc(memberId).collection('months').doc(monthdoc).collection('assigned').get();
+  final docsignature = assignedDocs.docs.firstWhere((doc) => doc['taskId'] == taskId);
+  
   final doc = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
   .collection('members').doc(memberId)
   .collection('months').doc(monthdoc)
-  .collection('assigned').doc(taskId)
+  .collection('assigned').doc(docsignature.id)
   .collection('reports').get();
   List<Map<String,dynamic>> reports = doc.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
   return reports;
@@ -479,9 +503,14 @@ Future<void> createNewMember(String firstname,String middlename,String lastname,
       final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
       await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(uniquecode))
           .collection('members').doc(uniquecode)
+          .collection('months').doc(monthdoc).set({'newMonth': 'monthdoc'});
+
+      await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(uniquecode))
+          .collection('members').doc(uniquecode)
           .collection('months').doc(monthdoc)
           .collection('assigned').doc('default').set({
-            'name': 'default'
+            'name': 'default',
+            'taskId': 'taskId'
           });
 
       // creating not assigned field of new member
@@ -489,7 +518,8 @@ Future<void> createNewMember(String firstname,String middlename,String lastname,
           .collection('members').doc(uniquecode)
           .collection('months').doc(monthdoc)
           .collection('notassigned').doc('default').set({
-            'name': 'default'
+            'name': 'default',
+            'taskId': 'default'
           });
           
     }

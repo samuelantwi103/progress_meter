@@ -293,6 +293,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                   milliseconds: 1000)));
                                     } else if (await fetchdata(
                                         context, code, pin)) {
+                                          await fetchSelfTasks(selfTasks, code,pin: pin);
                                           await fetchAssignedTasks(assigned, code,
                                           pin: pin);
                                       Navigator.pop(context);
@@ -301,8 +302,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                                           context, createSlideScaleTransition(HomePage()));
                                       
-                                      await fetchSelfTasks(selfTasks, code,
-                                          pin: pin);
+                                      
                                       assPro.setCurrentAssignedTasks(assigned);
                                       selfPro.setCurrentSelfTaks(selfTasks);
                                     }

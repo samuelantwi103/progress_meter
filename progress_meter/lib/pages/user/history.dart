@@ -33,27 +33,53 @@ class _HistoryPageState extends State<HistoryPage>
   @override
   Widget build(BuildContext context) {
     //Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    final assignedTasks =
-        Provider.of<AssignedProvider>(context, listen: true).currenMember!;
-    final notAssignedTasks =
-        Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
-    final member =
-        Provider.of<MemberProvider>(context, listen: true).currenMember!;
+    AssignedTasks assignedTasks = Provider.of<AssignedProvider>(context, listen: true).currenMember!;
+    SelfTasks notAssignedTasks = Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
+    final member = Provider.of<MemberProvider>(context, listen: true).currenMember!;
     TabController tabController = TabController(length: 2, vsync: this);
     //final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
-    if (assignedTasks.getCompletedTasks.isNotEmpty) {
-      historyData.addAll(assignedTasks.getCompletedTasks);
-    //  historyData.reversed.toList();
+    try{     
+      
+      if (assignedTasks.getCompletedTasks.isNotEmpty) {
+          historyData.addAll(assignedTasks.getCompletedTasks);
+        //  historyData.reversed.toList();
+        }  
+
+   
+    }
+    catch(e, stack){
+      debugPrint('error fetching completed tasks: $e');
+      debugPrint('the stack trace is: $stack');
     }
 
-    if (assignedTasks.getOverdueTasks.isNotEmpty) {
+    try{     
+      
+      if (assignedTasks.getOverdueTasks.isNotEmpty) {
       historyData.addAll(assignedTasks.getOverdueTasks);
       // historyData.reversed.toList();
+    } 
+
+   
     }
-    if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
+    catch(e){
+      debugPrint('error fetching member overdue tasks: $e');
+    }
+    
+     try{     
+      
+      if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
       standUpsData.addAll(notAssignedTasks.memberSelftasks!);
       // standUpsData.reversed.toList();
+    } 
+
+   
     }
+    catch(e, stack){
+      debugPrint('error feching member self tasks: $e');
+      debugPrint('the stack trace is: $stack');
+    }
+    
+    
 
     return Scaffold(
         appBar: AppBar(
@@ -101,6 +127,7 @@ class _HistoryPageState extends State<HistoryPage>
                                   onTap: () async {
                                     generalLoading(context);
                                     List<Map<String, dynamic>> reportList = await fetchAllReports(member.memberInfo!['uniquecode'], historyData[index]['taskId']);
+                                    debugPrint('===============\n$reportList');
                                     Navigator.pop(context);
                                      
                                     callBottomSheet(
@@ -113,6 +140,7 @@ class _HistoryPageState extends State<HistoryPage>
                                             itemCount: reportList.length,
                                             itemBuilder: (context, index) {
                                               dynamic data = reportList[index];
+                                              
                                               return ListTile(
                                                 title: Text(data['report']),
                                                 subtitle: Text(formatDateString(data['date'])),
