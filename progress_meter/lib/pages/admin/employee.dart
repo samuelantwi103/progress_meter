@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:progress_meter/components/card.dart';
 import 'package:progress_meter/components/empty_screen.dart';
 import 'package:progress_meter/components/form.dart';
+import 'package:progress_meter/components/loading.dart';
 import 'package:progress_meter/services/callback.dart';
 import 'package:progress_meter/services/myclasses.dart';
 import 'package:progress_meter/services/myfunctions.dart';
@@ -72,6 +73,7 @@ class _EmployeePageState extends State<EmployeePage> {
               title: "Add an employee",
               onConfirm: () async {
                 if (_formKey.currentState!.validate()) {
+                  generalLoading(context);
                   // creating the new member
                   await createNewMember(
                       fnameController.text.trim(),
@@ -92,6 +94,7 @@ class _EmployeePageState extends State<EmployeePage> {
                   mnameController.clear();
                   pinController.clear();
                   _formKey.currentState!.reset();
+                  Navigator.pop(context); // Close dialog on success
                   Navigator.pop(context); // Close dialog on success
                 }
               });
