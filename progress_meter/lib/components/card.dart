@@ -184,6 +184,7 @@ class _CardHomeState extends State<CardHome> {
                                         : 50;
                                     int dayNumber = getDaysBetween(
                                         widget.dateAssigned, widget.dateDue);
+                                    debugPrint('Days between: $dayNumber');
                                     await markComplete(
                                         widget.taskId,
                                         widget.memberId,
@@ -729,9 +730,12 @@ Widget adminTaskIndicator(
                           content: Text(
                               "Are you sure you want to delete this account?\n\nThis action cannot be reversed and all employee information will be lost."),
                           title: "Terminate employee account",
-                          onConfirm: () {
+                          onConfirm: () async {
                             generalLoading(context);
                             // Put the code here
+                            final admin = Provider.of<AdminProvider>(context,listen: false).currenMember!.adminInfo;
+                            await deleteMember(employee);
+                            await fetchAdminData(context, admin!['uniquecode'], admin['pin']);
                             Navigator.pop(context);
                             Navigator.pop(context);
                           });

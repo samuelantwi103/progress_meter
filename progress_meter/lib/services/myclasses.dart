@@ -7,9 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Member {
-  String? firstName, middleName, lastName;
-  String? code;
-  String? pin;
+  
   Map<String, dynamic>? memberInfo;
 
   Member();
@@ -18,11 +16,11 @@ class Member {
     memberInfo!['completedscores'] += value;
     await FirebaseFirestore.instance
       .collection('organisations')
-      .doc('son')
+      .doc(getFirstThreeLetters(memberInfo!['uniquecode']))
       .collection('members')
       .doc(memberInfo!['uniquecode'])
       .update(memberInfo!);
-      debugPrint('successfully marked complete');
+      
 
 
   }
@@ -240,17 +238,41 @@ class AdminProvider extends ChangeNotifier {
 Future<bool> fetchdata(BuildContext context, String uid, String pin) async {
 
   bool state = false;
+
+  final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
   DocumentSnapshot usersnap = await FirebaseFirestore.instance
       .collection('organisations')
-      .doc('son')
+      .doc(getFirstThreeLetters(uid))
       .collection('members')
       .doc(uid)
       .get();
   if (usersnap.exists) {
     // do something
     if (usersnap['pin'].toString() == pin) {
+
+      // document to help check if we are in a new month or not.
+      final docToCheck = await FirebaseFirestore.instance.collection('organisations')
+          .doc(getFirstThreeLetters(uid))
+          .collection('members').doc(uid)
+          .collection('months').doc(monthdoc).get();
+
+      if(!docToCheck.exists){
+
+        await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(uid)).collection('members').doc(uid).update({
+          'completedscores': 0,
+          'overallperformance': 0,
+          'personalperformance': 0,
+
+        });
+      }
+       DocumentSnapshot usersnap2 = await FirebaseFirestore.instance
+      .collection('organisations')
+      .doc(getFirstThreeLetters(uid))
+      .collection('members')
+      .doc(uid)
+      .get();
       Member member = Member();
-      member.memberInfo = usersnap.data() as Map<String, dynamic>;
+      member.memberInfo = usersnap2.data() as Map<String, dynamic>;
       Provider.of<MemberProvider>(context, listen: false)
           .setCurrentMember(member);
       

@@ -100,7 +100,7 @@ class _HistoryPageState extends State<HistoryPage>
                                       borderRadius: BorderRadius.circular(12)),
                                   onTap: () async {
                                     generalLoading(context);
-                                    List<Map<String, dynamic>> reportList = await fetchAllReports(member.memberInfo!['uniquecode'], historyData[index]['taskid']);
+                                    List<Map<String, dynamic>> reportList = await fetchAllReports(member.memberInfo!['uniquecode'], historyData[index]['taskId']);
                                     Navigator.pop(context);
                                      
                                     callBottomSheet(
@@ -136,7 +136,7 @@ class _HistoryPageState extends State<HistoryPage>
                                           status: historyItem['status'],
                                           memberId:
                                               member.memberInfo!['uniquecode'],
-                                          taskid: historyItem['taskid'],
+                                          taskid: historyItem['taskId'],
                                           date: historyItem['datecompleted'],
                                           context: context),
                                           

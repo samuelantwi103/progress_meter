@@ -39,7 +39,7 @@ String convertDateTimeToLowercaseString(DateTime dateTime) {
 Future<void> fetchAssignedTasks(AssignedTasks assigned, String code, {String? pin}) async {
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
 
-  final usersnap = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(code).collection('months').doc(monthdoc).collection('assigned').get();
+  final usersnap = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code)).collection('members').doc(code).collection('months').doc(monthdoc).collection('assigned').get();
   if (usersnap.docs.isNotEmpty){
     // do something
       
@@ -64,36 +64,63 @@ Future<void> fetchAssignedTasks(AssignedTasks assigned, String code, {String? pi
 Future<void> fetchSelfTasks(SelfTasks notAssigned, String code, {String? pin}) async {
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
 
-  final usersnap = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(code).collection('months').doc(monthdoc).collection('notassigned').get();
-  if (usersnap.docs.isNotEmpty){
-    // do something
-    
+  final docToCheck = await FirebaseFirestore.instance.collection('organisations')
+  .doc(getFirstThreeLetters(code))
+  .collection('members').doc(code)
+  .collection('months').doc(monthdoc).get();
 
-      notAssigned.memberSelftasks = usersnap.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
-      //Provider.of<SelfTasksProvider>(context,listen:false).setCurrentSelfTaks(notAssigned);
-      //return notAssigned;
-      
-    
+  if(docToCheck.exists){
+
+    final usersnap = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code))
+      .collection('members').doc(code).collection('months').doc(monthdoc).collection('notassigned').get();
+      if (usersnap.docs.isNotEmpty){
+        // do something
+        
+
+          notAssigned.memberSelftasks = usersnap.docs.where((doc) => doc.id != 'default').map((doc){return doc.data() as Map<String, dynamic>;}).toList();
+              
+        
+      }
+      else{
+        debugPrint('incorrect values');
+    //return notAssigned;
+    }
   }
   else{
-    debugPrint('incorrect values');
-    //return notAssigned;
+    await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code))
+      .collection('members').doc(code)
+      .collection('months').doc(monthdoc)
+      .collection('notassigned').doc('default').set({'name': 'default'});
+
+    await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code))
+      .collection('members').doc(code)
+      .collection('months').doc(monthdoc)
+      .collection('assigned').doc('default').set({'name': 'default'});
+
   }
-  debugPrint('done checking for self tasks');
+
+  
+  
 }
 
 Future<void> submitStandUp(String title, String description,String challenges, String memberId,SelfTasksProvider selfPro) async{
   final docId = getCurrentMonthDay();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
-  final doc = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('notassigned').doc(docId).get();
+  final doc = await FirebaseFirestore.instance.collection('organisations')
+  .doc(getFirstThreeLetters(memberId)).collection('members').doc(memberId).collection('months').doc(monthdoc).collection('notassigned').doc(docId).get();
+  
+
   (doc.exists) ?
-  await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('notassigned').doc(docId).update({
+  await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('members').doc(memberId).collection('months').doc(monthdoc).collection('notassigned').doc(docId).update({
     'title': title,
     'description': description,
     'challenges': challenges,
     'time': DateTime.now().toString()
   }) : 
-  await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('notassigned').doc(docId).set({
+  await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('members').doc(memberId)
+  .collection('months').doc(monthdoc).collection('notassigned').doc(docId).set({
     'title': title,
     'description': description,
     'challenges': challenges,
@@ -121,21 +148,70 @@ int getDaysBetween(String startDateString, String endDateString) {
 Future<void> markComplete(String taskId, String memberId, AssignedProvider assPro, Member member, double rawScore, int dayNum, MemberProvider memPro) async {
   //final docId = getCurrentMonthDay();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
-  final reports = await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('assigned').doc(taskId).collection('reports').get();
-  int reportNum = reports.size;
-  await FirebaseFirestore.instance.collection('organisations').doc('son').collection('members').doc(memberId).collection('months').doc(monthdoc).collection('assigned').doc(taskId).update({
-    'status': 'Completed',
-    'reportsize': reportNum
-  });
+  final completedDate = DateTime.now().toString();
 
-  final reportscore = rawScore + ((reportNum)/dayNum);
-  member.updateData(reportscore);
-  
-  AssignedTasks assignedTasks = AssignedTasks();
-  await fetchAssignedTasks(assignedTasks, memberId);
-  
-  assPro.setCurrentAssignedTasks(assignedTasks);
-  memPro.setCurrentMember(member);
+
+    final assignedCollection = FirebaseFirestore.instance.collection('organisations')
+      .doc(getFirstThreeLetters(memberId))
+      .collection('members')
+      .doc(memberId)
+      .collection('months')
+      .doc(monthdoc)
+      .collection('assigned');
+    
+    final assignedDocs = await assignedCollection.get();
+    if(assignedDocs.docs.isNotEmpty){
+
+        final docToUpdate = assignedDocs.docs.firstWhere(
+
+              (doc) => doc['taskId'] == taskId,
+              // Ensure no error if no doc is found
+            );
+          //await assignedCollection.doc(docToDelete.id).delete();
+        final reports = await FirebaseFirestore.instance.collection('organisations')
+            .doc(getFirstThreeLetters(memberId))
+            .collection('members')
+            .doc(memberId)
+            .collection('months')
+            .doc(monthdoc)
+            .collection('assigned')
+            .doc(docToUpdate.id)
+            .collection('reports')
+            .get();
+
+        int reportNum = reports.size;
+        await FirebaseFirestore.instance.collection('organisations')
+              .doc(getFirstThreeLetters(memberId))
+              .collection('members')
+              .doc(memberId)
+              .collection('months')
+              .doc(monthdoc)
+              .collection('assigned')
+              .doc(docToUpdate.id)
+              .update({
+                'status': 'Completed',
+                'reportsize': reportNum,
+                'datecompleted': completedDate
+              });
+
+          await FirebaseFirestore.instance.collection('organisations')
+              .doc(getFirstThreeLetters(memberId))
+              .collection('tasks')
+              .doc(taskId)
+              .update({
+                'status': 'Completed',
+                'datecompleted': completedDate
+              });
+        
+        final reportscore = (dayNum != 0) ? rawScore + ((reportNum)/dayNum)*50 : rawScore + 50;
+        member.updateData(reportscore);
+        
+        AssignedTasks assignedTasks = AssignedTasks();
+        await fetchAssignedTasks(assignedTasks, memberId);
+        
+        assPro.setCurrentAssignedTasks(assignedTasks);
+        memPro.setCurrentMember(member);
+  }
 }
 
 //==================Evaluating difference in dates.
@@ -186,6 +262,21 @@ String getCurrentMonthDay() {
   return monthDayHourMinuteSecond;
 }
 
+String getReportId() {
+  // Get the current date and time
+  DateTime now = DateTime.now();
+
+  // Define the format for the month, day, hour, minute, and second
+  String month = DateFormat('MMMM').format(now).toLowerCase(); // Full month name in lowercase
+  String day = DateFormat('d').format(now); // Day of the month
+
+
+  // Combine month, day, hour, minute, and second into the desired format
+  String monthDayHourMinuteSecond = '$month$day';
+
+  return monthDayHourMinuteSecond;
+}
+
 
 
 int getDaysInCurrentMonth() {
@@ -208,30 +299,58 @@ int getDaysInCurrentMonth() {
 //===============submit a report from a task
 
 Future<void> submitReport(String memberId, String reportText,String taskId, AssignedProvider assignPro)async {
-  final docId = getCurrentMonthDay();
+  final docId = getReportId();
   final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
-  final doc = await FirebaseFirestore.instance.collection('organisations').doc('son')
+  final assignedDocs = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('members').doc(memberId).collection('months').doc(monthdoc).collection('assigned').get();
+  final docsignature = assignedDocs.docs.firstWhere((doc) => doc['taskId'] == taskId);
+
+  final doc = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
   .collection('members').doc(memberId)
   .collection('months').doc(monthdoc)
-  .collection('assigned').doc(taskId)
+  .collection('assigned').doc(docsignature.id)
   .collection('reports').doc(docId).get();
   (doc.exists) ?
-  await FirebaseFirestore.instance.collection('organisations').doc('son')
+  await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
   .collection('members').doc(memberId)
   .collection('months').doc(monthdoc)
-  .collection('assigned').doc(taskId)
+  .collection('assigned').doc(docsignature.id)
   .collection('reports').doc(docId).update({
     'report': reportText,
     'date': DateTime.now().toString()
   }) : 
-  await FirebaseFirestore.instance.collection('organisations').doc('son')
+  await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
   .collection('members').doc(memberId)
   .collection('months').doc(monthdoc)
-  .collection('assigned').doc(taskId)
+  .collection('assigned').doc(docsignature.id)
   .collection('reports').doc(docId).set({
     'report': reportText,
     'date': DateTime.now().toString()
   });
+
+
+
+  // submitting same report at admin end:
+
+  final doc1 = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('tasks').doc(taskId)
+  .collection('reports').doc(docId).get();
+  (doc1.exists) ?
+  await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('tasks').doc(taskId)
+  .collection('reports').doc(docId).update({
+    'report': reportText,
+    'date': DateTime.now().toString()
+  }) : 
+  await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(memberId))
+  .collection('tasks').doc(taskId)
+  .collection('reports').doc(docId).set({
+    'report': reportText,
+    'date': DateTime.now().toString()
+  });
+
+
+
   AssignedTasks assigned = AssignedTasks();
   await fetchAssignedTasks(assigned, memberId);
   assignPro.setCurrentAssignedTasks(assigned);
@@ -280,6 +399,23 @@ Future<List<Map<String,dynamic>>> fetchAllReports(String memberId,String taskId)
   .collection('assigned').doc(taskId)
   .collection('reports').get();
   List<Map<String,dynamic>> reports = doc.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
+  return reports;
+}
+
+Future<List<Map<String,dynamic>>> fetchAdminTaskReports(String adminId,String taskId) async{
+  //final docId = getCurrentMonthDay();
+  //final monthdoc = convertDateTimeToLowercaseString(DateTime.now());
+  final doc = await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(adminId))
+  .collection('tasks').doc(taskId)
+  .collection('reports').get();
+  List<Map<String,dynamic>> reports = [];
+
+  if (doc.docs.isNotEmpty){
+
+    reports = doc.docs.where((doc) => doc.id != 'default').map((doc){return doc.data();}).toList();
+
+  }
+  
   return reports;
 }
 
@@ -361,6 +497,22 @@ Future<void> createNewMember(String firstname,String middlename,String lastname,
       debugPrint('Error creating new member: $e');
     }
 
+}
+
+//==================DELETING A MEMBER
+
+Future<void> deleteMember(Map<String, dynamic> member) async {
+  try{
+    await FirebaseFirestore.instance.collection('organisations')
+  .doc(getFirstThreeLetters(member['uniquecode']))
+  .collection('members')
+  .doc(member['uniquecode'])
+  .delete();
+  }
+  catch(e){
+    debugPrint('Error deleting member: $e');
+  }
+  
 }
 
 String convertDateTimeToCompactString(DateTime dateTime) {

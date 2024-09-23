@@ -108,7 +108,8 @@ class _TaskSegmentedSectionState extends State<TaskSegmentedSection> {
                       widget.admin,
                       onTap: () async {
                         generalLoading(context);
-                        List<Map<String, dynamic>> reportList = [];
+
+                        List<Map<String, dynamic>> reportList = await fetchAdminTaskReports(widget.admin.adminInfo!['uniquecode'],filteredTasks[index]['taskId']);
 
                         Navigator.pop(context);
                         if (filteredTasks[index]["assignedto"] == null) {

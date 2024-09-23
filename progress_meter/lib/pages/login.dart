@@ -280,8 +280,7 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     AssignedProvider assPro =
                                         Provider.of<AssignedProvider>(context,
                                             listen: false);
-                                    SelfTasksProvider selfPro =
-                                        Provider.of<SelfTasksProvider>(context,
+                                    SelfTasksProvider selfPro = Provider.of<SelfTasksProvider>(context,
                                             listen: false);
                                     if (await fetchAdminData(
                                         context, code, pin)) {
@@ -294,11 +293,14 @@ class LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                                   milliseconds: 1000)));
                                     } else if (await fetchdata(
                                         context, code, pin)) {
-                                      Navigator.pop(context);
-                                      Navigator.pushReplacement(
-                                          context, createSlideScaleTransition(HomePage()));
-                                      await fetchAssignedTasks(assigned, code,
+                                          await fetchAssignedTasks(assigned, code,
                                           pin: pin);
+                                      Navigator.pop(context);
+
+                                      Navigator.pushReplacement(
+
+                                          context, createSlideScaleTransition(HomePage()));
+                                      
                                       await fetchSelfTasks(selfTasks, code,
                                           pin: pin);
                                       assPro.setCurrentAssignedTasks(assigned);

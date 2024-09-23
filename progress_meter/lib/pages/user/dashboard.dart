@@ -81,9 +81,9 @@ class _DashboardPageState extends State<DashboardPage> {
     }
 
     final assignedTasks = assPro.currenMember;
-    final List<Map<String, dynamic>> dummyData =
-        assignedTasks!.memberAssignedtasks!;
-    //debugPrint('length of map: ${dummyData[0]}');
+    final List<Map<String, dynamic>> dummyData =assignedTasks!.getProgressTasks;
+    debugPrint('$dummyData');
+    
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -119,10 +119,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                 ),
               ),
-              if (dummyData.isNotEmpty &&
-                  dummyData
-                      .where((element) => element['status'] != 'Completed')
-                      .isNotEmpty)
+              if (dummyData.isNotEmpty)
+
                 ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -130,12 +128,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   itemBuilder: (context, index) {
 
                     final data = dummyData[index];
-                    if (data["status"]! != "Completed") {
-                      try{
+                    if (dummyData.isNotEmpty) {                      
 
-                        debugPrint(dummyData.toString());
-                        debugPrint(data["status"]!);
-                      debugPrint(member.memberInfo!['uniquecode']);
+                        
                       return Column(
                         children: [
                           CardHome(
@@ -152,16 +147,13 @@ class _DashboardPageState extends State<DashboardPage> {
                         ],
                       );
 
-                      }catch(e){
-                        debugPrint('error: $e');
-
-                      }
+                      
                       
                     } 
-                    else if(dummyData.isEmpty) {
+                    else{
                       return EmptyTaskScreen();
                     }
-                    return null;
+                    
                   },
                 )
                 
