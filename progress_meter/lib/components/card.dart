@@ -546,7 +546,7 @@ Widget adminDashTask(
               SizedBox(
                 height: 10,
               ),
-              if (task["assignedto"] != null)
+              if (task["assignedto"] != null  && (task["status"] != "Completed" && task["status"] != "Overdue"))
                 LoadingBar(
                   percentage: calculateDateTimePercentage(
                           task['dateassigned'], task['deadline'])
