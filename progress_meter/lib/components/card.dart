@@ -553,11 +553,14 @@ Widget adminDashTask(
                       .toDouble(),
                   // height: 10,
                 ),
-
-              if (task["assignedto"] == null)
+                SizedBox(
+                height: 10,
+              ),
+              
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
+                    if (task["assignedto"] == null)
                     FilledButton.tonal(
                       onPressed: () {
                         void getSelectedEmployee(
