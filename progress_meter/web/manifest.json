@@ -1,11 +1,11 @@
 {
-    "name": "progress_meter",
-    "short_name": "progress_meter",
+    "name": "Progress Meter",
+    "short_name": "Progress Meter",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Track progress of team members effortlessly.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
