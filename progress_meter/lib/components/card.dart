@@ -546,21 +546,23 @@ Widget adminDashTask(
               SizedBox(
                 height: 10,
               ),
-              if (task["assignedto"] != null  && (task["status"] != "Completed" && task["status"] != "Overdue"))
+              if (task["assignedto"] != null &&
+                  (task["status"] != "Completed" &&
+                      task["status"] != "Overdue"))
                 LoadingBar(
                   percentage: calculateDateTimePercentage(
                           task['dateassigned'], task['deadline'])
                       .toDouble(),
                   // height: 10,
                 ),
-                SizedBox(
+              SizedBox(
                 height: 10,
               ),
-              
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (task["assignedto"] == null)
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (task["assignedto"] == null)
                     FilledButton.tonal(
                       onPressed: () {
                         void getSelectedEmployee(
@@ -610,34 +612,31 @@ Widget adminDashTask(
                       },
                       child: Text("Assign"),
                     ),
-                    SizedBox(width: 10),
-                    FilledButton.tonal(
-                      onPressed: () {
-                        callDialog(
-                            context: context,
-                            content: Text(
-                                "Are you sure you want to delete this task?"),
-                            title: "Delete task",
-                            onConfirm: () async {
-                              generalLoading(context);
-                              await admin.deleteTask(task['taskId']);
-                              Provider.of<AdminProvider>(context, listen: false)
-                                  .setCurrentAdmin(admin);
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            });
-                      },
-                      style: ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                            Theme.of(context)
-                                .colorScheme
-                                .error
-                                .withOpacity(0.5)),
-                      ),
-                      child: Text("Delete"),
+                  SizedBox(width: 10),
+                  FilledButton.tonal(
+                    onPressed: () {
+                      callDialog(
+                          context: context,
+                          content: Text(
+                              "Are you sure you want to delete this task?"),
+                          title: "Delete task",
+                          onConfirm: () async {
+                            generalLoading(context);
+                            await admin.deleteTask(task['taskId']);
+                            Provider.of<AdminProvider>(context, listen: false)
+                                .setCurrentAdmin(admin);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(
+                          Theme.of(context).colorScheme.error.withOpacity(0.5)),
                     ),
-                  ],
-                )
+                    child: Text("Delete"),
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -656,21 +655,21 @@ Widget adminTaskIndicator(
     elevation: 10,
     child: InkWell(
       onTap: () async {
+        generalLoading(context);
         final assPro = Provider.of<AssignedProvider>(context, listen: false);
         final selfPro = Provider.of<SelfTasksProvider>(context, listen: false);
         final assigned = AssignedTasks();
         final selfTasks = SelfTasks();
         if (await fetchdata(
             context, employee['uniquecode'], employee['pin'].toString())) {
+          Navigator.pop(context);
           Navigator.push(context, logoutTransition(HomePage()));
-          generalLoading(context);
           await fetchAssignedTasks(assigned, employee['uniquecode'],
               pin: employee['pin'].toString());
           await fetchSelfTasks(selfTasks, employee['uniquecode'],
               pin: employee['pin'].toString());
           assPro.setCurrentAssignedTasks(assigned);
           selfPro.setCurrentSelfTaks(selfTasks);
-          Navigator.pop(context);
         }
 
         //Navigator.push(context, logoutTransition(HomePage()));
@@ -736,9 +735,13 @@ Widget adminTaskIndicator(
                           onConfirm: () async {
                             generalLoading(context);
                             // Put the code here
-                            final admin = Provider.of<AdminProvider>(context,listen: false).currenMember!.adminInfo;
+                            final admin = Provider.of<AdminProvider>(context,
+                                    listen: false)
+                                .currenMember!
+                                .adminInfo;
                             await deleteMember(employee);
-                            await fetchAdminData(context, admin!['uniquecode'], admin['pin']);
+                            await fetchAdminData(
+                                context, admin!['uniquecode'], admin['pin']);
                             Navigator.pop(context);
                             Navigator.pop(context);
                           });
