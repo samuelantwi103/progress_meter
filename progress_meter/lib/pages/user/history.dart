@@ -18,7 +18,7 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage>
     with TickerProviderStateMixin {
   late TabController tabController;
-    final ScrollController scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -33,53 +33,44 @@ class _HistoryPageState extends State<HistoryPage>
   @override
   Widget build(BuildContext context) {
     //Member member = Provider.of<MemberProvider>(context,listen: true).currenMember!;
-    AssignedTasks assignedTasks = Provider.of<AssignedProvider>(context, listen: true).currenMember!;
-    SelfTasks notAssignedTasks = Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
-    final member = Provider.of<MemberProvider>(context, listen: true).currenMember!;
+    AssignedTasks assignedTasks =
+        Provider.of<AssignedProvider>(context, listen: true).currenMember!;
+    SelfTasks notAssignedTasks =
+        Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
+    final member =
+        Provider.of<MemberProvider>(context, listen: true).currenMember!;
     TabController tabController = TabController(length: 2, vsync: this);
     //final notAssignedTaks = Provider.of<SelfTasksProvider>(context,listen: true).currenMember!;
-    try{     
-      
+    try {
       if (assignedTasks.getCompletedTasks.isNotEmpty) {
-          historyData.addAll(assignedTasks.getCompletedTasks);
+        historyData.addAll(assignedTasks.getCompletedTasks);
         //  historyData.reversed.toList();
-        }  
-
-   
-    }
-    catch(e, stack){
+      }
+    } catch (e, stack) {
       debugPrint('error fetching completed tasks: $e');
       debugPrint('the stack trace is: $stack');
     }
 
-    try{     
-      
+    try {
       if (assignedTasks.getOverdueTasks.isNotEmpty) {
-      historyData.addAll(assignedTasks.getOverdueTasks);
-      // historyData.reversed.toList();
-    } 
-
-   
-    }
-    catch(e){
+        historyData.addAll(assignedTasks.getOverdueTasks);
+        // historyData.reversed.toList();
+      }
+    } catch (e) {
       debugPrint('error fetching member overdue tasks: $e');
     }
-    
-     try{     
-      
-      if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
-      standUpsData.addAll(notAssignedTasks.memberSelftasks!);
-      // standUpsData.reversed.toList();
-    } 
 
-   
-    }
-    catch(e, stack){
+    try {
+      if (notAssignedTasks.memberSelftasks != null) {
+        if (notAssignedTasks.memberSelftasks!.isNotEmpty) {
+          standUpsData.addAll(notAssignedTasks.memberSelftasks!);
+          // standUpsData.reversed.toList();
+        }
+      }
+    } catch (e, stack) {
       debugPrint('error feching member self tasks: $e');
       debugPrint('the stack trace is: $stack');
     }
-    
-    
 
     return Scaffold(
         appBar: AppBar(
@@ -104,7 +95,7 @@ class _HistoryPageState extends State<HistoryPage>
                 ? EmptyHistoryScreen()
                 : SingleChildScrollView(
                     child: Container(
-                      height: 0.7*MediaQuery.of(context).size.height,
+                      height: 0.7 * MediaQuery.of(context).size.height,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,12 +117,15 @@ class _HistoryPageState extends State<HistoryPage>
                                       borderRadius: BorderRadius.circular(12)),
                                   onTap: () async {
                                     generalLoading(context);
-                                    List<Map<String, dynamic>> reportList = await fetchAllReports(member.memberInfo!['uniquecode'], historyData[index]['taskId']);
+                                    List<Map<String, dynamic>> reportList =
+                                        await fetchAllReports(
+                                            member.memberInfo!['uniquecode'],
+                                            historyData[index]['taskId']);
                                     debugPrint('===============\n$reportList');
                                     Navigator.pop(context);
-                                     
+
                                     callBottomSheet(
-                                      scrollController: scrollController,
+                                        scrollController: scrollController,
                                         context: context,
                                         title: "Report Summary",
                                         content: SizedBox(
@@ -140,10 +134,11 @@ class _HistoryPageState extends State<HistoryPage>
                                             itemCount: reportList.length,
                                             itemBuilder: (context, index) {
                                               dynamic data = reportList[index];
-                                              
+
                                               return ListTile(
                                                 title: Text(data['report']),
-                                                subtitle: Text(formatDateString(data['date'])),
+                                                subtitle: Text(formatDateString(
+                                                    data['date'])),
                                                 horizontalTitleGap: 5,
                                               );
                                             },
@@ -160,18 +155,17 @@ class _HistoryPageState extends State<HistoryPage>
                                     children: [
                                       historyCard(
                                           task: historyItem['title'],
-                                          description: historyItem['description'],
+                                          description:
+                                              historyItem['description'],
                                           status: historyItem['status'],
                                           memberId:
                                               member.memberInfo!['uniquecode'],
                                           taskid: historyItem['taskId'],
                                           date: historyItem['datecompleted'],
                                           context: context),
-                                          
                                     ],
                                   ),
                                 );
-                                
                               },
                             ),
                           ),
@@ -187,7 +181,7 @@ class _HistoryPageState extends State<HistoryPage>
               child: (standUpsData.isEmpty)
                   ? EmptyHistoryScreen()
                   : Container(
-                      height: 0.7*MediaQuery.of(context).size.height,
+                      height: 0.7 * MediaQuery.of(context).size.height,
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -209,13 +203,12 @@ class _HistoryPageState extends State<HistoryPage>
                                         status: 'Completed',
                                         date: historyItem['time'],
                                         context: context),
-                                        if (index == standUpsData.length - 1)
-                                          SizedBox(
-                                            height: 10,
-                                          )
+                                    if (index == standUpsData.length - 1)
+                                      SizedBox(
+                                        height: 10,
+                                      )
                                   ],
                                 );
-                                    
                               },
                             ),
                           ),

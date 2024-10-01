@@ -27,11 +27,11 @@ class _ProfilePageState extends State<ProfilePage> {
         Provider.of<AssignedProvider>(context, listen: true).currenMember!;
     final notAssignedTaks =
         Provider.of<SelfTasksProvider>(context, listen: true).currenMember!;
-    int totalTasks = assignedTasks.memberAssignedtasks!.length;
-    int completedTasks = assignedTasks.getCompletedTasks.length;
-    int inProgressTasks = assignedTasks.getProgressTasks.length;
-    int pendingTasks = assignedTasks.getOverdueTasks.length;
-    int completedStandUps = notAssignedTaks.memberSelftasks!.length;
+    int totalTasks =assignedTasks.memberAssignedtasks!=null? assignedTasks.memberAssignedtasks!.length:0;
+    int completedTasks =assignedTasks.getCompletedTasks != null? assignedTasks.getCompletedTasks.length:0;
+    int inProgressTasks =assignedTasks.getProgressTasks != null? assignedTasks.getProgressTasks.length:0;
+    int pendingTasks =assignedTasks.getOverdueTasks != null? assignedTasks.getOverdueTasks.length:0;
+    int completedStandUps =notAssignedTaks.memberSelftasks != null? notAssignedTaks.memberSelftasks!.length:0;
     int completeOverdue = completedTasks + pendingTasks;
 
     //final double progressPercentage = completedTasks / totalTasks;
