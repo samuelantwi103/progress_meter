@@ -106,6 +106,18 @@ Future<void> fetchSelfTasks(SelfTasks notAssigned, String code, {String? pin}) a
     }
   }
   else{
+    // Create the month document with the "newMonth" field
+    await FirebaseFirestore.instance
+        .collection('organisations')
+        .doc(getFirstThreeLetters(code))
+        .collection('members')
+        .doc(code)
+        .collection('months')
+        .doc(monthdoc)
+        .set({
+          'newMonth': monthdoc, // Add the newMonth field
+        });
+        
     await FirebaseFirestore.instance.collection('organisations').doc(getFirstThreeLetters(code))
       .collection('members').doc(code)
       .collection('months').doc(monthdoc)
